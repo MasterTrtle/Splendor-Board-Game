@@ -63,9 +63,8 @@
 
 Dans ce projet, il s’agit de concevoir et développer une application permettant de jouer au jeu de 
 société Splendor créé par Marc André et édité par SPACE Cowboys. 
-L’application devra permettre de jouer des parties standards de 2 à 4 joueurs. Les joueurs pourront être
-humains ou virtuels (une IA simulant un joueur). En plus du jeu standard, on doit pouvoir aussi jouer
-à au moins une des extensions officielles du jeu.\\
+L’application devra permettre de jouer des parties standards de 2 à 4 joueurs. Le jeu sera en tour par tour sur une seule machine en joueur contre joueur. En plus du jeu standard, on doit pouvoir aussi jouer
+à au moins une des extensions officielles du jeu: Nous avons choisi l'extension des villes (cartes nobles remplacées par des villes)\\
 \\
 Comme nous n'avions jamais été exposés à ce jeu auparavant, il faut commencer par comprendre les règles du jeu. 
 Nous avons également appris les mécanismes du jeu en jouant en ligne sur spendee.mattle.online.
@@ -74,30 +73,40 @@ Ensuite nous avons réfléchi à la manière de décomposer le jeu en son abstra
 Enfin, notre groupe s'est réuni pour consolider les idées de chacun et les rassembler dans une liste de tâches.
 
 \section*{2.Identification des tâches et estimation du temps}
-Comme il y a beaucoup de similitudes entre ce jeu et le jeu de société qui se déroule dans LO21 td(set!) il y a donc beaucoup à apprendre à ce sujet.
+Comme il y a beaucoup de similitudes entre ce jeu et le jeu de société qui se déroule dans LO21 td(set!), nous allons nous inspirer de sa struture.
+Nous décomposerons le travail selon les classes à créer.
 
+Pour l'instant nous identifiant les éléments suivants:
 
-Les classes:
+Première tâche: créer les éléments du jeu:
 
--joueur: possède des cartes, des cartes réservées ainsi que des jetons
-
+-La classe jeton
 - carte ( developpement et noble).
-Une carte à un coût en jetons, une valeur
--plateau
+    Une carte à un coût en jetons, une valeur, niveau , couleur 
+-joueur: possède des cartes, des cartes réservées ainsi que des jetons
+-plateau ( pioche ( 3 tas), cartes découvertes, tour ( joueur qui doit jouet etc.) )
 
+Seconde tâche:
 
 -action ( réserver, acheter, prendre 3 jetons differents, prendre 2 jetons identiques)
-
-→ sous tache: reserver/acheter ou prendre jetons
-
+    → sous tache: reserver/acheter ou prendre jetons
 -pioche (automatiquement quand une carte est achetée ou réservée)
 
+troisième tâche:
+
+Porte sur toutes les actions de contrôle du jeu:
+
+- regarder s’il y a un vainqueur
+- verifier la faisabilité des actions
+
+Dernière tâche:
+-affichage et représentation  du plateau:
+ Sous tâches:
+ - representer une carte
+ - representer le plateau
+ -representer les joueurs
 
 
--contrôleur: regarde s’il y a un vainqueur
-
--affichage et représentation de la carte et du plateau
-→ sous tache représentation plateau / représentation carte
 
 \section*{3.Répartition des tâches}
 
