@@ -46,7 +46,7 @@
 { \huge \bfseries Rapport intermédiaire 1}\\[0.7cm]								% Assignment
 \HRule \\[2cm]
 \large
-\emph{LIU Chenxin, Nicolas Vengeon, Clément Dupuis, Alexandre Laval}\\
+\emph{Alexandre Laval,Clément Dupuis, LIU Chenxin, Nicolas Vengeon,  }\\
 %name (4511328)\\[1.5cm]													% Author info
 {\large \today}\\[13cm]
 \includegraphics[width=0.4\textwidth]{images/SU-UTC18-70.jpg}\\[1cm] 	% University logo
@@ -79,10 +79,10 @@ Enfin, notre groupe s'est réuni pour consolider les idées de chacun et les ras
 \section*{2.Identification des tâches et estimation du temps}
 Comme il y a beaucoup de similitudes entre ce jeu et le jeu de société qui se déroule dans LO21 td(set!), nous allons nous inspirer de sa struture.
 %Nous décomposerons le travail selon les classes à créer.
-
 %Pour l'instant nous identifiant les éléments suivants:
 Nous avons décomposé le processus de développement en quatre parties.\\
-Première partie: créer les éléments du jeu:\\
+
+\subsection*{2.1.Définition et création d'éléments du jeu}
 La première section est la plus urgente et la plus fondamentale, sur laquelle tout le jeu doit fonctionner. Dans cette section, nous devons définir les éléments du jeu, pour l'instant nous identifiant les éléments suivants: 6 types de jetons, 10 tuiles nobles et 3 types de cartes développement.
 
 -La classe jeton\\
@@ -96,33 +96,25 @@ Possède des cartes, des cartes réservées ainsi que des jetons
 \\
 Le temps de travail estimé :  35h.\\
 \\
-La première partie, bien que peu complexe, est la base sur laquelle le programme peut fonctionner avec succès. Par conséquent, le travail attendu est:\\
-\\
-1.Elaboration d'une première version de l'UML chacun individuellement\\
-2.Elaboration d'une première version de l'UML commun \\
-3.Définition détaillés des entités structurelles du projet\\
-4.Définition détaillés des entités fonctionnelles du projet\\
-5.Conceptualisation et l’implémentation le premier partie\\
+La première partie, bien que peu complexe, est la base sur laquelle le programme peut fonctionner avec succès.
+Notre UML de départ était le suivant\\
+\includegraphics[width=0.6\textwidth]{images/UML1.png}
 
-
-
-
-Seconde partie:\\
-
+\subsection*{2.2.Définition et création des entités fonctionnelles du jeu}
 -action \\
 ( réserver, acheter, prendre 3 jetons differents, prendre 2 jetons identiques)
     → sous tache: reserver/acheter ou prendre jetons
 -pioche \\
 (automatiquement quand une carte est achetée ou réservée)
 
-troisième partie:
+\subsection*{2.3.Définition détaillés pour les actions de jeu}
 
 Porte sur toutes les actions de contrôle du jeu:
 
 - regarder s’il y a un vainqueur
 - verifier la faisabilité des actions
 
-Dernière partie:
+\subsection*{2.4.Création d'interfaces (QT) et de connexions au code}
 -affichage et représentation  du plateau:
  Sous tâches:
  - representer une carte
@@ -132,6 +124,17 @@ Dernière partie:
 
 
 \section*{3.Répartition des tâches}
+Par conséquent, le travail attendu (Avant le deuxième rapport) est:\\
+1.Elaboration d'une première version de l'UML commun 2h\\
+2.Définition détaillés des entités structurelles du projet 10h\\
+3.Définition détaillés des entités fonctionnelles du projet 15h\\
+4.Conceptualisation et l’implémentation le premier partie 10h\\
+\\
+Estimation du total des heures de travail: 37 h\\
+\\
+UML → LIU Chenxin, Nicolas Vengeon\\
+Entités structurelles et fonctionnelles → Alexandre Laval\\
+Conceptualisation et l’implémentation → LIU Chenxin, Nicolas Vengeon\\
 
 \section*{4.Conclusion}
 Nous avons commencé à concevoir les différentes tâches nécessaires au projet par étapes. Ces parties et tâches peuvent encore être affinées ou modifiées, mais grâce à ce travail, nous avons commencé à étoffer le projet et à mieux le comprendre.\\
