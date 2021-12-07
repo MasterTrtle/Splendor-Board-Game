@@ -22,14 +22,30 @@ namespace Splendor {
 
 
 }
-class Jetons {
-	int vert;
-	int bleu;
-	int rouge;
-	int blanc;
-	int noir;
-	int joker;
+
+enum class Couleur {vert,bleu,rouge,blanc, noir, jaune};
+enum class TypeCarte {'carte developpement N1',  'carte developpement N2', 'carte developpement N3', 'tuile noble'};
+
+// a voir si la classe jeton est utile, ou si on la supprime
+class Jeton {
+private:
+    const Couleur couleur;
+public:
+    Jeton(const couleur c): couleur (c) {}
+    Couleur getCouleur() const { return couleur; }
 };
+
+class Pile {
+private:
+    const Couleur couleur;
+    unsigned int nombre;
+public:
+    Pile(const couleur c, unsigned int n ): couleur(c), nombre(n) {}
+    Couleur getCouleur() const { return couleur; }
+    unsigned int getNombre() const {return nombre;}
+};
+
+
 
 class Cout {
 public:
@@ -42,7 +58,7 @@ public:
 
 class Carte {
 public:
-	std::string getID() const{ return ID;}
+    const unsigned int getID() const{ return ID;}
 	std::string getNom() const { return Nom; }
 	Cout getCout() const{ return cout; }
 	int getPrestige() const{ return prestige; }
@@ -51,19 +67,22 @@ public:
 	Carte& operator=(const Carte& c) = default;
 private:
 	Carte(std::string id, std::string nom, Cout c, int p) :ID(id), Nom(nom), cout(c), prestige(p) {}
-	std::string ID;
+	const unsigned int ID;
 	std::string Nom;
 	Cout cout;
 	int prestige;
-
-	class Jeu {
 };
 
-
-
-
-
+class Pioche {
+private:
+    TypeCarte typePioche;
+    const Carte** cartes = nullptr;
+    size_t nb =0;
+public:
+    size_t getNombreCarte() const { return nb; }
+    const Carte& piocher();
 };
+
 
 
 ostream& operator<<(ostream& f, const Carte& c);
