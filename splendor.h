@@ -39,10 +39,13 @@ class Pile {
 private:
     const Couleur couleur;
     unsigned int nombre;
+	//const Jetons ** jetons = nullptr;  //on gérer touts les adress de jetons dans un pile ?
 public:
     Pile(const couleur c, unsigned int n ): couleur(c), nombre(n) {}
     Couleur getCouleur() const { return couleur; }
     unsigned int getNombre() const {return nombre;}
+	// Jeton depiler(){};pour prendre une jeton
+	//void empile(){}; ; pour ajouter une jeton
 };
 
 
