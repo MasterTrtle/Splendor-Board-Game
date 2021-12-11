@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <ctime>
 #include "cartes.h"
+#include <set>
+#include <vector>
 
 using namespace std;
 
@@ -207,5 +209,31 @@ namespace Splendor {
         const cartes::carte &piocher();
     };
 
+	class  Joueur
+	{
+		friend class Controleur;
+	public:
+		 Joueur();
+		~ Joueur();
+		const int getJoueurID() const{ return ID; };
+		bool GetJetons();
+		bool giveJetons();
+		void ShowJetons(Jeton J); //a voir comment on va gerer les jetons
+		void ShowCartes();
+		void ShowReserved();
+		bool ReserveCartre(Carte c, Jeton jetons) {};
+		bool BuyCarte(Carte*) {};
+		bool VisitNobles();
+
+	private:
+		
+		const unsigned int ID;
+		const std::string Nom;
+		Jeton jetons;
+		std::set<int> Carte;
+		std::vector<int> Jeton;
+		int prestige;
+
+	};
 #endif
 }
