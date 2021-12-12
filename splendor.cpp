@@ -12,6 +12,7 @@ namespace Splendor {
 		return f;
 		
 	}
+	
 	std::ostream& operator<<(std::ostream& f, TypeCarte t) {
 		if (t == TypeCarte::N1) f << "N1";
 		else if (t == TypeCarte::N2) f << "N2";
@@ -70,14 +71,24 @@ namespace Splendor {
 
 	}
 	Pioche::~Pioche() {
+		/*
 		cout << "\n pioche type: " << type_cartes << "\n";
 		for (size_t i = 0; i < nbCartes; i++) {
 			cout << "suppresion pioche" << i;
+			cout << "carte cout: " << *cartes[i] << cartes[i];
 			delete cartes[i];
 			cout << "fin suppresion pioche" << i << "\n";
 		}
+		*/
+		delete[] cartes;
 
 
+	}
+	void Pioche::printCarte(ostream& f ) const {
+		cout << "affichage de la pioche " << type_cartes << ": ";
+		for (size_t i = 0; i < nbCartes; i++) {
+			cout << *cartes[i] << "\n";
+		}
 	}
 	const Carte& Pioche::piocher() {
 		
@@ -128,6 +139,7 @@ namespace Splendor {
 	
 	Plateau::Plateau():cartesN1(new const Carte*[nbMax]), cartesN2(new const Carte* [nbMax]), cartesN3(new const Carte* [nbMax]) {}
 	Plateau::~Plateau() {
+		/*
 		for (size_t i = 0; i < nbMax; i++) {
 			cout << "suppression: " << i;
 			delete cartesN1[i];
@@ -143,7 +155,10 @@ namespace Splendor {
 			delete cartesN3[i];
 			cout << "fin suppression: " << i << "\n";
 		}
-		 
+		 */
+		delete[] cartesN1;
+		delete[] cartesN2;
+		delete[] cartesN3;
 	}
 	Controleur::Controleur() {
 
@@ -186,6 +201,8 @@ namespace Splendor {
 	void Controleur::distribuerCarte() {
 		
 		if (plateau.getNbCartesN1() < 4 || plateau.getNbCartesN2() < 4 || plateau.getNbCartesN3() < 4) {
+			plateau.ajouterCarte(piocheN1->piocher());
+			/*
 			while (!piocheN1->estVide() && plateau.getNbCartesN1() < 4) {
 				plateau.ajouterCarte(piocheN1->piocher());
 				
@@ -201,24 +218,28 @@ namespace Splendor {
 			}
 			
 			cout << "fin distribution";
-			
+			*/
 		}
 		else
 			throw SetException("Impossible de distribuer des cartes, le plateau est plein");
 			
 	}
 	
-	void Plateau::printCarte(ostream& f = std::cout) const  {
+	void Plateau::printCarte(ostream& f ) const  {
+		f << " \n Cartes presentes sur le plateau: \n";
+		f<< "Cartes  N1: \n";
 		for (size_t i = 0; i < nbCartesN1; i++) {
-			f << *cartesN1[i] << " ";
+			f << *cartesN1[i] << "\n ";
 		}
-		f << "\n";
+		f << "\n ";
+		f << "Cartes  N2: \n";
 		for (size_t i = 0; i < nbCartesN2; i++) {
-			f << *cartesN2[i] << " ";
+			f << *cartesN2[i] << "\n ";
 		}
 		f << "\n";
+		f << "Cartes  N3: \n";
 		for (size_t i = 0; i < nbCartesN3; i++) {
-			f << *cartesN3[i] << " ";
+			f << *cartesN3[i] << " \n";
 		}
 		f << "\n";
 		
