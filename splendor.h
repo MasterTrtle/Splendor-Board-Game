@@ -41,9 +41,9 @@ namespace Splendor {
 	private:
 		const Couleur couleur;
 		unsigned int nombre;
-		//const Jetons ** jetons = nullptr;  //on g�rer touts les adress de jetons dans un pile ?
+		//const Jetons ** jetons = nullptr;  //on gérer touts les adress de jetons dans un pile ?
 	public:
-		Pile(const couleur c, unsigned int n) : couleur(c), nombre(n) {}
+		Pile(const Couleur c, unsigned int n) : couleur(c), nombre(n) {}
 		Couleur getCouleur() const { return couleur; }
 		unsigned int getNombre() const { return nombre; }
 		// Jeton depiler(){};pour prendre une jeton
@@ -52,8 +52,10 @@ namespace Splendor {
 
 
 
-	class Cout {
+	class Prix {
+
 		public:
+			Prix(int v, int b, int r, int bl, int n) : vert(v),bleu(b),rouge(r),blanc(bl),noir(n) {};
 			int vert;
 			int bleu;
 			int rouge;
@@ -61,126 +63,156 @@ namespace Splendor {
 			int noir;
 	};
 
-	class Carte {
+	class Carte { 
 		public:
-			TypeCarte type;
+			
 			const unsigned int getID() const { return ID; }
 			std::string getNom() const { return Nom; }
-			Cout getCout() const { return cout; }
+			Prix getCout() const { return *prix; }
+			TypeCarte getType() const { return type; }
 			int getPrestige() const { return prestige; }
-			~Carte() = default;
+			Carte(unsigned int id, std::string nom, Prix* c, int p, TypeCarte t);
+			~Carte() { delete prix; };
 			Carte(const Carte& c) = default;
 			Carte& operator=(const Carte& c) = default;
 		private:
-			Carte(std::string id, std::string nom, Cout c, int p, TypeCarte t) :ID(id), Nom(nom), cout(c), prestige(p),type(t) {}
+			TypeCarte type;
 			const unsigned int ID;
 			std::string Nom;
-			Cout cout;
+			Prix* prix;
 			int prestige;
 	};
+	
 
-
-
+	
 
 
 	ostream& operator<<(ostream& f, const Carte& c);
+	class Joueur {
 
+	};
 	class Partie {
-	private:
-		
-		static size_t nb_cartes;
-		Carte* cartes[90];
-		
-		Jeton* jetons[40];
-		~Partie() { delete[] cartes; delete* jetons; }
-		Partie(const Partie&) = delete;
-		Partie& operator=(const Partie&) = delete;
-	
-		const Carte& getCarte(size_t i) { return *cartes[i]; }
-		const Jeton& getJeton(size_t i) { return *jetons[i]; }
-		friend class Iterator;
 	public:
-		
-		size_t getNbCartes() const { return nb_cartes; }
+		static Partie& getInstance() { if (handler.instance == nullptr) handler.instance = new Partie; return *handler.instance;}
+		static void libererInstance() {  delete handler.instance;  handler.instance = nullptr; 
+		}
+		size_t getNbCartes(TypeCarte t) const;
+		const Carte& getCarte(size_t i); // provisoire en attendant d'avoir un iterateur qui ne parcourt que les cartes du type souhaité
 		class Iterator {
 		public:
 			void next() { if (isDone()) throw SetException("Iterateur en fin de sequence"); i++; }
-			bool isDone() const { return i == nb_cartes; }
-			const Carte& currentItem() const { if (isDone()) throw SetException("Iterateur en fin de sequence"); return getCarte(i); }
+			bool isDone() const { return i == getInstance().nb_cartes; }
+			const Carte& currentItem() { if (isDone()) throw SetException("Iterateur en fin de sequence"); return Partie::getInstance().getCarte(i); }
 		private:
 			size_t i = 0;
+			
 			friend class Partie;
 			Iterator() = default;
-			 
+
 		};
-	
 		Iterator getIterator() const { return Iterator(); }
-
-	};
-
-	class Controleur {
-		static const int nb_joueurs;
-		Pioche* piocheN1 = nullptr;
-		Pioche* piocheN2 = nullptr;
-		Pioche* piocheN3 = nullptr;
-		Pile* pile = nullptr;
-		Plateau plateau;
-		Joueur* joueurs;
-
-	public:
-		Controleur();
-		~Controleur() { delete piocheN1; delete piocheN2; delete piocheN3; }
-		Controleur(const Controleur& c) = delete;
-		Controleur& operator=(const Controleur& c) = delete;
-		const Pioche& getPiocheN1() { return *piocheN1; }
-		const Pioche& getPiocheN1() { return *piocheN2; }
-		const Pioche& getPiocheN1() { return *piocheN3; }
-		const Pile& getPile() { return *pile; }
-		Plateau& getPlateau() { return plateau; }
-
-		void getCurrentJoueur();
-		void joueurSuivant();
-		void distribuerJeton();
-		void distribuerCarte();
-	};
-
-	class Plateau {
-	private:
+	private:	
+		const  size_t nb_cartes = 90;
+		const  size_t nb_cartesN1 = 40;
+		const  size_t nb_cartesN2 = 30;
+		const  size_t nb_cartesN3 = 20;
+		const Carte* cartes[90];
+		//Jeton* jetons[40];
 		
-		const Carte** cartesN1 = nullptr;
-		const Carte** cartesN2 = nullptr;
-		const Carte** cartesN3 = nullptr;
-		const Jeton** jetons = nullptr;
-		size_t nbCartesN1;
-		size_t nbCartesN2;
-		size_t nbCartesN3;
+		//const Jeton& getJeton(size_t i) { return *jetons[i]; }
+		friend class Iterator;
+		struct Handler {
+			Partie* instance;
+			Handler() :instance(nullptr) {  }
+			~Handler() { delete instance; } 
+		};
+		static Handler handler;
 
-	public:
-		Plateau();
-		~Plateau() { delete[] cartesN1; delete[] cartesN2; delete[] cartesN3; }
-		void ajouterCarte(const Carte& c);
-		void retirerCarte(const Carte& c);
-		void ajouterJeton(const Jeton& c);
-		void retirerJeton(const Jeton& c);
+		Partie();
+		~Partie(); 
+		Partie(const Partie&) = delete;
+		Partie& operator=(const Partie&) = delete;
+	
 
-		const int getNbCartesN1() { return nbCartesN1; }
-		const int getNbCartesN2() { return nbCartesN2; }
-		const int getNbCartesN3() { return nbCartesN3; }
-		
 	};
-
 	class Pioche {
 	private:
 		size_t nbCartes;
 		TypeCarte type_cartes;
 		const Carte** cartes = nullptr;
-	
+
 	public:
+		Pioche(TypeCarte t);
+		~Pioche();
 		bool estVide() const { return nbCartes == 0; }
-		Pioche(TypeCarte t) : type_cartes(t) {};
-		const size_t getNbCartes() { return nbCartes; }
+
+		size_t getNbCartes() const { return nbCartes; }
 		const Carte& piocher();
 	};
+	class Plateau {
+	private:
+
+		const Carte** cartesN1;
+		const Carte** cartesN2;
+		const Carte** cartesN3;
+		//const Jeton** jetons = nullptr;
+		size_t nbCartesN1 = 0;
+		size_t nbCartesN2 = 0;
+		size_t nbCartesN3= 0;
+		const size_t nbMax = 4;
+		
+
+
+	public:
+		Plateau();
+		~Plateau();
+		void ajouterCarte(const Carte& c);
+
+		void printCarte(ostream& f) const;
+
+		//void retirerCarte(const Carte& c);
+		//void ajouterJeton(const Jeton& c);
+		//void retirerJeton(const Jeton& c);
+
+		const int getNbCartesN1() { return nbCartesN1; }
+		const int getNbCartesN2() { return nbCartesN2; }
+		const int getNbCartesN3() { return nbCartesN3; }
+
+	};
+
+	
+	
+
+	class Controleur {
+		static const int nb_joueurs;
+		Pioche* piocheN1;
+		Pioche* piocheN2;
+		Pioche* piocheN3;
+		//Pile* pile;
+		
+		Plateau plateau;
+		//Joueur* joueurs;
+
+	public:
+		Controleur();
+		Controleur(const Controleur& c) = delete;
+		Controleur& operator=(const Controleur& c) = delete;
+		~Controleur() { delete piocheN1; delete piocheN2; delete piocheN3; }//delete pile; }
+
+		Pioche& getPiocheN1() { return *piocheN1; }
+		Pioche& getPiocheN2() { return *piocheN2; }
+		Pioche& getPiocheN3() { return *piocheN3; }
+		//Pile& getPile() { return *pile; }
+		Plateau& getPlateau() { return plateau; }
+
+		//void getCurrentJoueur();
+		//void joueurSuivant();
+		//void distribuerJeton();
+		void distribuerCarte();
+	};
+
+	
+	
 
 	#endif
 }
