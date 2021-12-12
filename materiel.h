@@ -1,5 +1,5 @@
-#ifndef LO21_PROJET_SPLENDOR_A21_V1_NICO_CARTES_H
-#define LO21_PROJET_SPLENDOR_A21_V1_NICO_CARTES_H
+#ifndef LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
+#define LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
 
 #include <iostream>
 #include <vector>
@@ -10,16 +10,20 @@
 
 using namespace std;
 
-namespace cartes {
+namespace materiel {
 
-    class cartesException {
+    class materielException {
     public:
-        cartesException(const string &i) : info(i) {}
+        materielException(const string &i) : info(i) {}
 
         string getInfo() const { return info; }
 
     private:
         string info;
+    };
+
+    enum class Couleur {
+        vert, bleu, rouge, blanc, noir, jaune
     };
 
 
@@ -84,8 +88,44 @@ namespace cartes {
             shuffle(std::begin(cartes), std::end(cartes), std::default_random_engine());
         }
     };
+
+
+    // a voir si la classe jeton est utile, ou si on la supprime
+    class Jeton {
+    private:
+        const Couleur couleur;
+
+    public:
+        explicit Jeton(const Couleur c) : couleur(c) {}
+
+        Couleur getCouleur() const { return couleur; }
+    };
+
+    class Pile {
+    private:
+        const Couleur couleur;
+        size_t nbJetons = 0;
+        vector<Jeton *> jetons = {};
+    public:
+        bool estVide() const { return nbJetons == 0; }
+
+        Pile(const Couleur c) : couleur(c) {};
+
+        Couleur getCouleur() const { return couleur; }
+
+        size_t getNombre() const { return nbJetons; }
+
+        Jeton * retirerJeton ();
+
+        void ajouterJeton (Jeton * j);
+
+        Pile &operator<<(Jeton &e);
+
+    };
+
+
 };
 
 
 
-#endif //LO21_PROJET_SPLENDOR_A21_V1_NICO_CARTES_H
+#endif //LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H

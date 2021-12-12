@@ -8,7 +8,7 @@
 #include <array>
 #include <cstdlib>
 #include <ctime>
-#include "cartes.h"
+#include "materiel.h"
 #include <set>
 #include <vector>
 
@@ -35,43 +35,19 @@ namespace Splendor {
         N1, N2, N3, Noble
     };
 
-    // a voir si la classe jeton est utile, ou si on la supprime
-    class Jeton {
-    private:
-        const Couleur couleur;
-    public:
-        Jeton(const Couleur c) : couleur(c) {}
 
-        Couleur getCouleur() const { return couleur; }
-    };
-
-    class Pile {
-    private:
-        const Couleur couleur;
-        unsigned int nombre;
-        //const Jetons ** jetons = nullptr;  //on gerer touts les adress de jetons dans un pile ?
-    public:
-        Pile(const Couleur c, unsigned int n) : couleur(c), nombre(n) {};
-
-        Couleur getCouleur() const { return couleur; }
-
-        unsigned int getNombre() const { return nombre; }
-        // Jeton depiler(){};pour prendre une jeton
-        //void empile(){}; ; pour ajouter une jeton
-    };
-
-    ostream &operator<<(ostream &f, const cartes::carte &c);
+    ostream &operator<<(ostream &f, const materiel::carte &c);
 
     class Partie {
     private:
 
         static size_t nb_cartes;
-        cartes::carte *cartes[90];
+        materiel::carte *cartes[90];
 
-        Jeton *jetons[40];
+        materiel::Jeton *jetons[40];
 
         ~Partie() {
-            delete[] cartes;
+            delete *cartes;
             delete *jetons;
         }
 
@@ -80,9 +56,9 @@ namespace Splendor {
         Partie &operator=(const Partie &) = delete;
 
     public:
-        const cartes::carte &getCarte(size_t i) { return *cartes[i]; }
+        const materiel::carte &getCarte(size_t i) { return *cartes[i]; }
 
-        const Jeton &getJeton(size_t i) { return *jetons[i]; }
+        const materiel::Jeton &getJeton(size_t i) { return *jetons[i]; }
 
         friend class Iterator;
 
@@ -97,7 +73,7 @@ namespace Splendor {
 
             bool isDone() const { return i == nb_cartes; }
 
-            const cartes::carte &currentItem() const {
+            const materiel::carte &currentItem() const {
                 if (isDone()) throw SetException("Iterateur en fin de sequence");
                 return getCarte(i);
             }
@@ -118,10 +94,10 @@ namespace Splendor {
     class Plateau {
     private:
 
-        const cartes::carte **cartesN1 = nullptr;
-        const cartes::carte **cartesN2 = nullptr;
-        const cartes::carte **cartesN3 = nullptr;
-        const Jeton **jetons = nullptr;
+        const materiel::carte **cartesN1 = nullptr;
+        const materiel::carte **cartesN2 = nullptr;
+        const materiel::carte **cartesN3 = nullptr;
+        const materiel::Jeton **jetons = nullptr;
         size_t nbCartesN1;
         size_t nbCartesN2;
         size_t nbCartesN3;
@@ -135,9 +111,9 @@ namespace Splendor {
             delete[] cartesN3;
         }
 
-        void ajouterCarte(const cartes::carte &c);
+        void ajouterCarte(const materiel::carte &c);
 
-        void retirerCarte(const cartes::carte &c);
+        void retirerCarte(const materiel::carte &c);
 
         void ajouterJeton(const Jeton &c);
 
@@ -153,10 +129,10 @@ namespace Splendor {
 
     class Controleur {
         static const int nb_joueurs;
-        cartes::Pioche *piocheN1 = nullptr;
-        cartes::Pioche *piocheN2 = nullptr;
-        cartes::Pioche *piocheN3 = nullptr;
-        Pile *pile = nullptr;
+        materiel::Pioche *piocheN1 = nullptr;
+        materiel::Pioche *piocheN2 = nullptr;
+        materiel::Pioche *piocheN3 = nullptr;
+        materiel::Pile *pile = nullptr;
         Plateau plateau;
         //Joueur* joueurs;
 
@@ -173,13 +149,13 @@ namespace Splendor {
 
         Controleur &operator=(const Controleur &c) = delete;
 
-        const cartes::Pioche &getPiocheN1() { return *piocheN1; }
+        const materiel::Pioche &getPiocheN1() { return *piocheN1; }
 
-        const cartes::Pioche &getPiocheN2() { return *piocheN2; }
+        const materiel::Pioche &getPiocheN2() { return *piocheN2; }
 
-        const cartes::Pioche &getPiocheN3() { return *piocheN3; }
+        const materiel::Pioche &getPiocheN3() { return *piocheN3; }
 
-        const Pile &getPile() { return *pile; }
+        const materiel::Pile &getPile() { return *pile; }
 
         Plateau &getPlateau() { return plateau; }
 
@@ -197,7 +173,7 @@ namespace Splendor {
     private:
         size_t nbCartes;
         TypeCarte type_cartes;
-        const cartes::carte **cartes = nullptr;
+        const materiel::carte **cartes = nullptr;
 
     public:
         bool estVide() const { return nbCartes == 0; }
@@ -206,7 +182,7 @@ namespace Splendor {
 
         const size_t getNbCartes() { return nbCartes; }
 
-        const cartes::carte &piocher();
+        const materiel::carte &piocher();
     };
 
 		class  Joueur
@@ -239,8 +215,8 @@ namespace Splendor {
 		int GetPrestige() { return prestige; };
 
 		//methods pour joueur
-		bool ReserveCartre(Carte c, Jeton jetons) {};
-		bool BuyCarte(Carte*) {};
+		bool ReserveCartre(materiel::carte c, materiel::Jeton jetons) {};
+		bool BuyCarte(materiel::carte*) {};
 		bool VisitNobles(); 
 		bool GetJetons(); //prendre des jetons
 		bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
@@ -255,8 +231,8 @@ namespace Splendor {
 		
 		const unsigned int ID;
 		const std::string Nom;
-		std::vector<Carte> Reserved;
-		std::vector<Carte> Cartes;
+		std::vector<materiel::carte> Reserved;
+		std::vector<materiel::carte> Cartes;
 		Jeton* Jetons[10];
 		int prestige;
 

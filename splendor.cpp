@@ -9,12 +9,12 @@ namespace Splendor {
 	}
 
 	void Joueur::ShowCartes() {
-		for (vector<Carte>::iterator i = Cartes.begin(); i != Cartes.end(); i++)
+		for (vector<materiel::carte>::iterator i = Cartes.begin(); i != Cartes.end(); i++)
 			cout << *i << endl; 
 	};
 
 	void Joueur::ShowReserved() {
-		for (vector<Carte>::iterator i = Reserved.begin(); i != Reserved.end(); i++)
+		for (vector<materiel::carte>::iterator i = Reserved.begin(); i != Reserved.end(); i++)
 			cout << *i << endl;
 	};
 
