@@ -209,31 +209,59 @@ namespace Splendor {
         const cartes::carte &piocher();
     };
 
-	class  Joueur
+		class  Joueur
 	{
 		friend class Controleur;
 	public:
-		 Joueur();
-		~ Joueur();
+		Joueur(unsigned int id, std::string nom) :ID(id), Nom(nom),prestige(0){
+			for (int i = 0; i < 10; i++)
+			{
+				Jetons[i] = nullptr;
+			}
+		};
+		~Joueur() {
+			for (int i = 0; i < 10; i++)
+			{
+				if (Jetons[i] != nullptr)
+				{
+					delete Jetons[i];
+					Jetons[i] = nullptr;
+				}
+			}
+		};
+
+		// functions pour afficher 
 		const int getJoueurID() const{ return ID; };
-		bool GetJetons();
-		bool giveJetons();
-		void ShowJetons(Jeton J); //a voir comment on va gerer les jetons
+		void ShowJetons(); //a voir comment on va gerer les jetons
 		void ShowCartes();
 		void ShowReserved();
+		Couleur GetBonus(); // pour calculer le bonus de joueur
+		int GetPrestige() { return prestige; };
+
+		//methods pour joueur
 		bool ReserveCartre(Carte c, Jeton jetons) {};
 		bool BuyCarte(Carte*) {};
-		bool VisitNobles();
+		bool VisitNobles(); 
+		bool GetJetons(); //prendre des jetons
+		bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
+
+		//functions set
+		void AddPrestige(int i) { prestige = prestige+ i;}
+
+		// fonctions de controle
+
 
 	private:
 		
 		const unsigned int ID;
 		const std::string Nom;
-		Jeton jetons;
-		std::set<int> Carte;
-		std::vector<int> Jeton;
+		std::vector<Carte> Reserved;
+		std::vector<Carte> Cartes;
+		Jeton* Jetons[10];
 		int prestige;
 
 	};
+
+
 #endif
 }
