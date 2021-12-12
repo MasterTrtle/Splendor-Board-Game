@@ -137,7 +137,7 @@ namespace Splendor {
 		cout<< "\n" <<" --- fin de la génération des cartes --- "<< "\n";
 	}
 	
-	Plateau::Plateau():cartesN1(new const Carte*[4]), cartesN2(new const Carte* [4]), cartesN3(new const Carte* [4]) {} // nbMAx -> 4 pour fixer le pb du memoire
+	Plateau::Plateau():cartesN1(new const Carte*[4]), cartesN2(new const Carte* [4]), cartesN3(new const Carte* [4]) {}
 	Plateau::~Plateau() {
 		/*
 		for (size_t i = 0; i < nbMax; i++) {
@@ -201,8 +201,8 @@ namespace Splendor {
 	void Controleur::distribuerCarte() {
 		
 		if (plateau.getNbCartesN1() < 4 || plateau.getNbCartesN2() < 4 || plateau.getNbCartesN3() < 4) {
-			plateau.ajouterCarte(piocheN1->piocher());
-			/*
+			
+			
 			while (!piocheN1->estVide() && plateau.getNbCartesN1() < 4) {
 				plateau.ajouterCarte(piocheN1->piocher());
 				
@@ -218,7 +218,7 @@ namespace Splendor {
 			}
 			
 			cout << "fin distribution";
-			*/
+			
 		}
 		else
 			throw SetException("Impossible de distribuer des cartes, le plateau est plein");
