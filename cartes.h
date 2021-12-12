@@ -46,13 +46,15 @@ namespace cartes {
         Cout cout;
         int prestige;
         TypeCarte type;
-
+        Cout bonus; // on a oublie ce truc
     public:
         unsigned int getID() const { return ID; }
 
         std::string getNom() const { return Nom; }
 
         Cout getCout() const { return cout; }
+
+        Cout getBonus() const { return cout; }  // on a oublie ce truc
 
         int getPrestige() const { return prestige; }
 
