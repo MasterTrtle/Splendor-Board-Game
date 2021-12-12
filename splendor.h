@@ -142,15 +142,15 @@ namespace Splendor {
 		const Carte** cartes = nullptr;
 
 	public:
+		void printCarte(ostream& f = std::cout) const;
 		Pioche(TypeCarte t);
 		~Pioche();
 		bool estVide() const { return nbCartes == 0; }
-
 		size_t getNbCartes() const { return nbCartes; }
 		const Carte& piocher();
 	};
 	class Plateau {
-	private:
+	private: // pour debug
 
 		const Carte** cartesN1;
 		const Carte** cartesN2;
@@ -168,7 +168,7 @@ namespace Splendor {
 		~Plateau();
 		void ajouterCarte(const Carte& c);
 
-		void printCarte(ostream& f) const;
+		void printCarte(ostream& f = std::cout) const;
 
 		//void retirerCarte(const Carte& c);
 		//void ajouterJeton(const Jeton& c);
