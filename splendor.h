@@ -88,9 +88,7 @@ namespace Splendor {
 
 
 	ostream& operator<<(ostream& f, const Carte& c);
-	class Joueur {
 
-	};
 	class Partie {
 	public:
 		static Partie& getInstance() { if (handler.instance == nullptr) handler.instance = new Partie; return *handler.instance;}
@@ -212,7 +210,58 @@ namespace Splendor {
 	};
 
 	
-	
+	class  Joueur
+	{
+		friend class Controleur;
+	public:
+		Joueur(unsigned int id, std::string nom) :ID(id), Nom(nom),prestige(0){
+			for (int i = 0; i < 10; i++)
+			{
+				Jetons[i] = nullptr;
+			}
+		};
+		~Joueur() {
+			for (int i = 0; i < 10; i++)
+			{
+				if (Jetons[i] != nullptr)
+				{
+					delete Jetons[i];
+					Jetons[i] = nullptr;
+				}
+			}
+		};
+
+		// functions pour afficher 
+		const int getJoueurID() const{ return ID; };
+		void ShowJetons(); //a voir comment on va gerer les jetons
+		void ShowCartes();
+		void ShowReserved();
+		Couleur GetBonus(); // pour calculer le bonus de joueur
+		int GetPrestige() { return prestige; };
+
+		//methods pour joueur
+		bool ReserveCartre(Carte c, Jeton jetons) {};
+		bool BuyCarte(Carte*) {};
+		bool VisitNobles(); 
+		bool GetJetons(); //prendre des jetons
+		bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
+
+		//functions set
+		void AddPrestige(int i) { prestige = prestige+ i;}
+
+		// fonctions de controle
+
+
+	private:
+		
+		const unsigned int ID;
+		const std::string Nom;
+		std::vector<Carte> Reserved;
+		std::vector<Carte> Cartes;
+		Jeton* Jetons[10];
+		int prestige;
+
+	};
 
 	#endif
 }
