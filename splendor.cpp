@@ -137,7 +137,7 @@ namespace Splendor {
 		cout<< "\n" <<" --- fin de la génération des cartes --- "<< "\n";
 	}
 	
-	Plateau::Plateau():cartesN1(new const Carte*[nbMax]), cartesN2(new const Carte* [nbMax]), cartesN3(new const Carte* [nbMax]) {}
+	Plateau::Plateau():cartesN1(new const Carte*[4]), cartesN2(new const Carte* [4]), cartesN3(new const Carte* [4]) {} // nbMAx -> 4 pour fixer le pb du memoire
 	Plateau::~Plateau() {
 		/*
 		for (size_t i = 0; i < nbMax; i++) {
