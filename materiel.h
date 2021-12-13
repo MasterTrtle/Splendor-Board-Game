@@ -22,6 +22,17 @@ namespace materiel {
         string info;
     };
 
+
+    class Prix {
+    public:
+        Prix(int v, int b, int r, int bl, int n) : vert(v),bleu(b),rouge(r),blanc(bl),noir(n) {};
+        int vert;
+        int bleu;
+        int rouge;
+        int blanc;
+        int noir;
+    };
+
     enum class Couleur {
         vert, bleu, rouge, blanc, noir, jaune
     };
@@ -31,41 +42,34 @@ namespace materiel {
         N1, N2, N3, Noble
     };
 
-    class Cout {
-    public:
-        int vert;
-        int bleu;
-        int rouge;
-        int blanc;
-        int noir;
-        int jaune;
-    };
-
 
     class carte {
     private:
         const unsigned int ID;
         static int current_id;
         std::string Nom;
-        Cout cout;
+        Prix prix;
         int prestige;
         TypeCarte type;
-        Cout bonus; // on a oublie ce truc
+
     public:
         unsigned int getID() const { return ID; }
 
         std::string getNom() const { return Nom; }
 
-        Cout getCout() const { return cout; }
+        Prix getPrix() const { return prix; }
 
-        Cout getBonus() const { return cout; }  // on a oublie ce truc
+        Prix getBonus() const { return prix; }  // on a oublie ce truc
 
         int getPrestige() const { return prestige; }
 
+        TypeCarte getType() const { return type; }
+
         ~carte() = default;
 
-        carte(string &n, Cout c, int p, TypeCarte t) : ID(current_id++), Nom(n), cout(c), prestige(p), type(t) {};
+        carte(string &n, Prix c, int p,TypeCarte t) : ID(current_id++), Nom(n),prix(c), prestige(p), type(t) {};
     };
+    int carte::current_id =0;
 
     class Pioche {
     private:
@@ -78,15 +82,20 @@ namespace materiel {
 
         Pioche(TypeCarte t) : type_cartes(t) {};
 
+        Pioche(TypeCarte t, vector<carte *> c) : type_cartes(t), cartes(c) {};
+
+
         size_t getNbCartes() { return nbCartes; }
 
-        carte* piocher();
+        carte *piocher();
 
         Pioche &operator<<(carte &e);
 
-        void shufflePioche (){
+        void shufflePioche() {
             shuffle(std::begin(cartes), std::end(cartes), std::default_random_engine());
         }
+
+        void printPioche(ostream &f) const;
     };
 
 
@@ -115,17 +124,17 @@ namespace materiel {
 
         size_t getNombre() const { return nbJetons; }
 
-        Jeton * retirerJeton ();
+        Jeton *retirerJeton();
 
-        void ajouterJeton (Jeton * j);
+        void ajouterJeton(Jeton *j);
 
         Pile &operator<<(Jeton &e);
 
     };
 
 
-};
 
+}
 
 
 #endif //LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
