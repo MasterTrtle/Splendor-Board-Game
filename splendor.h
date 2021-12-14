@@ -13,10 +13,11 @@
 #include <vector>
 
 using namespace std;
+using namespace materiel;
 
 namespace Splendor {
 
-    // classe pour gerer les exceptions dans le set
+    // classe pour gerer les exceptions dans le jeu
     class SplendorException {
     public:
         SplendorException(const string &i) : info(i) {}
@@ -28,23 +29,16 @@ namespace Splendor {
     };
 
 
-    enum class Couleur {
-        vert, bleu, rouge, blanc, noir, jaune
-    };
-    enum class TypeCarte {
-        N1, N2, N3, Noble
-    };
-
-
-    ostream &operator<<(ostream &f, const materiel::carte &c);
+    
 
     class Partie {
     private:
+        
         const size_t nb_cartes = 90;
         const size_t nb_cartesN1 = 40;
         const size_t nb_cartesN2 = 30;
         const size_t nb_cartesN3 = 20;
-        const materiel::carte *cartes[90];
+        const materiel::Carte *cartes[90];
         //Jeton* jetons[40];
 
         //const Jeton& getJeton(size_t i) { return *jetons[i]; }
@@ -81,7 +75,7 @@ namespace Splendor {
 
         size_t getNbCartes(TypeCarte t) const;
 
-        const materiel::carte &getCarte(
+        const materiel::Carte &getCarte(
                 size_t i); // provisoire en attendant d'avoir un iterateur qui ne parcourt que les cartes du type souhaité
         class Iterator {
         public:
@@ -92,7 +86,7 @@ namespace Splendor {
 
             bool isDone() const { return i == getInstance().nb_cartes; }
 
-            const materiel::carte &currentItem() {
+            const materiel::Carte &currentItem() {
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
                 return Partie::getInstance().getCarte(i);
             }
@@ -112,9 +106,9 @@ namespace Splendor {
 
     class Plateau {
     private: // pour debug
-        materiel::Pioche cartesN1;
-        materiel::Pioche cartesN2;
-        materiel::Pioche cartesN3;
+        const materiel::Carte** cartesN1;
+        const materiel::Carte** cartesN2;
+        const materiel::Carte** cartesN3;
         //const Jeton** jetons = nullptr;
         size_t nbCartesN1 = 0;
         size_t nbCartesN2 = 0;
@@ -126,7 +120,7 @@ namespace Splendor {
 
         ~Plateau();
 
-        void ajouterCarte(const materiel::carte &c);
+        void ajouterCarte(const materiel::Carte &c);
 
         void printCarte(ostream &f = std::cout) const;
 
@@ -144,9 +138,9 @@ namespace Splendor {
 
     class Controleur {
         static const int nb_joueurs;
-        materiel::Pioche *piocheN1;
-        materiel::Pioche *piocheN2;
-        materiel::Pioche *piocheN3;
+        materiel::Pioche* piocheN1;
+        materiel::Pioche* piocheN2;
+        materiel::Pioche* piocheN3;
         //Pile* pile;
 
         Plateau plateau;
@@ -186,8 +180,8 @@ namespace Splendor {
 
         const unsigned int ID;
         const std::string Nom;
-        std::vector<materiel::carte *> Reserved;
-        std::vector<materiel::carte *> Cartes = {};
+        std::vector<materiel::Carte *> Reserved;
+        std::vector<materiel::Carte *> Cartes = {};
         std::vector<materiel::Jeton *> Jetons = {};
         int prestige = 0;
 
@@ -202,23 +196,23 @@ namespace Splendor {
         // functions pour afficher
         const int getJoueurID() const { return ID; };
 
-        void ShowJetons(); //a voir comment on va gerer les jetons
-        void ShowCartes();
+        //void ShowJetons(); //a voir comment on va gerer les jetons
+        //void ShowCartes();
 
-        void ShowReserved();
+        //void ShowReserved();
 
-        Couleur GetBonus(); // pour calculer le bonus de joueur
+        //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
 
         //methods pour joueur
-        bool ReserveCartre(materiel::carte c, materiel::Jeton jetons) {};
+        bool ReserveCartre(materiel::Carte c, materiel::Jeton jetons) {};
 
-        bool BuyCarte(materiel::carte *) {};
+        bool BuyCarte(materiel::Carte *) {};
 
-        bool VisitNobles();
+       // bool VisitNobles();
 
-        bool GetJetons(); //prendre des jetons
-        bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
+        //bool GetJetons(); //prendre des jetons
+        //bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
 
         //functions set
         void AddPrestige(int i) { prestige = prestige + i; }
