@@ -1,3 +1,4 @@
+#pragma once
 #ifndef LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
 #define LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
 
@@ -43,59 +44,62 @@ namespace materiel {
     };
 
 
-    class carte {
+    class Carte {
     private:
         const unsigned int ID;
-        static int current_id;
+       
         std::string Nom;
-        Prix prix;
+        Prix* prix;
         int prestige;
         TypeCarte type;
+        Couleur bonus; 
 
     public:
+        static int current_id;
         unsigned int getID() const { return ID; }
 
         std::string getNom() const { return Nom; }
 
-        Prix getPrix() const { return prix; }
+        Prix getPrix() const { return *prix; }
 
-        Prix getBonus() const { return prix; }  // on a oublie ce truc
+        Couleur getBonus() const { return bonus; }  // on a oublie ce truc
 
         int getPrestige() const { return prestige; }
 
         TypeCarte getType() const { return type; }
 
-        ~carte() = default;
+        ~Carte() = default;
 
-        carte(string &n, Prix c, int p,TypeCarte t) : ID(current_id++), Nom(n),prix(c), prestige(p), type(t) {};
+        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c),bonus(b), prestige(p), type(t) {};
     };
-    int carte::current_id =0;
+    
 
     class Pioche {
     private:
         size_t nbCartes = 0;
         TypeCarte type_cartes;
-        vector<carte *> cartes = {};
+        vector<Carte *> cartes = {};
 
     public:
         bool estVide() const { return nbCartes == 0; }
 
         Pioche(TypeCarte t) : type_cartes(t) {};
 
-        Pioche(TypeCarte t, vector<carte *> c) : type_cartes(t), cartes(c) {};
+        Pioche(TypeCarte t, vector<Carte *> c) : type_cartes(t), cartes(c) {};
 
 
         size_t getNbCartes() { return nbCartes; }
 
-        carte *piocher();
+        
+        const Carte& piocher();
 
-        Pioche &operator<<(carte &e);
+        Pioche &operator<<(Carte &e);
 
         void shufflePioche() {
             shuffle(std::begin(cartes), std::end(cartes), std::default_random_engine());
         }
 
-        void printPioche(ostream &f) const;
+        void printPioche(ostream& f = cout) const;
     };
 
 
