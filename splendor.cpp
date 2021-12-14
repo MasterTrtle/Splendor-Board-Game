@@ -1,54 +1,58 @@
 #include "splendor.h"
-
+#include "ostream.cpp"
 using namespace std;
+using namespace materiel;
 namespace Splendor {
 
     Partie::Handler Partie::handler = Handler();
 
-    std::ostream &operator<<(std::ostream &f, TypeCarte t) {
-        if (t == TypeCarte::N1) f << "N1";
-        else if (t == TypeCarte::N2) f << "N2";
-        else if (t == TypeCarte::N3) f << "N3";
-        else cout << "erreur";
-        return f;
-    }
+   
 
 
     size_t Partie::getNbCartes(TypeCarte t) const {
         if (t == TypeCarte::N1) return nb_cartesN1;
         if (t == TypeCarte::N2) return nb_cartesN2;
         if (t == TypeCarte::N3) return nb_cartesN3;
+        else return 0;
     }
 
-    const materiel::carte &Partie::getCarte(size_t i) {
-        return cartes[i];
+    const materiel::Carte &Partie::getCarte(size_t i) {
+        return *cartes[i];
     }
-    Partie::Partie() {
+    Partie::Partie() { // Plus tard construire à partir de données de stockage externe.
         cout << "generation des cartes de la partie: \n ";
         unsigned int i = 0;
 
         for (i; i < nb_cartesN1; i++) {
 
-            cartes[i] = new materiel::carte("la muerta", new materiel::Prix(1, 1, 1, 1, 1), 2, TypeCarte::N1);
+            cartes[i] = new materiel::Carte("la muerta", new materiel::Prix(1, 1, 1, 1, 1), materiel::Couleur::bleu, 2, TypeCarte::N1);
             //cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2; i++) {
 
-            cartes[i] = new materiel::carte( "la vida", new materiel::Prix(2, 3, 4, 1, 1), 5, TypeCarte::N2);
+            cartes[i] = new materiel::Carte( "la vida", new materiel::Prix(2, 3, 4, 1, 1), materiel::Couleur::bleu,5, TypeCarte::N2);
 
             cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2 + nb_cartesN3; i++) {
 
-            cartes[i] = new materiel::carte( "poco loco", new materiel::Prix(1, 3, 5, 1, 1), 7, TypeCarte::N3);
+            cartes[i] = new materiel::Carte( "poco loco", new materiel::Prix(1, 3, 5, 1, 1), materiel::Couleur::bleu, 7, TypeCarte::N3);
             cout << *cartes[i] << "\n";
         }
 
         cout << "\n" << " --- fin de la génération des cartes --- " << "\n";
     }
+    Partie::~Partie() {
+        for (size_t i = 0; i < nb_cartes; i++) {
 
-    Plateau::Plateau() : cartesN1(materiel::TypeCarte::N1), cartesN2(materiel::TypeCarte::N1),
-                         cartesN3(materiel::TypeCarte::N1) {}
+            delete cartes[i];
+
+        }
+
+    }
+
+    Plateau::Plateau() : cartesN1(new const materiel::Carte* [4]), cartesN2(new const materiel::Carte* [4]),
+                         cartesN3(new const materiel::Carte* [4]) {}
 
     Plateau::~Plateau() {
         delete[] cartesN1;
@@ -63,9 +67,9 @@ namespace Splendor {
         piocheN3 = new materiel::Pioche(materiel::TypeCarte::N3);
     };
 
-    void Plateau::ajouterCarte(const materiel::carte &c) {
+    void Plateau::ajouterCarte(const materiel::Carte& c) {
 
-        if (c.materiel::carte::getType() == TypeCarte::N1) {
+        if (c.materiel::Carte::getType() == TypeCarte::N1) {
             if (nbCartesN1 < nbMax) {
 
                 cartesN1[nbCartesN1] = &c;
