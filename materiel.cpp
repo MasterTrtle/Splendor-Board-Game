@@ -1,35 +1,31 @@
+#pragma once
 #include "materiel.h"
 #include <string>
 #include <iostream>
-#include <splendor>
+#include "ostream.cpp"
+//#include <splendor>
 
 using namespace materiel;
 
-std::ostream &operator<<(std::ostream &f, Prix c) {
-    f << "Vert:" << c.vert << "Bleu:" << c.bleu << "Noir:" << c.noir << "Rouge:" << c.rouge << "Blanc:" << c.blanc;
-    return f;
-}
+//initialisation dans le cpp de la variable statique
+int Carte::current_id = 0;
 
-std::ostream &operator<<(std::ostream &f, const carte &c) {
-    f << "(" << "ID:" << c.getID() << "," << "Nom:" << c.getNom() << "," << "Prix:" << c.getPrix() << ","
-      << "ID:Perstige" << c.getPrestige() << ")";
-    return f;
-}
 
-Pioche &Pioche::operator<<(carte &e) {
+
+Pioche &Pioche::operator<<(materiel::Carte &e) {
     cartes.push_back(&e);
     nbCartes++;
     return *this;
 }
 
-carte* Pioche::piocher() {
+const Carte& Pioche::piocher() {
     if (estVide()) {
         throw materielException("erreur: impossible de piocher dans une pioche vide");
     }
     auto target = cartes.back();
     cartes.pop_back();
     nbCartes -= 1;
-    return target;
+    return *target;
 }
 
 Jeton* Pile::retirerJeton() {
@@ -61,6 +57,7 @@ Pile& Pile::operator<<(materiel::Jeton &e) {
 
 void Pioche::printPioche(ostream &f) const {
     for (size_t i = 0; i < nbCartes; i++) {
-         cout <<*cartes[i] << "\n";
+         f <<*cartes[i] << "\n";
     }
+    
 }
