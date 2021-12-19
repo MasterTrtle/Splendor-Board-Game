@@ -1,5 +1,4 @@
 
-
 #include "splendor.h"
 #include <string>
 #include <iostream>
@@ -8,7 +7,7 @@ using namespace materiel;
 using namespace Splendor;
 
 
-std::ostream& operator<<(std::ostream& f, TypeCarte t) {
+inline std::ostream& operator<<(std::ostream& f, TypeCarte t) {
     if (t == TypeCarte::N1) f << "N1";
     else if (t == TypeCarte::N2) f << "N2";
     else if (t == TypeCarte::N3) f << "N3";
@@ -16,12 +15,12 @@ std::ostream& operator<<(std::ostream& f, TypeCarte t) {
     return f;
 }
 
-std::ostream& operator<<(std::ostream& f, Prix c) {
+inline std::ostream& operator<<(std::ostream& f, Prix c) {
     f << "Vert:" << c.vert << "Bleu:" << c.bleu << "Noir:" << c.noir << "Rouge:" << c.rouge << "Blanc:" << c.blanc;
     return f;
 }
 
-std::ostream& operator<<(std::ostream& f, const materiel::Carte& c) {
+inline std::ostream& operator<<(std::ostream& f, const materiel::Carte& c) {
     f << "(" << "ID:" << c.getID() << "," << "Nom:" << c.getNom() << "," << "Prix:" << c.getPrix() << ","
         << "ID:Perstige" << c.getPrestige() << ")";
     return f;
