@@ -15,7 +15,7 @@ namespace materiel {
 
     class materielException {
     public:
-        materielException(const string &i) : info(i) {}
+        materielException(const string& i) : info(i) {}
 
         string getInfo() const { return info; }
 
@@ -26,7 +26,7 @@ namespace materiel {
 
     class Prix {
     public:
-        Prix(int v, int b, int r, int bl, int n) : vert(v),bleu(b),rouge(r),blanc(bl),noir(n) {};
+        Prix(int v, int b, int r, int bl, int n) : vert(v), bleu(b), rouge(r), blanc(bl), noir(n) {};
         int vert;
         int bleu;
         int rouge;
@@ -47,12 +47,12 @@ namespace materiel {
     class Carte {
     private:
         const unsigned int ID;
-       
-        std::string Nom;
-        Prix* prix;
-        int prestige;
-        TypeCarte type;
-        Couleur bonus; 
+
+         std::string Nom;
+         Prix* prix;
+         int prestige;
+         TypeCarte type;
+         Couleur bonus;
 
     public:
         static int current_id;
@@ -70,30 +70,30 @@ namespace materiel {
 
         ~Carte() = default;
 
-        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c),bonus(b), prestige(p), type(t) {};
+        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b), prestige(p), type(t) {};
     };
-    
+
 
     class Pioche {
     private:
         size_t nbCartes = 0;
         TypeCarte type_cartes;
-        vector<Carte *> cartes = {};
+        vector<Carte*> cartes = {};
 
     public:
         bool estVide() const { return nbCartes == 0; }
 
-        Pioche(TypeCarte t) : type_cartes(t) {};
+        Pioche(TypeCarte t) ; // on construit uniquement avec le type, les cartes sont choisies dans le constructeur directement
 
-        Pioche(TypeCarte t, vector<Carte *> c) : type_cartes(t), cartes(c) {};
+        //Pioche(TypeCarte t, vector<Carte*> c) : type_cartes(t), cartes(c) {};
 
 
         size_t getNbCartes() { return nbCartes; }
 
-        
+
         const Carte& piocher();
 
-        Pioche &operator<<(Carte &e);
+        Pioche& operator<<(Carte& e);
 
         void shufflePioche() {
             shuffle(std::begin(cartes), std::end(cartes), std::default_random_engine());
@@ -118,7 +118,7 @@ namespace materiel {
     private:
         const Couleur couleur;
         size_t nbJetons = 0;
-        vector<Jeton *> jetons = {};
+        vector<Jeton*> jetons = {};
     public:
         bool estVide() const { return nbJetons == 0; }
 
@@ -128,11 +128,11 @@ namespace materiel {
 
         size_t getNombre() const { return nbJetons; }
 
-        Jeton *retirerJeton();
+        Jeton* retirerJeton();
 
-        void ajouterJeton(Jeton *j);
+        void ajouterJeton(Jeton* j);
 
-        Pile &operator<<(Jeton &e);
+        Pile& operator<<(Jeton& e);
 
     };
 
@@ -142,3 +142,4 @@ namespace materiel {
 
 
 #endif //LO21_PROJET_SPLENDOR_A21_V1_NICO_MATERIEL_H
+

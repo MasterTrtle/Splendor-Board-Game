@@ -6,13 +6,14 @@ int main() {
     try {
 
     }
-    catch (SplendorException &e) {
+    catch (SplendorException& e) {
         std::cout << e.getInfo() << "\n";
     }
     Controleur c;
     c.distribuerCarte();
 
     c.getPlateau().printCarte();
+    
     c.getPiocheN1().printPioche();
 
     system("pause");
