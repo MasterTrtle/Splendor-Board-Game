@@ -85,11 +85,12 @@ namespace Splendor {
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
                  i++;
                 
-                
-                while (getInstance().getCarte(i).getType() != type && !isDone()) {
+                 if (!parcourtTout) {
+                     while (getInstance().getCarte(i).getType() != type && !isDone()) {
 
-                    i++;
-                }
+                         i++;
+                     }
+                 }
                
 
                 //cout << "\n " << i << "\n";
@@ -105,18 +106,25 @@ namespace Splendor {
         private:
             size_t i = 0;
             TypeCarte type;
+            bool parcourtTout;
             friend class Partie;
-
-            Iterator(TypeCarte t) : type(t) {
+            
+            Iterator(TypeCarte t) : type(t), parcourtTout(false) {
                 while (getInstance().getCarte(i).getType() != type && !isDone()) {
                     i++;                   
                 }
 
             };
+            //defaut le type est inutile issi
+            Iterator() : type(TypeCarte::N1),parcourtTout(true) { };
+            
 
         };
-
+        //parcourir qu'un type de carte en particulier
         Iterator getIterator(TypeCarte t) const { return Iterator(t); }
+        //tout parcourir
+        Iterator getIterator() const { return Iterator(); }
+        
     };
 
 
@@ -151,71 +159,28 @@ namespace Splendor {
         const int getNbCartesN3() { return nbCartesN3; }
 
     };
-
-    class Controleur {
-        static const int nb_joueurs;
-        materiel::Pioche* piocheN1;
-        materiel::Pioche* piocheN2;
-        materiel::Pioche* piocheN3;
-        //Pile* pile;
-
-        Plateau plateau;
-        //Joueur* joueurs;
-
-        void donner2jetons();
-        void donner3jetons();
-        void reserverCarte();
-        void acheterCarte();
-
-    public:
-        Controleur();
-
-        Controleur(const Controleur& c) = delete;
-
-        Controleur& operator=(const Controleur& c) = delete;
-
-        ~Controleur() {
-            delete piocheN1;
-            delete piocheN2;
-            delete piocheN3;
-        }//delete pile; }
-
-        materiel::Pioche& getPiocheN1() { return *piocheN1; }
-
-        materiel::Pioche& getPiocheN2() { return *piocheN2; }
-
-        materiel::Pioche& getPiocheN3() { return *piocheN3; }
-
-        //Pile& getPile() { return *pile; }
-        Plateau& getPlateau() { return plateau; }
-        void addPlayer();
-        void getCurrentJoueur();
-        void joueursuivant();
-
-        bool action(materiel::typeActions t); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
-        void joueurSuivant();
-       
-
-        void distribuerCarte(); //distribue (si besoin) des cartes sur le plateau
-    };
-
+    
+    
 
     class Joueur {
     private:
 
         const unsigned int ID;
-        const std::string Nom;
+        const std::string nom;
         std::vector<materiel::Carte*> Reserved;
         std::vector<materiel::Carte*> Cartes = {};
         std::vector<materiel::Jeton*> Jetons = {};
         int prestige = 0;
-
+        materiel::Carte& choisirCarte();
+        materiel::Couleur choisirJeton();
         friend class Controleur;
 
     public:
+        Joueur(int i, string& n) :nom(n), ID(i) {}
         ~Joueur() {
             Jetons.clear();
             Cartes.clear();
+            Reserved.clear();
         };
 
         // -------------functions pour afficher------------------------
@@ -228,39 +193,87 @@ namespace Splendor {
 
         //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
+        const  string  GetNom() const { 
+        return nom; };
 
         // -------------fin de functions pour afficher------------------------
         
         //----------------Methodes de choix d'actions//
        materiel::typeActions  ChoisirAction();
-
+      
          //----------------fin de Methodes de choix d'actions//
          
 
-
-        
-        // ------------Pour moi, il n'y a pas besoin de ces methodes car gérées par le controleur -----------------//
-        //methods pour joueur
-        bool ReserveCartre(materiel::Carte c, materiel::Jeton jetons) {};
-
-        bool BuyCarte(materiel::Carte*) {};
-
-        // bool VisitNobles();
-        
-
-         //bool GetJetons(); //Demande de prendre des jetons
-         //bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
-
-         //functions set
-        void AddPrestige(int i) { prestige = prestige + i; } //on ajoute pas de prestige, il est directement calculé à partir des possessions du joueur (qu'on obtient par getPrestige()
-
-        // fonctions de controle
-        // ------------fin de Pour moi, il n'y a pas besoin de ces methodes  -----------------//
-
-
-
     };
+    class Controleur {
+        int nombre_joueurs;
+        materiel::Pioche* piocheN1;
+        materiel::Pioche* piocheN2;
+        materiel::Pioche* piocheN3;
+        std::vector<Joueur*> joueurs;
+        //Pile* pile;
 
+        Plateau plateau;
+        //Joueur* joueurs;
+
+        bool donner2jetons(Couleur c);
+        bool donner3jetons(Couleur c);
+        bool reserverCarte(Carte& c);
+        bool acheterCarte(Carte& c);
+
+        Controleur(int nb_joueurs);
+        friend class Regles;
+
+        int current_joueur;
+
+    public:
+
+        Controleur(const Controleur& c) = delete;
+
+       Controleur& operator=(const Controleur& c) = delete;
+
+        ~Controleur() {
+            delete piocheN1;
+            delete piocheN2;
+            delete piocheN3;
+            joueurs.clear();
+        }//delete pile; }
+
+        materiel::Pioche& getPiocheN1() { return *piocheN1; }
+
+        materiel::Pioche& getPiocheN2() { return *piocheN2; }
+
+        materiel::Pioche& getPiocheN3() { return *piocheN3; }
+
+        //Pile& getPile() { return *pile; }
+        Plateau& getPlateau() { return plateau; }
+        void addPlayer();
+        Joueur& getCurrentJoueur() { return *joueurs[current_joueur]; };
+        void joueursuivant() {
+            if (current_joueur < nombre_joueurs - 1) current_joueur++; else current_joueur = 0;
+        }
+
+        bool action(materiel::typeActions t); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
+        void joueurSuivant();
+
+
+        void distribuerCarte(); //distribue (si besoin) des cartes sur le plateau
+    };
+    class Regles {
+        friend class Controleur;
+        int nombre_joueurs;
+        Controleur* controleur = new Controleur(nombre_joueurs);
+    public:
+       
+
+        Regles(int nb_joueurs) :nombre_joueurs(1) {
+            
+        };
+        Controleur& getControleur() {
+            
+            return *controleur;
+       }
+    };
 
 #endif
 }

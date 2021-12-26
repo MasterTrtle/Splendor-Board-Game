@@ -39,7 +39,7 @@ namespace materiel {
     };
 
     enum class typeActions {
-        piocher2jetons, piocher3jetons, reserverCarte, acheterCarte
+        piocher2jetons, piocher3jetons, reserver, acheter
     };
 
     enum class TypeCarte {

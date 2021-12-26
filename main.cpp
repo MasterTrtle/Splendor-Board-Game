@@ -9,20 +9,23 @@ int main() {
     catch (SplendorException& e) {
         std::cout << e.getInfo() << "\n";
     }
-    Controleur c;
-    c.distribuerCarte();
+    //1 joueur
+    Regles r = Regles(1);
+   
+    r.getControleur().distribuerCarte();
 
-    c.getPlateau().printCarte();
+    r.getControleur().getPlateau().printCarte();
     
-    c.getPiocheN1().printPioche();
+    r.getControleur().getPiocheN1().printPioche();
+
+    r.getControleur().action(r.getControleur().getCurrentJoueur().ChoisirAction());
 
     //Idée de déroulé
     /*
     * input combien de joueurs voulez vous ?
     * Pour n = nombre de joueur:
     *   c.AddPlayer();
-    En fonction du nombre de joueur et d'autres critères (extensions etc), on modifie les règles. Certaines fonctions se baseront sur la classe regle ex: distribution des premiers jetons.
-
+    *
       Tant que partie non finie
         tant que ! c.action (c.getcurrentJoueur().choisirAction()) //Au cas ou l'action n'est pas faisable, on la redemande
         
