@@ -11,6 +11,12 @@
 #include "materiel.h"
 #include <set>
 #include <vector>
+#include <json.hpp>
+#include <fstream>
+
+
+// for convenience
+using json = nlohmann::json;
 
 using namespace std;
 using namespace materiel;

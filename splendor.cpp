@@ -19,25 +19,86 @@ namespace Splendor {
       materiel::Carte& Partie::getCarte(size_t i) {
         return *cartes[i];
     }
-    Partie::Partie() { // Plus tard construire à partir de données de stockage externe.
-        cout << "Constructeur de Partie, generation des cartes de la partie: plutard à importer depuis un fichier json (par exemple) \n ";
+    Partie::Partie() {
+
+        std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
+        json jf = json::parse(ifs);
+
         unsigned int i = 0;
-
         for (i; i < nb_cartesN1; i++) {
+            string vert =jf[i]["vert"];
+            string bleu =jf[i]["bleu"];
+            string rouge =jf[i]["rouge"];
+            string blanc =jf[i]["blanc"];
+            string noir =jf[i]["noir"];
+            string Prestige =jf[i]["Prestige"];
+            string couleur = jf[i]["Gem color"];
+            materiel::Couleur temp;
+            if (couleur == "red")
+                temp = materiel::Couleur::rouge;
+            if (couleur == "blue")
+                temp = materiel::Couleur::bleu;
+            if (couleur == "green")
+                temp = materiel::Couleur::vert;
+            if (couleur == "white")
+                temp = materiel::Couleur::blanc;
+            if (couleur == "black")
+                temp = materiel::Couleur::noir;
 
-            cartes[i] = new materiel::Carte("la muerta", new materiel::Prix(1, 1, 1, 1, 1), materiel::Couleur::bleu, 2, TypeCarte::N1);
-            cout << *cartes[i] << "\n";
+            cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
+                                            temp, stoi(Prestige), TypeCarte::N1);
+            //cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2; i++) {
 
-            cartes[i] = new materiel::Carte("la vida", new materiel::Prix(2, 3, 4, 1, 1), materiel::Couleur::bleu, 5, TypeCarte::N2);
+            string vert =jf[i]["vert"];
+            string bleu =jf[i]["bleu"];
+            string rouge =jf[i]["rouge"];
+            string blanc =jf[i]["blanc"];
+            string noir =jf[i]["noir"];
+            string Prestige =jf[i]["Prestige"];
+            string couleur = jf[i]["Gem color"];
+            materiel::Couleur temp;
+            if (couleur == "red")
+                temp = materiel::Couleur::rouge;
+            if (couleur == "blue")
+                temp = materiel::Couleur::bleu;
+            if (couleur == "green")
+                temp = materiel::Couleur::vert;
+            if (couleur == "white")
+                temp = materiel::Couleur::blanc;
+            if (couleur == "black")
+                temp = materiel::Couleur::noir;
 
-            cout << *cartes[i] << "\n";
+            cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
+                                            temp, stoi(Prestige), TypeCarte::N2);
+
+            //cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2 + nb_cartesN3; i++) {
 
-            cartes[i] = new materiel::Carte("poco loco", new materiel::Prix(1, 3, 5, 1, 1), materiel::Couleur::bleu, 7, TypeCarte::N3);
-            cout << *cartes[i] << "\n";
+            string vert =jf[i]["vert"];
+            string bleu =jf[i]["bleu"];
+            string rouge =jf[i]["rouge"];
+            string blanc =jf[i]["blanc"];
+            string noir =jf[i]["noir"];
+            string Prestige =jf[i]["Prestige"];
+            string couleur = jf[i]["Gem color"];
+            materiel::Couleur temp;
+            if (couleur == "red")
+                temp = materiel::Couleur::rouge;
+            if (couleur == "blue")
+                temp = materiel::Couleur::bleu;
+            if (couleur == "green")
+                temp = materiel::Couleur::vert;
+            if (couleur == "white")
+                temp = materiel::Couleur::blanc;
+            if (couleur == "black")
+                temp = materiel::Couleur::noir;
+
+            cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
+                                            temp, stoi(Prestige), TypeCarte::N3);
+            //cout << *cartes[i] << "\n";
         }
 
         cout << "\n" << " --- fin constructeur de partie et de la génération des cartes --- " << "\n";
