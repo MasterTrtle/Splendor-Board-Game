@@ -21,7 +21,8 @@ int main() {
     * input combien de joueurs voulez vous ?
     * Pour n = nombre de joueur:
     *   c.AddPlayer();
-    *
+    En fonction du nombre de joueur et d'autres critères (extensions etc), on modifie les règles. Certaines fonctions se baseront sur la classe regle ex: distribution des premiers jetons.
+
       Tant que partie non finie
         tant que ! c.action (c.getcurrentJoueur().choisirAction()) //Au cas ou l'action n'est pas faisable, on la redemande
         
