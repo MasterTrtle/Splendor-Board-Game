@@ -38,6 +38,9 @@ namespace materiel {
         vert, bleu, rouge, blanc, noir, jaune
     };
 
+    enum class typeActions {
+        piocher2jetons, piocher3jetons, reserverCarte, acheterCarte
+    };
 
     enum class TypeCarte {
         N1, N2, N3, Noble

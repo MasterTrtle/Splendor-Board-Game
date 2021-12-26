@@ -25,11 +25,11 @@ Pioche::Pioche(TypeCarte t) : type_cartes(t),  nbCartes(Partie::getInstance().ge
     
     for (Partie::Iterator it = Partie::getInstance().getIterator(t); !it.isDone(); it.next()) {
         cartes.push_back(&it.currentItem());
-        cout << it.currentItem();
-        cout << "\n";
+        //cout << it.currentItem();
+        //cout << "\n";
 
     }
-    
+    shufflePioche();
     cout << "Fin constructeur de la pioche: " << t << "\n";
 
 }

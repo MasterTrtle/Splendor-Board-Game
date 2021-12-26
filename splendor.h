@@ -162,6 +162,11 @@ namespace Splendor {
         Plateau plateau;
         //Joueur* joueurs;
 
+        void donner2jetons();
+        void donner3jetons();
+        void reserverCarte();
+        void acheterCarte();
+
     public:
         Controleur();
 
@@ -183,11 +188,15 @@ namespace Splendor {
 
         //Pile& getPile() { return *pile; }
         Plateau& getPlateau() { return plateau; }
+        void addPlayer();
+        void getCurrentJoueur();
+        void joueursuivant();
 
-        //void getCurrentJoueur();
-        //void joueurSuivant();
-        //void distribuerJeton();
-        void distribuerCarte();
+        bool action(materiel::typeActions t); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
+        void joueurSuivant();
+       
+
+        void distribuerCarte(); //distribue (si besoin) des cartes sur le plateau
     };
 
 
@@ -209,7 +218,7 @@ namespace Splendor {
             Cartes.clear();
         };
 
-        // functions pour afficher
+        // -------------functions pour afficher------------------------
         const int getJoueurID() const { return ID; };
 
         //void ShowJetons(); //a voir comment on va gerer les jetons
@@ -220,21 +229,33 @@ namespace Splendor {
         //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
 
+        // -------------fin de functions pour afficher------------------------
+        
+        //----------------Methodes de choix d'actions//
+       materiel::typeActions  ChoisirAction();
+
+         //----------------fin de Methodes de choix d'actions//
+         
+
+
+        
+        // ------------Pour moi, il n'y a pas besoin de ces methodes car gérées par le controleur -----------------//
         //methods pour joueur
         bool ReserveCartre(materiel::Carte c, materiel::Jeton jetons) {};
 
         bool BuyCarte(materiel::Carte*) {};
 
         // bool VisitNobles();
+        
 
-         //bool GetJetons(); //prendre des jetons
+         //bool GetJetons(); //Demande de prendre des jetons
          //bool giveJetons(); // si les jetons depasser 10 on doit rendre les jetons
 
          //functions set
-        void AddPrestige(int i) { prestige = prestige + i; }
+        void AddPrestige(int i) { prestige = prestige + i; } //on ajoute pas de prestige, il est directement calculé à partir des possessions du joueur (qu'on obtient par getPrestige()
 
         // fonctions de controle
-
+        // ------------fin de Pour moi, il n'y a pas besoin de ces methodes  -----------------//
 
 
 
