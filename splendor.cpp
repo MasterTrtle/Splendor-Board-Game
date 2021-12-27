@@ -16,22 +16,26 @@ namespace Splendor {
         else return 0;
     }
 
-      materiel::Carte& Partie::getCarte(size_t i) {
+    materiel::Carte& Partie::getCarte(size_t i) {
         return *cartes[i];
     }
     Partie::Partie() {
 
-        std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
+        cout << "\n" << " ---  constructeur de partie et de la génération des cartes --- " << "\n";
+        //std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
+         std::ifstream ifs("cartes.json");
+        
         json jf = json::parse(ifs);
+        
 
         unsigned int i = 0;
         for (i; i < nb_cartesN1; i++) {
-            string vert =jf[i]["vert"];
-            string bleu =jf[i]["bleu"];
-            string rouge =jf[i]["rouge"];
-            string blanc =jf[i]["blanc"];
-            string noir =jf[i]["noir"];
-            string Prestige =jf[i]["Prestige"];
+            string vert = jf[i]["vert"];
+            string bleu = jf[i]["bleu"];
+            string rouge = jf[i]["rouge"];
+            string blanc = jf[i]["blanc"];
+            string noir = jf[i]["noir"];
+            string Prestige = jf[i]["Prestige"];
             string couleur = jf[i]["Gem color"];
             materiel::Couleur temp;
             if (couleur == "red")
@@ -46,17 +50,17 @@ namespace Splendor {
                 temp = materiel::Couleur::noir;
 
             cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
-                                            temp, stoi(Prestige), TypeCarte::N1);
+                temp, stoi(Prestige), TypeCarte::N1);
             //cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2; i++) {
 
-            string vert =jf[i]["vert"];
-            string bleu =jf[i]["bleu"];
-            string rouge =jf[i]["rouge"];
-            string blanc =jf[i]["blanc"];
-            string noir =jf[i]["noir"];
-            string Prestige =jf[i]["Prestige"];
+            string vert = jf[i]["vert"];
+            string bleu = jf[i]["bleu"];
+            string rouge = jf[i]["rouge"];
+            string blanc = jf[i]["blanc"];
+            string noir = jf[i]["noir"];
+            string Prestige = jf[i]["Prestige"];
             string couleur = jf[i]["Gem color"];
             materiel::Couleur temp;
             if (couleur == "red")
@@ -71,18 +75,18 @@ namespace Splendor {
                 temp = materiel::Couleur::noir;
 
             cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
-                                            temp, stoi(Prestige), TypeCarte::N2);
+                temp, stoi(Prestige), TypeCarte::N2);
 
             //cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2 + nb_cartesN3; i++) {
 
-            string vert =jf[i]["vert"];
-            string bleu =jf[i]["bleu"];
-            string rouge =jf[i]["rouge"];
-            string blanc =jf[i]["blanc"];
-            string noir =jf[i]["noir"];
-            string Prestige =jf[i]["Prestige"];
+            string vert = jf[i]["vert"];
+            string bleu = jf[i]["bleu"];
+            string rouge = jf[i]["rouge"];
+            string blanc = jf[i]["blanc"];
+            string noir = jf[i]["noir"];
+            string Prestige = jf[i]["Prestige"];
             string couleur = jf[i]["Gem color"];
             materiel::Couleur temp;
             if (couleur == "red")
@@ -97,7 +101,7 @@ namespace Splendor {
                 temp = materiel::Couleur::noir;
 
             cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
-                                            temp, stoi(Prestige), TypeCarte::N3);
+                temp, stoi(Prestige), TypeCarte::N3);
             //cout << *cartes[i] << "\n";
         }
 
@@ -121,7 +125,7 @@ namespace Splendor {
         delete[] cartesN3;
     }
 
-    
+
     bool Controleur::acheterCarte(Carte& c) {
         cout << "achat de carte de";
         return true;
@@ -138,29 +142,29 @@ namespace Splendor {
         cout << "Reservation de carte de ";
         return true;
     }
-    bool Controleur::action(materiel::typeActions t) {
-        
+    bool Controleur::action() {
+        materiel::typeActions t = getCurrentJoueur().ChoisirAction();
         cout << "action effectuée par le joueur: " << getCurrentJoueur().GetNom(); //id incorrecte ??
         switch (t) {
         case materiel::typeActions::acheter:
             if (!acheterCarte(getCurrentJoueur().choisirCarte()))  return false;
             break;
         case materiel::typeActions::reserver:
-            if(!reserverCarte(getCurrentJoueur().choisirCarte())) return false;
+            if (!reserverCarte(getCurrentJoueur().choisirCarte())) return false;
             break;
         case materiel::typeActions::piocher2jetons:
-            if(! donner2jetons(getCurrentJoueur().choisirJeton())) return false;
+            if (!donner2jetons(getCurrentJoueur().choisirJeton())) return false;
             break;
         case materiel::typeActions::piocher3jetons:
-            if(!donner3jetons(getCurrentJoueur().choisirJeton())) return false;
+            if (!donner3jetons(getCurrentJoueur().choisirJeton())) return false;
             break;
         }
     }
-    Controleur::Controleur(int nb_joueurs):nombre_joueurs(nb_joueurs) {
+    Controleur::Controleur(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
         current_joueur = 0;
-        for (int i = 0; i < nombre_joueurs;i++) {
+        for (int i = 0; i < nombre_joueurs; i++) {
             string nomJoueur;
-            cout << "Nom du joueur " << i+1 << ": ";
+            cout << "Nom du joueur " << i + 1 << ": ";
             getline(cin, nomJoueur);
             Joueur* j = new Joueur(i, nomJoueur);
             //cout << j.getJoueurID();
@@ -172,7 +176,7 @@ namespace Splendor {
         piocheN3 = new materiel::Pioche(materiel::TypeCarte::N3);
     };
 
-    void Plateau::ajouterCarte( const materiel::Carte& c) {
+    void Plateau::ajouterCarte(const materiel::Carte& c) {
 
         if (c.materiel::Carte::getType() == TypeCarte::N1) {
             if (nbCartesN1 < nbMax) {
@@ -184,20 +188,20 @@ namespace Splendor {
         }
         else if (c.getType() == TypeCarte::N2) {
 
-if (nbCartesN2 < nbMax) {
-    cartesN2[nbCartesN2] = &c;
+            if (nbCartesN2 < nbMax) {
+                cartesN2[nbCartesN2] = &c;
 
-    nbCartesN2++;
-}
-else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
+                nbCartesN2++;
+            }
+            else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
         }
         else if (c.getType() == TypeCarte::N3) {
-        if (nbCartesN3 < nbMax) {
+            if (nbCartesN3 < nbMax) {
 
-            cartesN3[nbCartesN3] = &c;
-            nbCartesN3++;
-        }
-        else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
+                cartesN3[nbCartesN3] = &c;
+                nbCartesN3++;
+            }
+            else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
         }
 
 
@@ -255,7 +259,7 @@ else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
 
     }
     materiel::typeActions Joueur::ChoisirAction() {
-       
+
         int x = 0;
         cout << "\nQuelle action voulez vous effectuer: \n";
         cout << "1: Piocher 3 jetons differents\n";
@@ -265,7 +269,7 @@ else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
         cin >> x;
         while (x != 1 && x != 2 && x != 3 && x != 4) {
             cout << "Veuillez choisir un nombre valide";
-            
+
             cin >> x;
         }
         switch (x)
@@ -285,7 +289,7 @@ else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
         int id;
         cout << "\nVous devez choisir une carte, donnez son ID: \n";
         cin >> id;
-        
+
         //tant que la carte n'existe pase
         while (true) {
             for (Partie::Iterator it = Partie::getInstance().getIterator(); !it.isDone(); it.next()) {
@@ -327,6 +331,6 @@ else throw SplendorException("trop de cartes sur le plateau N2 pour piocher");
         }
 
     }
-   
+
 
 }

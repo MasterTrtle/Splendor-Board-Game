@@ -11,14 +11,23 @@ int main() {
     }
     //1 joueur
     Regles r = Regles(1);
-   
-    r.getControleur().distribuerCarte();
+    //uniquement pour ne pas avoir à écrire r.getControleur(), le controleur est géré par la règle.
+    Controleur& c = r.getControleur();
 
-    r.getControleur().getPlateau().printCarte();
+
+   c.distribuerCarte();
     
-    r.getControleur().getPiocheN1().printPioche();
+    
+    //affichage des cartes de chaque pioche (pour debug).
+    c.getPiocheN1().printPioche();
+    c.getPiocheN2().printPioche();
+    c.getPiocheN3().printPioche();
 
-    r.getControleur().action(r.getControleur().getCurrentJoueur().ChoisirAction());
+    //affichage des cartes du plateau
+    c.getPlateau().printCarte();
+    //action pour le current_player
+    c.action();
+
 
     //Idée de déroulé
     /*

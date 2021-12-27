@@ -69,6 +69,7 @@ namespace materiel {
 
         int getPrestige() const { return prestige; }
 
+
         TypeCarte getType() const { return type; }
 
         ~Carte() = default;
@@ -79,19 +80,19 @@ namespace materiel {
 
     class Pioche {
     private:
-        size_t nbCartes = 0;
+       
         TypeCarte type_cartes;
         vector<Carte*> cartes = {};
 
     public:
-        bool estVide() const { return nbCartes == 0; }
+        bool estVide() const { return cartes.size() == 0; }
 
         Pioche(TypeCarte t) ; // on construit uniquement avec le type, les cartes sont choisies dans le constructeur directement
 
         //Pioche(TypeCarte t, vector<Carte*> c) : type_cartes(t), cartes(c) {};
 
 
-        size_t getNbCartes() { return nbCartes; }
+        size_t getNbCartes() { return cartes.size(); }
 
 
         const Carte& piocher();

@@ -14,23 +14,26 @@ int Carte::current_id = 0;
 
 Pioche& Pioche::operator<<(materiel::Carte& e) {
     cartes.push_back(&e);
-    nbCartes++;
+   
     return *this;
 }
-Pioche::Pioche(TypeCarte t) : type_cartes(t),  nbCartes(Partie::getInstance().getNbCartes(t))
+Pioche::Pioche(TypeCarte t) : type_cartes(t)
 {
-    cout << "Constructeur pioche: Debut de la génération de la pioche: " << t << ": \n";
+    //cout << "Constructeur pioche: Debut de la génération de la pioche: " << t << ": \n";
     
     //iterator qui ne parcourt que les cartes du type demandé
     
     for (Partie::Iterator it = Partie::getInstance().getIterator(t); !it.isDone(); it.next()) {
-        cartes.push_back(&it.currentItem());
-        //cout << it.currentItem();
-        //cout << "\n";
+        if (!it.isDone()) {
+            
+            cartes.push_back(&it.currentItem());
+            //cout << it.currentItem() << "ok";
+            //cout << "\n";
+        }
 
     }
     shufflePioche();
-    cout << "Fin constructeur de la pioche: " << t << "\n";
+   // cout << "Fin constructeur de la pioche: " << t << "\n";
 
 }
 
@@ -41,7 +44,7 @@ const Carte& Pioche::piocher() {
     }
     auto target = cartes.back();
     cartes.pop_back();
-    nbCartes -= 1;
+   
     return *target;
 }
 
@@ -73,8 +76,8 @@ Pile& Pile::operator<<(materiel::Jeton& e) {
 
 
 void Pioche::printPioche(ostream& f) const {
-    cout << " \n Pioche::printPioche, Affichage des cartes de la pioche N1 \n";
-    for (size_t i = 0; i < nbCartes; i++) {
+    cout << " \n Pioche::printPioche, Affichage des cartes de la pioche " << type_cartes<< "\n";
+    for (size_t i = 0; i < cartes.size(); i++) {
         f << *cartes[i] << "\n";
     }
     cout << "\n fin Pioche::printPioche() \n";

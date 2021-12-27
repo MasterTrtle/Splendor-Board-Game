@@ -11,9 +11,8 @@
 #include "materiel.h"
 #include <set>
 #include <vector>
-#include <json.hpp>
 #include <fstream>
-
+#include "json.hpp"
 
 // for convenience
 using json = nlohmann::json;
@@ -70,7 +69,7 @@ namespace Splendor {
 
     public:
         static Partie& getInstance() {
-            
+
             if (handler.instance == nullptr) handler.instance = new Partie;
             return *handler.instance;
         }
@@ -87,22 +86,28 @@ namespace Splendor {
         class Iterator { //Iterator qui itère toutes les cartes d'un type en particulier ex Iterator(N1) itere toutes les cartes de type N1
         public:
             void next() {
-
-                if (isDone()) throw SplendorException("Iterateur en fin de sequence");
-                 i++;
-                
-                 if (!parcourtTout) {
-                     while (getInstance().getCarte(i).getType() != type && !isDone()) {
-
-                         i++;
-                     }
-                 }
                
+                if (isDone()) throw SplendorException("Iterateur en fin de sequence");
+                i++;
+                
+                if (!parcourtTout) {
+                    while ( !isDone() &&getInstance().getCarte(i).getType() != type) {
+                        
+                        i++;
+                    }
+                  
+                }
 
+               
                 //cout << "\n " << i << "\n";
             }
 
-            bool isDone() const {  return i == getInstance().nb_cartes - 1; }
+            bool isDone() const { 
+                
+                   return getInstance().nb_cartes == i;
+                
+                
+            }
 
             materiel::Carte& currentItem() {
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
@@ -114,23 +119,24 @@ namespace Splendor {
             TypeCarte type;
             bool parcourtTout;
             friend class Partie;
-            
+
             Iterator(TypeCarte t) : type(t), parcourtTout(false) {
                 while (getInstance().getCarte(i).getType() != type && !isDone()) {
-                    i++;                   
+                   
+                    i++;
                 }
 
             };
             //defaut le type est inutile issi
-            Iterator() : type(TypeCarte::N1),parcourtTout(true) { };
-            
+            Iterator() : type(TypeCarte::N1), parcourtTout(true) { };
+
 
         };
         //parcourir qu'un type de carte en particulier
         Iterator getIterator(TypeCarte t) const { return Iterator(t); }
         //tout parcourir
         Iterator getIterator() const { return Iterator(); }
-        
+
     };
 
 
@@ -165,8 +171,8 @@ namespace Splendor {
         const int getNbCartesN3() { return nbCartesN3; }
 
     };
-    
-    
+
+
 
     class Joueur {
     private:
@@ -199,16 +205,17 @@ namespace Splendor {
 
         //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
-        const  string  GetNom() const { 
-        return nom; };
+        const  string  GetNom() const {
+            return nom;
+        };
 
         // -------------fin de functions pour afficher------------------------
-        
+
         //----------------Methodes de choix d'actions//
-       materiel::typeActions  ChoisirAction();
-      
-         //----------------fin de Methodes de choix d'actions//
-         
+        materiel::typeActions  ChoisirAction();
+
+        //----------------fin de Methodes de choix d'actions//
+
 
     };
     class Controleur {
@@ -236,7 +243,7 @@ namespace Splendor {
 
         Controleur(const Controleur& c) = delete;
 
-       Controleur& operator=(const Controleur& c) = delete;
+        Controleur& operator=(const Controleur& c) = delete;
 
         ~Controleur() {
             delete piocheN1;
@@ -259,7 +266,7 @@ namespace Splendor {
             if (current_joueur < nombre_joueurs - 1) current_joueur++; else current_joueur = 0;
         }
 
-        bool action(materiel::typeActions t); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
+        bool action(); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
         void joueurSuivant();
 
 
@@ -270,15 +277,15 @@ namespace Splendor {
         int nombre_joueurs;
         Controleur* controleur = new Controleur(nombre_joueurs);
     public:
-       
+
 
         Regles(int nb_joueurs) :nombre_joueurs(1) {
-            
+
         };
         Controleur& getControleur() {
-            
+
             return *controleur;
-       }
+        }
     };
 
 #endif
