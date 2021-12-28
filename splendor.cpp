@@ -107,6 +107,7 @@ namespace Splendor {
                 temp, stoi(Prestige), TypeCarte::N3);
             //cout << *cartes[i] << "\n";
         }
+        
         //generation des jeton
         for (int i = 0; i < 7; i++) {
             jetons[i] = new materiel::Jeton(materiel::Couleur::rouge);
@@ -151,6 +152,8 @@ namespace Splendor {
         pileNoir->remplir();
         pileJaune = new materiel::Pile(materiel::Couleur::jaune);
         pileJaune->remplir();
+        
+        
     }
 
     Plateau::~Plateau() {
@@ -558,6 +561,20 @@ namespace Splendor {
         piocheN1 = new materiel::Pioche(materiel::TypeCarte::N1);
         piocheN2 = new materiel::Pioche(materiel::TypeCarte::N2);
         piocheN3 = new materiel::Pioche(materiel::TypeCarte::N3);
+       
+        //on adapte la pile de jeton en fonction du nombre de joueur
+        int nb_retirer = 0;
+        if (nb_joueurs == 2) nb_retirer = 3;
+        else if (nb_joueurs == 3) nb_retirer = 2;
+        for (int i = 0; i < nb_retirer; i++) {
+            getPlateau().getPile(Couleur::rouge).retirerJeton();
+            getPlateau().getPile(Couleur::vert).retirerJeton();
+            getPlateau().getPile(Couleur::bleu).retirerJeton();
+            getPlateau().getPile(Couleur::blanc).retirerJeton();
+            getPlateau().getPile(Couleur::noir).retirerJeton();
+        }
+       
+       
         
     };
 

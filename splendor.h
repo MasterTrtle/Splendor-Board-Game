@@ -341,11 +341,13 @@ namespace Splendor {
         friend class Controleur;
         int nombre_joueurs;
         Controleur* controleur = new Controleur(nombre_joueurs);
+      
+       
     public:
 
 
         Regles(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
-
+            
         };
         Controleur& getControleur() {
 

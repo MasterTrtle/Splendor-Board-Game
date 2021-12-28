@@ -12,7 +12,7 @@ int main() {
     //Choix du nombre de joueur
     int nb = -1;
     cout << "Choisissez un nombre de joueur: \n";
-    while (nb != 1 && nb != 2 && nb != 3 && nb != 4) {
+    while ( nb != 2 && nb != 3 && nb != 4) {
        
         cin >> nb;
     }
