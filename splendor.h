@@ -293,11 +293,13 @@ namespace Splendor {
         Plateau plateau;
         //Joueur* joueurs;
 
+        bool donnerJeton(Couleur c);
         bool donner2jetons(Couleur c);
         bool donner3jetons();
         bool reserverCarte(Carte& c);
         bool acheterCarte(Carte& c);
-
+        bool acheterDansPile(std::vector<Carte*>& v, Carte& c);
+        bool verification_couleur(const int prix,Couleur couleur, int& joker);
         Controleur(int nb_joueurs);
         friend class Regles;
 

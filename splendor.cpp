@@ -26,10 +26,10 @@ namespace Splendor {
 
         cout << "\n" << " ---  constructeur de partie et de la génération des cartes --- " << "\n";
         //std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
-         std::ifstream ifs("cartes.json");
-        
+        std::ifstream ifs("cartes.json");
+
         json jf = json::parse(ifs);
-        
+
 
         unsigned int i = 0;
         for (i; i < nb_cartesN1; i++) {
@@ -138,7 +138,7 @@ namespace Splendor {
 
     }
 
-    Plateau::Plateau()  {
+    Plateau::Plateau() {
         pileRouge = new materiel::Pile(materiel::Couleur::rouge);
         pileRouge->remplir();
         pileVert = new materiel::Pile(materiel::Couleur::vert);
@@ -154,9 +154,9 @@ namespace Splendor {
     }
 
     Plateau::~Plateau() {
-       cartesN1.clear();
+        cartesN1.clear();
         cartesN2.clear();
-       cartesN3.clear();
+        cartesN3.clear();
         delete pileBlanc;
         delete pileBleu;
         delete pileRouge;
@@ -172,8 +172,8 @@ namespace Splendor {
             getCurrentJoueur().getPile(Couleur::vert).getNombre() +
             getCurrentJoueur().getPile(Couleur::jaune).getNombre() +
             getCurrentJoueur().getPile(Couleur::blanc).getNombre() +
-            getCurrentJoueur().getPile(Couleur::noir).getNombre() >10)
-        { 
+            getCurrentJoueur().getPile(Couleur::noir).getNombre() > 10)
+        {
             cout << "\n Vous avez trop de jetons, il faut en rendre: ";
             Couleur c = getCurrentJoueur().choisirJeton();
             if (!getCurrentJoueur().getPile(c).estVide()) {
@@ -183,9 +183,9 @@ namespace Splendor {
                 cout << "\n Vous ne possedez pas de jeton de cette couleur, impossible d'en rendre";
             }
         }
-        
 
-        
+
+
     }
     // vert(v), bleu(b), rouge(r), blanc(bl), noir(n)
     Prix* Joueur::GetReduction() {
@@ -214,58 +214,152 @@ namespace Splendor {
         }
         return reduction;
     }
+    bool Controleur::verification_couleur(const int prix, Couleur couleur, int& joker) {
+
+        if (prix <= getCurrentJoueur().getPile(couleur).getNombre() + joker) {
+            //on enlève les joker si besoin
+            if (prix > getCurrentJoueur().getPile(Couleur::vert).getNombre()) {
+                joker -= prix - getCurrentJoueur().getPile(Couleur::vert).getNombre();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    bool Controleur::acheterDansPile(std::vector<Carte*>& v, Carte& c) {
+        std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
+        int* joker = new int;
+        *joker = getCurrentJoueur().getPile(Couleur::jaune).getNombre();
+        if (std::count(v.begin(), v.end(), &c)) {
+            //verification que le joueur à assez pour acheter
+            Prix p = (c.getPrix());
+            Prix* prixReduit = new Prix(
+                p.vert - getCurrentJoueur().GetReduction()->vert,
+                p.bleu - getCurrentJoueur().GetReduction()->bleu,
+                p.rouge - getCurrentJoueur().GetReduction()->rouge,
+                p.blanc - getCurrentJoueur().GetReduction()->blanc,
+                p.noir - getCurrentJoueur().GetReduction()->noir
+            );
+
+            Couleur vert = Couleur::vert;
+            Couleur bleu = Couleur::bleu;
+            Couleur blanc = Couleur::blanc;
+            Couleur rouge = Couleur::rouge;
+            Couleur noir = Couleur::noir;
+            //verification si le joueur a assez de jetons ( joker pour prendre en  compte les jetons dorés)
+            if (verification_couleur(prixReduit->vert, vert, *joker) &&
+                verification_couleur(prixReduit->bleu, bleu, *joker) &&
+                verification_couleur(prixReduit->blanc, blanc, *joker) &&
+                verification_couleur(prixReduit->rouge, rouge, *joker) &&
+                verification_couleur(prixReduit->noir, noir, *joker))
+            {
+                //si il y a assez de jetons verts en prenant en compte les joker
+
+                    //on les enlève
+                while (prixReduit->vert > 0) {
+                    if (getCurrentJoueur().getPile(Couleur::vert).getNombre() != 0)
+                    {
+                        getCurrentJoueur().getPile(Couleur::vert).retirerJeton();
+                        
+                    }
+                    //si plus de jetons, on doit enlever un jeton joker
+                    else {
+                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                    }
+                    prixReduit->vert -= 1;
+                    }
+                while (prixReduit->rouge > 0) {
+                    if (getCurrentJoueur().getPile(Couleur::rouge).getNombre() != 0)
+                    {
+                        getCurrentJoueur().getPile(Couleur::rouge).retirerJeton();
+
+                    }
+                    //si plus de jetons, on doit enlever un jeton joker
+                    else {
+                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                    }
+                    prixReduit->rouge -= 1;
+                }
+                while (prixReduit->bleu > 0) {
+                    if (getCurrentJoueur().getPile(Couleur::bleu).getNombre() != 0)
+                    {
+                        getCurrentJoueur().getPile(Couleur::bleu).retirerJeton();
+
+                    }
+                    //si plus de jetons, on doit enlever un jeton joker
+                    else {
+                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                    }
+                    prixReduit->bleu -= 1;
+                }
+                while (prixReduit->blanc > 0) {
+                    if (getCurrentJoueur().getPile(Couleur::blanc).getNombre() != 0)
+                    {
+                        getCurrentJoueur().getPile(Couleur::blanc).retirerJeton();
+
+                    }
+                    //si plus de jetons, on doit enlever un jeton joker
+                    else {
+                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                    }
+                    prixReduit->blanc -= 1;
+                }
+                while (prixReduit->noir > 0) {
+                    if (getCurrentJoueur().getPile(Couleur::noir).getNombre() != 0)
+                    {
+                        getCurrentJoueur().getPile(Couleur::noir).retirerJeton();
+
+                    }
+                    //si plus de jetons, on doit enlever un jeton joker
+                    else {
+                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                    }
+                    prixReduit->noir -= 1;
+                }
+                cout << "Vous achetez la carte " << c.getNom();
+                v.erase(std::find(v.begin(), v.end(), &c));
+                vachete.push_back(&c);
+                return true;
+        }
+            else {
+                cout << "\nVous n'avez pas assez pour acheter cette carte\n";
+                return false;
+            }
+           
+        }
+        
+        return false;
+
+    }
     bool Controleur::acheterCarte(Carte& c) {
         
         std::vector<materiel::Carte*>& v1 = getPlateau().getCarte(TypeCarte::N1);
         std::vector<materiel::Carte*>& v2 = getPlateau().getCarte(TypeCarte::N2);
         std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
         std::vector<materiel::Carte*>& vreserved= getCurrentJoueur().getCarteReserve();
-        std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
-        
-        //verification qu'elle existe dans la pioche N1
-        if (std::count(v1.begin(), v1.end(), &c) ){
-            //verification que le joueur à assez pour acheter
-            Prix p = (c.getPrix());
-            Prix* prixReduit = new Prix(
-                p.vert - getCurrentJoueur().reduction->vert,
-                p.bleu - getCurrentJoueur().reduction->bleu,
-                p.rouge - getCurrentJoueur().reduction->rouge,
-                p.blanc - getCurrentJoueur().reduction->blanc,
-                p.noir - getCurrentJoueur().reduction->noir
-            );
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v1.erase(std::find(v1.begin(), v1.end(), &c));
-            vachete.push_back(&c);
-            return true;
-        }
-        
-        if (std::count(v2.begin(), v2.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v2.erase(std::find(v2.begin(), v2.end(), &c));
-            vachete.push_back(&c);
-            return true;
-        }
-        if ( std::count(v3.begin(), v3.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v3.erase(std::find(v3.begin(), v3.end(), &c));
-            vachete.push_back(&c);
-            return true;
-        }
-        if (std::count(vreserved.begin(), vreserved.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " que vous aviez réservé";
-            vreserved.erase(std::find(vreserved.begin(), vreserved.end(),&c));
-            vachete.push_back(&c);
-            return true;
-        }
        
-           
+        if (
+            acheterDansPile(v1, c) ||
+            acheterDansPile(v2, c) ||
+            acheterDansPile(v3, c) ||
+            acheterDansPile(vreserved, c)
+            ) return true;
+
         
         cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations\n";
         return false;
     }
        
         
-    
+    bool Controleur::donnerJeton(Couleur c) {
+        if (getPlateau().getPile(c).getNombre() > 0) {
+            cout << getCurrentJoueur().GetNom() << " a pioché un jeton " << c;
+            getCurrentJoueur().getPile(c).ajouterJeton(getPlateau().getPile(c).retirerJeton());
+            return true;
+        }
+        cout << "Il n'y a pas assez de jetons dans la pile des jetons joker  (" << getPlateau().getPile(c).getNombre() << "), aucun ne vous sera donc distribuer";
+        return false;
+    }
     bool Controleur::donner2jetons(Couleur c) {
         if (getPlateau(). getPile(c).getNombre() >= 4) {
             cout << getCurrentJoueur().GetNom()<< " a pioché deux jetons " << c;
@@ -328,28 +422,34 @@ namespace Splendor {
         std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
         std::vector<materiel::Carte*>& vreserved = getCurrentJoueur().getCarteReserve();
        
+        if (vreserved.size() < 3) {
+            if (std::count(v1.begin(), v1.end(), &c)) {
+                cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
+                v1.erase(std::find(v1.begin(), v1.end(), &c));
+                vreserved.push_back(&c);
+                return true;
+            }
 
-        if (std::count(v1.begin(), v1.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v1.erase(std::find(v1.begin(), v1.end(), &c));
-            vreserved.push_back(&c);
-            return true;
+            if (std::count(v2.begin(), v2.end(), &c)) {
+                cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
+                v2.erase(std::find(v2.begin(), v2.end(), &c));
+                vreserved.push_back(&c);
+                return true;
+            }
+            if (std::count(v3.begin(), v3.end(), &c)) {
+                cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
+                v3.erase(std::find(v3.begin(), v3.end(), &c));
+                vreserved.push_back(&c);
+                donnerJeton(Couleur::jaune);
+                return true;
+            }
+            cout << "\nLa carte que vous voulez réserver n'est pas sur le plateau\n";
+            return false;
         }
-
-        if (std::count(v2.begin(), v2.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v2.erase(std::find(v2.begin(), v2.end(), &c));
-            vreserved.push_back(&c);
-            return true;
+        else {
+            cout << "\nVous avez déjà 3 réservations, impossible d'en reserver plus\n";
+            return false;
         }
-        if (std::count(v3.begin(), v3.end(), &c)) {
-            cout << "Vous achetez la carte " << c.getNom() << " présente sur le plateau";
-            v3.erase(std::find(v3.begin(), v3.end(), &c));
-            vreserved.push_back(&c);
-            return true;
-        }
-        cout << "\nLa carte que vous voulez réserver n'est pas sur le plateau\n";
-        return false;
         
     }
     bool Controleur::action() {
