@@ -11,6 +11,7 @@
 #include "materiel.h"
 #include <set>
 #include <vector>
+#include <stack>
 #include <fstream>
 #include "json.hpp"
 
@@ -43,7 +44,9 @@ namespace Splendor {
         const size_t nb_cartesN1 = 40;
         const size_t nb_cartesN2 = 30;
         const size_t nb_cartesN3 = 20;
+        const size_t nb_jetons = 40;
         materiel::Carte* cartes[90];
+        materiel::Jeton* jetons[40];
         //Jeton* jetons[40];
 
         //const Jeton& getJeton(size_t i) { return *jetons[i]; }
@@ -81,40 +84,29 @@ namespace Splendor {
 
         size_t getNbCartes(TypeCarte t) const;
 
-        materiel::Carte& getCarte(
-            size_t i); // provisoire en attendant d'avoir un iterateur qui ne parcourt que les cartes du type souhaité
+        materiel::Carte& getCarte(size_t i);
+        materiel::Jeton& getJeton(size_t i);
         class Iterator { //Iterator qui itère toutes les cartes d'un type en particulier ex Iterator(N1) itere toutes les cartes de type N1
         public:
             void next() {
-               
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
                 i++;
-                
                 if (!parcourtTout) {
-                    while ( !isDone() &&getInstance().getCarte(i).getType() != type) {
-                        
+                    while (!isDone() && getInstance().getCarte(i).getType() != type) {
                         i++;
                     }
-                  
                 }
-
-               
                 //cout << "\n " << i << "\n";
             }
+            bool isDone() const {
+                return getInstance().nb_cartes == i;
 
-            bool isDone() const { 
-                
-                   return getInstance().nb_cartes == i;
-                
-                
             }
-
             materiel::Carte& currentItem() {
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
                 return Partie::getInstance().getCarte(i);
             }
 
-        private:
             size_t i = 0;
             TypeCarte type;
             bool parcourtTout;
@@ -122,41 +114,86 @@ namespace Splendor {
 
             Iterator(TypeCarte t) : type(t), parcourtTout(false) {
                 while (getInstance().getCarte(i).getType() != type && !isDone()) {
-                   
+
                     i++;
                 }
 
             };
-            //defaut le type est inutile issi
+            //defaut le type est inutile ici
             Iterator() : type(TypeCarte::N1), parcourtTout(true) { };
 
 
         };
-        //parcourir qu'un type de carte en particulier
-        Iterator getIterator(TypeCarte t) const { return Iterator(t); }
-        //tout parcourir
-        Iterator getIterator() const { return Iterator(); }
 
+        class IteratorJeton { //Iterator qui itère toutes les cartes d'un type en particulier ex Iterator(N1) itere toutes les cartes de type N1
+        public:
+            void next() {
+                if (isDone()) throw SplendorException("Iterateur en fin de sequence");
+                i++;
+                if (!parcourtTout) {
+                    while (!isDone() && getInstance().getJeton(i).getCouleur()!= couleur) {
+                        i++;
+                    }
+                }
+                //cout << "\n " << i << "\n";
+            }
+            bool isDone() const {
+                return getInstance().nb_jetons == i;
+
+            }
+            materiel::Jeton& currentItem() {
+                if (isDone()) throw SplendorException("Iterateur en fin de sequence");
+                return Partie::getInstance().getJeton(i);
+            }
+
+            size_t i = 0;
+            Couleur couleur;
+            bool parcourtTout;
+            friend class Partie;
+
+            IteratorJeton(Couleur c) : couleur(c), parcourtTout(false) {
+                while (getInstance().getJeton(i).getCouleur() != couleur && !isDone()) {
+
+                    i++;
+                }
+
+            };
+            IteratorJeton() : couleur(Couleur::bleu), parcourtTout(true) { };
+           
+           
+        };
+        //parcourir qu'un type de couleur
+        IteratorJeton getIteratorJeton(Couleur c) const { return IteratorJeton(c); }
+        IteratorJeton getIteratorJeton() const { return IteratorJeton(); }
+        //tout parcourir
+        Iterator getIterator(TypeCarte t) const { return Iterator(t); }
+        Iterator getIterator() const { return Iterator(); }
     };
 
 
     class Plateau {
     private: // pour debug
-        const materiel::Carte** cartesN1;
-        const materiel::Carte** cartesN2;
-        const materiel::Carte** cartesN3;
+        std::vector<Carte*> cartesN1;
+        std::vector<Carte*> cartesN2;
+        std::vector<Carte*> cartesN3;
+        
+        materiel::Pile* pileJaune;
+        materiel::Pile* pileRouge;
+        materiel::Pile* pileBleu;
+        materiel::Pile* pileVert;
+        materiel::Pile* pileNoir;
+        materiel::Pile* pileBlanc;
         //const Jeton** jetons = nullptr;
-        size_t nbCartesN1 = 0;
-        size_t nbCartesN2 = 0;
-        size_t nbCartesN3 = 0;
+        
         const size_t nbMax = 4;
 
     public:
         Plateau();
 
         ~Plateau();
-
-        void ajouterCarte(const materiel::Carte& c);
+        std::vector<Carte*>& getCarte(materiel::TypeCarte t);
+        materiel::Pile& getPile(materiel::Couleur c);
+        void ajouterCarte( materiel::Carte& c);
 
         void printCarte(ostream& f = std::cout) const;
 
@@ -164,11 +201,11 @@ namespace Splendor {
         //void ajouterJeton(const Jeton& c);
         //void retirerJeton(const Jeton& c);
 
-        const int getNbCartesN1() { return nbCartesN1; }
+         const size_t getNbCartesN1() const { return cartesN1.size(); }
 
-        const int getNbCartesN2() { return nbCartesN2; }
+         const size_t getNbCartesN2()const { return cartesN2.size(); }
 
-        const int getNbCartesN3() { return nbCartesN3; }
+         const size_t getNbCartesN3() const{ return cartesN3.size(); }
 
     };
 
@@ -181,28 +218,54 @@ namespace Splendor {
         const std::string nom;
         std::vector<materiel::Carte*> Reserved;
         std::vector<materiel::Carte*> Cartes = {};
-        std::vector<materiel::Jeton*> Jetons = {};
+        materiel::Pile* pileJaune;
+        materiel::Pile* pileRouge;
+        materiel::Pile* pileBleu;
+        materiel::Pile* pileVert;
+        materiel::Pile* pileNoir;
+        materiel::Pile* pileBlanc;
+        Prix* reduction;
         int prestige = 0;
         materiel::Carte& choisirCarte();
         materiel::Couleur choisirJeton();
         friend class Controleur;
+        /*
+        void ajouterJeton(Jeton* j) { Jetons.push(j); };
+        Jeton* retirerJeton();
+        void acheterCarte(Carte* c);
+        void reserverCarte(Carte* c);
+        */
 
     public:
-        Joueur(int i, string& n) :nom(n), ID(i) {}
+        void printCarte(std::vector<materiel::Carte*>& v,ostream&f = cout);
+        Joueur(int i, string& n) :nom(n), ID(i) {
+            pileRouge = new materiel::Pile(materiel::Couleur::rouge);
+            pileVert = new materiel::Pile(materiel::Couleur::vert);
+            pileBleu = new materiel::Pile(materiel::Couleur::bleu);
+            pileBlanc = new materiel::Pile(materiel::Couleur::blanc);
+            pileNoir = new materiel::Pile(materiel::Couleur::noir);
+            pileJaune = new materiel::Pile(materiel::Couleur::jaune);
+            Prix* reduction = new Prix(0, 0, 0, 0,0);
+        }
         ~Joueur() {
-            Jetons.clear();
+            delete pileBlanc;
+            delete pileBleu;
+            delete pileRouge;
+            delete pileNoir;
+            delete pileVert;
+            delete pileJaune;
             Cartes.clear();
             Reserved.clear();
         };
 
+        std::vector<Carte*>& getCarteReserve();
+        std::vector<Carte*>& getCarteAchetes();
         // -------------functions pour afficher------------------------
         const int getJoueurID() const { return ID; };
+        materiel::Pile& getPile(materiel::Couleur c);
 
-        //void ShowJetons(); //a voir comment on va gerer les jetons
-        //void ShowCartes();
-
-        //void ShowReserved();
-
+       
+        Prix* GetReduction();
         //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
         const  string  GetNom() const {
@@ -223,6 +286,7 @@ namespace Splendor {
         materiel::Pioche* piocheN1;
         materiel::Pioche* piocheN2;
         materiel::Pioche* piocheN3;
+       
         std::vector<Joueur*> joueurs;
         //Pile* pile;
 
@@ -230,7 +294,7 @@ namespace Splendor {
         //Joueur* joueurs;
 
         bool donner2jetons(Couleur c);
-        bool donner3jetons(Couleur c);
+        bool donner3jetons();
         bool reserverCarte(Carte& c);
         bool acheterCarte(Carte& c);
 
@@ -241,6 +305,7 @@ namespace Splendor {
 
     public:
 
+        void verifierRendreJetons();
         Controleur(const Controleur& c) = delete;
 
         Controleur& operator=(const Controleur& c) = delete;
@@ -249,16 +314,14 @@ namespace Splendor {
             delete piocheN1;
             delete piocheN2;
             delete piocheN3;
+            
             joueurs.clear();
         }//delete pile; }
 
-        materiel::Pioche& getPiocheN1() { return *piocheN1; }
+        materiel::Pioche& getPioche(materiel::TypeCarte t);
+       
 
-        materiel::Pioche& getPiocheN2() { return *piocheN2; }
-
-        materiel::Pioche& getPiocheN3() { return *piocheN3; }
-
-        //Pile& getPile() { return *pile; }
+        
         Plateau& getPlateau() { return plateau; }
         void addPlayer();
         Joueur& getCurrentJoueur() { return *joueurs[current_joueur]; };
@@ -267,7 +330,7 @@ namespace Splendor {
         }
 
         bool action(); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
-        void joueurSuivant();
+       
 
 
         void distribuerCarte(); //distribue (si besoin) des cartes sur le plateau
@@ -279,7 +342,7 @@ namespace Splendor {
     public:
 
 
-        Regles(int nb_joueurs) :nombre_joueurs(1) {
+        Regles(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
 
         };
         Controleur& getControleur() {

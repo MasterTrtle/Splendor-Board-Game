@@ -17,6 +17,7 @@ Pioche& Pioche::operator<<(materiel::Carte& e) {
    
     return *this;
 }
+
 Pioche::Pioche(TypeCarte t) : type_cartes(t)
 {
     //cout << "Constructeur pioche: Debut de la génération de la pioche: " << t << ": \n";
@@ -38,7 +39,7 @@ Pioche::Pioche(TypeCarte t) : type_cartes(t)
 }
 
 
-const Carte& Pioche::piocher() {
+ Carte& Pioche::piocher() {
     if (estVide()) {
         throw materielException("erreur: impossible de piocher dans une pioche vide");
     }
@@ -52,9 +53,9 @@ Jeton* Pile::retirerJeton() {
     if (estVide()) {
         throw materielException("erreur: impossible de retirer un jeton dans une pile vide");
     }
-    auto target = jetons.back();
-    jetons.pop_back();
-    nbJetons -= 1;
+    auto target = jetons.top();
+    jetons.pop();
+   
     return target;
 }
 
@@ -63,22 +64,41 @@ void Pile::ajouterJeton(Jeton* j) {
     if (j->getCouleur() != this->getCouleur()) {
         throw materielException("erreur: impossible de d'ajouter un jeton dans une pile de couleur différente");
     }
-    nbJetons++;
-    jetons.push_back(j);
+   
+    jetons.push(j);
+}
+void Pile::remplir() {
+    for (Partie::IteratorJeton it = Partie::getInstance().getIteratorJeton(couleur); !it.isDone(); it.next()) {
+        if (!it.isDone()) {
+
+            jetons.push(&it.currentItem());
+            //cout << it.currentItem() << "ok";
+            //cout << "\n";
+        }
+
+    }
 }
 
-
 Pile& Pile::operator<<(materiel::Jeton& e) {
-    jetons.push_back(&e);
-    nbJetons++;
+    jetons.push(&e);
+   
     return *this;
 }
 
 
 void Pioche::printPioche(ostream& f) const {
-    cout << " \n Pioche::printPioche, Affichage des cartes de la pioche " << type_cartes<< "\n";
+    cout << " \n  Affichage des cartes de la pioche " << type_cartes<< "\n";
     for (size_t i = 0; i < cartes.size(); i++) {
         f << *cartes[i] << "\n";
     }
-    cout << "\n fin Pioche::printPioche() \n";
+    
+}
+
+void Pile::printPile(ostream& f) const {
+   // cout << " \n Pile::printPile, Affichage des cartes de la pile " << couleur << "\n";
+    
+        f << "\n Il y a " << jetons.size() << couleur << "\n";
+    
+    
+   // cout << " fin Pile::printPile() \n";
 }

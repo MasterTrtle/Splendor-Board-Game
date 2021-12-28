@@ -7,6 +7,7 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <stack>
 
 
 using namespace std;
@@ -95,7 +96,7 @@ namespace materiel {
         size_t getNbCartes() { return cartes.size(); }
 
 
-        const Carte& piocher();
+         Carte& piocher();
 
         Pioche& operator<<(Carte& e);
 
@@ -121,20 +122,23 @@ namespace materiel {
     class Pile {
     private:
         const Couleur couleur;
-        size_t nbJetons = 0;
-        vector<Jeton*> jetons = {};
+        
+       
+        stack<Jeton*> jetons = {};
     public:
-        bool estVide() const { return nbJetons == 0; }
+        bool estVide() const { return getNombre() == 0; }
 
-        Pile(const Couleur c) : couleur(c) {};
+        Pile(const Couleur c) :couleur(c) {};
 
         Couleur getCouleur() const { return couleur; }
 
-        size_t getNombre() const { return nbJetons; }
+        size_t getNombre() const { return jetons.size(); }
 
+        void remplir();
         Jeton* retirerJeton();
 
         void ajouterJeton(Jeton* j);
+        void printPile(ostream& f = cout) const;
 
         Pile& operator<<(Jeton& e);
 
