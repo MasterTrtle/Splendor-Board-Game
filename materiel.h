@@ -75,7 +75,12 @@ namespace materiel {
 
         ~Carte() = default;
 
-        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b), prestige(p), type(t) {};
+        Carte(string n, Prix *c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b),
+                                                                  prestige(p),
+                                                                  type(t) {}; // constructeur pour les cartes de developpement
+
+        Carte(string n, Prix *c, int p) : ID(current_id++), Nom(n), prix(c), prestige(p),
+                                          type(materiel::TypeCarte::Noble) {}; // contructeur pour les cartes nobles
     };
 
 

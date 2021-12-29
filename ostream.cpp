@@ -31,8 +31,10 @@ inline std::ostream& operator<<(std::ostream& f, Prix c) {
 }
 
 inline std::ostream& operator<<(std::ostream& f, const materiel::Carte& c) {
-    f << "(" << "ID:" << c.getID() << "," << "Nom:" << c.getNom() << "," << "Prix:" << c.getPrix() << ", Bonus:  "<<c.getBonus()<< ", "
-        << "Perstige:" << c.getPrestige() << ")";
+    if (c.getType()==materiel::TypeCarte::Noble){
+        f << "(ID: " << c.getID() << ", Nom: " << c.getNom() << ", Prix: " << c.getPrix() <<"Prestige: " << c.getPrestige() << ")";
+    }
+    else f << "(" << "ID: " << c.getID() << ", Nom: " << c.getNom() << ", Prix: " << c.getPrix() << ", Bonus: "<<c.getBonus()<< ", Prestige: " << c.getPrestige() << ")";
     return f;
 }
 inline std::ostream& operator<<(std::ostream& f, const materiel::Jeton& j) {

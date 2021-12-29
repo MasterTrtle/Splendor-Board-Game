@@ -13,6 +13,8 @@ namespace Splendor {
         if (t == TypeCarte::N1) return nb_cartesN1;
         if (t == TypeCarte::N2) return nb_cartesN2;
         if (t == TypeCarte::N3) return nb_cartesN3;
+        if (t == TypeCarte::Noble) return nb_cartesNoble;
+
         else return 0;
     }
 
@@ -25,36 +27,53 @@ namespace Splendor {
     Partie::Partie() {
 
         cout << "\n" << " ---  constructeur de partie et de la génération des cartes --- " << "\n";
-        //std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
-        std::ifstream ifs("cartes.json");
-
+        std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
+        //std::ifstream ifs("cartes.json");
         json jf = json::parse(ifs);
+        string vert, bleu, rouge, blanc, noir, Prestige, couleur, type;
+        materiel::Couleur tempCouleur;
+        materiel::TypeCarte tempType;
 
 
         unsigned int i = 0;
-        for (i; i < nb_cartesN1; i++) {
-            string vert = jf[i]["vert"];
-            string bleu = jf[i]["bleu"];
-            string rouge = jf[i]["rouge"];
-            string blanc = jf[i]["blanc"];
-            string noir = jf[i]["noir"];
-            string Prestige = jf[i]["Prestige"];
-            string couleur = jf[i]["Gem color"];
-            materiel::Couleur temp;
-            if (couleur == "red")
-                temp = materiel::Couleur::rouge;
-            if (couleur == "blue")
-                temp = materiel::Couleur::bleu;
-            if (couleur == "green")
-                temp = materiel::Couleur::vert;
-            if (couleur == "white")
-                temp = materiel::Couleur::blanc;
-            if (couleur == "black")
-                temp = materiel::Couleur::noir;
+        for (i; i < jf.size(); i++) {
+            vert = jf[i]["vert"]; // on doit convertir le string json en string sinon on ne peut pas stoi
+            bleu = jf[i]["bleu"];
+            rouge = jf[i]["rouge"];
+            blanc = jf[i]["blanc"];
+            noir = jf[i]["noir"];
+            Prestige = jf[i]["Prestige"];
+            type = jf[i]["Level"];
 
-            cartes[i] = new materiel::Carte(jf[i]["name"], new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc), stoi(noir)),
-                temp, stoi(Prestige), TypeCarte::N1);
-            //cout << *cartes[i] << "\n";
+            if (type == "1")
+                tempType = materiel::TypeCarte::N1;
+            if (type == "2")
+                tempType = materiel::TypeCarte::N2;
+            if (type == "3")
+                tempType = materiel::TypeCarte::N3;
+            if (type == "noble") { // creatition des cartes nobles
+                tempType = materiel::TypeCarte::Noble;
+                cartes[i] = new materiel::Carte(jf[i]["name"],
+                                                new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
+                                                                   stoi(noir)), stoi(Prestige));
+            } else { // creation des cartes de developpement
+                couleur = jf[i]["Gem color"];
+                if (couleur == "red")
+                    tempCouleur = materiel::Couleur::rouge;
+                if (couleur == "blue")
+                    tempCouleur = materiel::Couleur::bleu;
+                if (couleur == "green")
+                    tempCouleur = materiel::Couleur::vert;
+                if (couleur == "white")
+                    tempCouleur = materiel::Couleur::blanc;
+                if (couleur == "black")
+                    tempCouleur = materiel::Couleur::noir;
+                cartes[i] = new materiel::Carte(jf[i]["name"],
+                                                new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
+                                                                   stoi(noir)),
+                                                tempCouleur, stoi(Prestige), tempType);
+            }
+            cout << *cartes[i] << "\n";
         }
         for (i; i < nb_cartesN1 + nb_cartesN2; i++) {
 
@@ -152,9 +171,23 @@ namespace Splendor {
         pileNoir->remplir();
         pileJaune = new materiel::Pile(materiel::Couleur::jaune);
         pileJaune->remplir();
-        
-        
     }
+    Plateau::Plateau(int nbjoueurs){
+        pileRouge = new materiel::Pile(materiel::Couleur::rouge);
+        pileRouge->remplir();
+        pileVert = new materiel::Pile(materiel::Couleur::vert);
+        pileVert->remplir();
+        pileBleu = new materiel::Pile(materiel::Couleur::bleu);
+        pileBleu->remplir();
+        pileBlanc = new materiel::Pile(materiel::Couleur::blanc);
+        pileBlanc->remplir();
+        pileNoir = new materiel::Pile(materiel::Couleur::noir);
+        pileNoir->remplir();
+        pileJaune = new materiel::Pile(materiel::Couleur::jaune);
+        pileJaune->remplir();
+        nombre_joueurs = nbjoueurs;
+    }
+
 
     Plateau::~Plateau() {
         cartesN1.clear();
@@ -561,7 +594,9 @@ namespace Splendor {
         piocheN1 = new materiel::Pioche(materiel::TypeCarte::N1);
         piocheN2 = new materiel::Pioche(materiel::TypeCarte::N2);
         piocheN3 = new materiel::Pioche(materiel::TypeCarte::N3);
-       
+        piocheNoble = new materiel::Pioche(materiel::TypeCarte::Noble);
+
+
         //on adapte la pile de jeton en fonction du nombre de joueur
         int nb_retirer = 0;
         if (nb_joueurs == 2) nb_retirer = 3;
@@ -579,12 +614,9 @@ namespace Splendor {
     };
 
     void Plateau::ajouterCarte( materiel::Carte& c) {
-
         if (c.materiel::Carte::getType() == TypeCarte::N1) {
             if (getNbCartesN1() < nbMax) {
-                
                 cartesN1.push_back(&c);
-                
             }
             else throw SplendorException("trop de cartes sur le plateau N1 pour piocher");
         }
@@ -602,6 +634,12 @@ namespace Splendor {
             }
             else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
         }
+        else if (c.getType() == TypeCarte::Noble) {
+            if (getNbCartesNoble() <  nbMax) {
+                cartesNoble.push_back(&c);
+            }
+            else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
+        }
 
 
     }
@@ -609,23 +647,23 @@ namespace Splendor {
     void Controleur::distribuerCarte() {
         cout << " \n \n--Debut de la distribution--";
 
-        if (plateau.getNbCartesN1() < 4 || plateau.getNbCartesN2() < 4 || plateau.getNbCartesN3() < 4) {
-
+        if (plateau.getNbCartesN1() < 4 || plateau.getNbCartesN2() < 4 || plateau.getNbCartesN3() < 4 || plateau.getNbCartesNoble() < 4) {
 
             while (!piocheN1->estVide() && plateau.getNbCartesN1() < 4) {
                 plateau.ajouterCarte(piocheN1->piocher());
-
-
             }
             while (!piocheN2->estVide() && plateau.getNbCartesN2() < 4) {
 
                 plateau.ajouterCarte(piocheN2->piocher());
-
             }
             while (!piocheN3->estVide() && plateau.getNbCartesN3() < 4) {
-                plateau.ajouterCarte(piocheN3->piocher());
 
+                plateau.ajouterCarte(piocheN3->piocher());
             }
+            while (!piocheNoble->estVide() && plateau.getNbCartesNoble() < 4) {
+                plateau.ajouterCarte(piocheNoble->piocher());
+            }
+
 
             cout << "--fin distribution--";
 
@@ -644,20 +682,25 @@ namespace Splendor {
     }
     void Plateau::printCarte(ostream& f) const {
         f << " \n Plateau::printcarte(), Cartes presentes sur le plateau: \n";
-        f << "Cartes  N1: \n";
+        f << "Cartes N1: \n";
         for (size_t i = 0; i < getNbCartesN1(); i++) {
             f << *cartesN1[i] << "\n ";
 
         }
         f << "\n ";
-        f << "Cartes  N2: \n";
+        f << "Cartes N2: \n";
         for (size_t i = 0; i < getNbCartesN2(); i++) {
             f << *cartesN2[i] << "\n ";
         }
         f << "\n";
-        f << "Cartes  N3: \n";
+        f << "Cartes N3: \n";
         for (size_t i = 0; i < getNbCartesN3(); i++) {
             f << *cartesN3[i] << " \n";
+        }
+        f << "\n";
+        f << "Cartes Nobles: \n";
+        for (size_t i = 0; i < getNbCartesN3(); i++) {
+            f << *cartesNoble[i] << " \n";
         }
         f << "fin de Plateau::printcarte()";
         f << "\n";

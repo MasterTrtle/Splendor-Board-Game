@@ -40,12 +40,13 @@ namespace Splendor {
     class Partie {
     private:
 
-        const size_t nb_cartes = 90;
+        const size_t nb_cartes = 100;
         const size_t nb_cartesN1 = 40;
         const size_t nb_cartesN2 = 30;
         const size_t nb_cartesN3 = 20;
+        const size_t nb_cartesNoble = 10;
         const size_t nb_jetons = 40;
-        materiel::Carte* cartes[90];
+        materiel::Carte* cartes[100];
         materiel::Jeton* jetons[40];
         //Jeton* jetons[40];
 
@@ -176,7 +177,10 @@ namespace Splendor {
         std::vector<Carte*> cartesN1;
         std::vector<Carte*> cartesN2;
         std::vector<Carte*> cartesN3;
-        
+        std::vector<Carte*> cartesNoble;
+        int nombre_joueurs;
+
+
         materiel::Pile* pileJaune;
         materiel::Pile* pileRouge;
         materiel::Pile* pileBleu;
@@ -189,6 +193,8 @@ namespace Splendor {
 
     public:
         Plateau();
+        Plateau(int nbjoueurs);
+
 
         ~Plateau();
         std::vector<Carte*>& getCarte(materiel::TypeCarte t);
@@ -197,15 +203,14 @@ namespace Splendor {
 
         void printCarte(ostream& f = std::cout) const;
 
-        //void retirerCarte(const Carte& c);
-        //void ajouterJeton(const Jeton& c);
-        //void retirerJeton(const Jeton& c);
-
          const size_t getNbCartesN1() const { return cartesN1.size(); }
 
          const size_t getNbCartesN2()const { return cartesN2.size(); }
 
          const size_t getNbCartesN3() const{ return cartesN3.size(); }
+
+        const size_t getNbCartesNoble() const{ return cartesNoble.size(); }
+
 
     };
 
@@ -286,7 +291,9 @@ namespace Splendor {
         materiel::Pioche* piocheN1;
         materiel::Pioche* piocheN2;
         materiel::Pioche* piocheN3;
-       
+        materiel::Pioche* piocheNoble;
+
+
         std::vector<Joueur*> joueurs;
         //Pile* pile;
 
@@ -306,7 +313,7 @@ namespace Splendor {
         int current_joueur;
 
     public:
-
+        int getNombreJoueurs() const { return nombre_joueurs; };
         void verifierRendreJetons();
         Controleur(const Controleur& c) = delete;
 
@@ -316,7 +323,7 @@ namespace Splendor {
             delete piocheN1;
             delete piocheN2;
             delete piocheN3;
-            
+            delete piocheNoble;
             joueurs.clear();
         }//delete pile; }
 
