@@ -7,6 +7,9 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <stack>
+#include <QString>
+#include <QDebug>
 
 
 using namespace std;
@@ -32,6 +35,11 @@ namespace materiel {
         int rouge;
         int blanc;
         int noir;
+        int getVert(){return vert;}
+        int getBleu(){return bleu;}
+        int getRouge(){return rouge;}
+        int getBlanc(){return blanc;}
+        int getNoir(){return noir;}
     };
 
     enum class Couleur {
@@ -39,7 +47,7 @@ namespace materiel {
     };
 
     enum class typeActions {
-        piocher2jetons, piocher3jetons, reserverCarte, acheterCarte
+        piocher2jetons, piocher3jetons, reserver, acheter
     };
 
     enum class TypeCarte {
@@ -56,9 +64,13 @@ namespace materiel {
          int prestige;
          TypeCarte type;
          Couleur bonus;
+         //QString PicAddr;  //qt
 
     public:
         static int current_id;
+
+        //QString GetAddress()const{return PicAddr;}
+
         unsigned int getID() const { return ID; }
 
         std::string getNom() const { return Nom; }
@@ -69,32 +81,38 @@ namespace materiel {
 
         int getPrestige() const { return prestige; }
 
+
         TypeCarte getType() const { return type; }
 
         ~Carte() = default;
 
-        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b), prestige(p), type(t) {};
+        Carte(string n, Prix *c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b),
+                                                                  prestige(p),
+                                                                  type(t) {}; // constructeur pour les cartes de developpement
+
+        Carte(string n, Prix *c, int p) : ID(current_id++), Nom(n), prix(c), prestige(p),
+                                          type(materiel::TypeCarte::Noble) {}; // contructeur pour les cartes nobles
     };
 
 
     class Pioche {
     private:
-        size_t nbCartes = 0;
+       
         TypeCarte type_cartes;
         vector<Carte*> cartes = {};
 
     public:
-        bool estVide() const { return nbCartes == 0; }
+        bool estVide() const { return cartes.size() == 0; }
 
         Pioche(TypeCarte t) ; // on construit uniquement avec le type, les cartes sont choisies dans le constructeur directement
 
         //Pioche(TypeCarte t, vector<Carte*> c) : type_cartes(t), cartes(c) {};
 
 
-        size_t getNbCartes() { return nbCartes; }
+        size_t getNbCartes() { return cartes.size(); }
 
 
-        const Carte& piocher();
+         Carte& piocher();
 
         Pioche& operator<<(Carte& e);
 
@@ -120,20 +138,23 @@ namespace materiel {
     class Pile {
     private:
         const Couleur couleur;
-        size_t nbJetons = 0;
-        vector<Jeton*> jetons = {};
+        
+       
+        stack<Jeton*> jetons = {};
     public:
-        bool estVide() const { return nbJetons == 0; }
+        bool estVide() const { return getNombre() == 0; }
 
-        Pile(const Couleur c) : couleur(c) {};
+        Pile(const Couleur c) :couleur(c) {};
 
         Couleur getCouleur() const { return couleur; }
 
-        size_t getNombre() const { return nbJetons; }
+        size_t getNombre() const { return jetons.size(); }
 
+        void remplir();
         Jeton* retirerJeton();
 
         void ajouterJeton(Jeton* j);
+        void printPile(ostream& f = cout) const;
 
         Pile& operator<<(Jeton& e);
 

@@ -14,9 +14,14 @@ class game_setting : public QDialog
 public:
     explicit game_setting(QWidget *parent = nullptr);
     ~game_setting();
+    game_interface* getGame()const {return game;};
 
 private slots:
     void on_buttonBox_accepted();
+
+    void on_nb_jouers_valueChanged(int arg1);
+
+    void on_AI_checkBox_stateChanged(int arg1);
 
 private:
     Ui::game_setting *ui;

@@ -592,7 +592,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="name1">
    <property name="geometry">
     <rect>
-     <x>-10</x>
+     <x>10</x>
      <y>590</y>
      <width>161</width>
      <height>41</height>
@@ -881,7 +881,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="name2">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>140</y>
      <width>161</width>
      <height>41</height>

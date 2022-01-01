@@ -15,14 +15,17 @@ SOURCES += \
     mainwindow.cpp \
     materiel.cpp \
     ostream.cpp \
-    splendor.cpp
+    splendor.cpp \
+    vuecarte.cpp
 
 HEADERS += \
     game_interface.h \
     game_setting.h \
     mainwindow.h \
     splendor.h \
-    materiel.h
+    materiel.h \
+    json.hpp \
+    vuecarte.h
 
 FORMS += \
     game_interface.ui \
