@@ -64,7 +64,9 @@ int main() {
         c.getCurrentJoueur().printCarte(c.getCurrentJoueur().getCarteReserve());
         //On fait jouer le joueur tant que on action est invalide
         cout << "\n" << c.getCurrentJoueur().GetNom() << " à vous de jouer! \n";
-        while (!c.action());
+        //on check si joueur est une ia pour on appele l'action correspondante
+        if (c.getCurrentJoueur().isIa()) { cout <<"test"; c.actionIa();}
+        else {while (!c.action());}
         //passage au joueur suivant
         c.joueursuivant();
     }
