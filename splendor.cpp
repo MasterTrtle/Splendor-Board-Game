@@ -266,6 +266,7 @@ namespace Splendor {
         std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
         int* joker = new int;
         *joker = getCurrentJoueur().getPile(Couleur::jaune).getNombre();
+
         if (std::count(v.begin(), v.end(), &c)) {
             //verification que le joueur à assez pour acheter
             Prix p = (c.getPrix());
@@ -583,10 +584,15 @@ namespace Splendor {
         current_joueur = 0;
         for (int i = 0; i < nombre_joueurs; i++) {
             string nomJoueur;
+            string Ia;
             cout << "Nom du joueur " << i + 1 << ": ";
             cin.ignore();
             getline(cin, nomJoueur);
-            Joueur* j = new Joueur(i, nomJoueur);
+            cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
+            cin.ignore();
+            getline(cin, nomJoueur);
+
+            Joueur* j = new Joueur(i, nomJoueur,Ia);
             //cout << j.getJoueurID();
             joueurs.push_back(j);
         }

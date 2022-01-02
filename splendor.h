@@ -220,6 +220,7 @@ namespace Splendor {
     private:
 
         const unsigned int ID;
+        bool Ia;
         const std::string nom;
         std::vector<materiel::Carte*> Reserved;
         std::vector<materiel::Carte*> Cartes = {};
@@ -243,13 +244,15 @@ namespace Splendor {
 
     public:
         void printCarte(std::vector<materiel::Carte*>& v,ostream&f = cout);
-        Joueur(int i, string& n) :nom(n), ID(i) {
+        bool isIa()const {return Ia;}
+        Joueur(int i, string& n,string& ia) :nom(n), ID(i) {
             pileRouge = new materiel::Pile(materiel::Couleur::rouge);
             pileVert = new materiel::Pile(materiel::Couleur::vert);
             pileBleu = new materiel::Pile(materiel::Couleur::bleu);
             pileBlanc = new materiel::Pile(materiel::Couleur::blanc);
             pileNoir = new materiel::Pile(materiel::Couleur::noir);
             pileJaune = new materiel::Pile(materiel::Couleur::jaune);
+            Ia=ia == "0";
             Prix* reduction = new Prix(0, 0, 0, 0,0);
         }
         ~Joueur() {
