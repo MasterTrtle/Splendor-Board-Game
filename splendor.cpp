@@ -263,6 +263,7 @@ namespace Splendor {
     }
 
     bool Controleur::acheterDansPile(std::vector<Carte*>& v, Carte& c) {
+        if (c.getType() == materiel::TypeCarte::Noble) return false; // on ne peut pas acheter de carte noble
         std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
         int* joker = new int;
         *joker = getCurrentJoueur().getPile(Couleur::jaune).getNombre();
@@ -369,7 +370,7 @@ namespace Splendor {
 
     }
     bool Controleur::acheterCarte(Carte& c) {
-        
+        if (c.getType() == materiel::TypeCarte::Noble) return false;
         std::vector<materiel::Carte*>& v1 = getPlateau().getCarte(TypeCarte::N1);
         std::vector<materiel::Carte*>& v2 = getPlateau().getCarte(TypeCarte::N2);
         std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
@@ -382,8 +383,9 @@ namespace Splendor {
             acheterDansPile(vreserved, c)
             ) return true;
 
-        
-        cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations\n";
+        //on affiche rien pour l'ia
+        if (!getCurrentJoueur().isIa())
+            cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations,\n";
         return false;
     }
        
@@ -510,6 +512,23 @@ namespace Splendor {
         verifierRendreJetons();
         return true;
     }
+    void Controleur::actionIa() {
+        materiel::typeActions t = materiel::typeActions::acheter;
+        cout << "action effectuée par le joueur: " << getCurrentJoueur().GetNom(); //id incorrecte ??
+
+        //on essaye d'acheter chaque carte
+        for (Partie::Iterator it = Partie::getInstance().getIterator(); !it.isDone(); it.next()) {
+            if (acheterCarte(it.currentItem())) return;
+        }
+        // on essaye de piocher chaque jeton
+        if (donner2jetons(materiel::Couleur::vert)) {verifierRendreJetons(); return;}
+        if (donner2jetons(materiel::Couleur::bleu)) {verifierRendreJetons();return ;}
+        if (donner2jetons(materiel::Couleur::rouge)) {verifierRendreJetons();return ;}
+        if (donner2jetons(materiel::Couleur::noir)) {verifierRendreJetons();return ;}
+        if (donner2jetons(materiel::Couleur::blanc)) {verifierRendreJetons();return ;}
+    }
+
+
     materiel::Pioche& Controleur::getPioche(materiel::TypeCarte t) {
         switch (t) {
         case TypeCarte::N1:
@@ -589,8 +608,7 @@ namespace Splendor {
             cin.ignore();
             getline(cin, nomJoueur);
             cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
-            cin.ignore();
-            getline(cin, nomJoueur);
+            cin>> nomJoueur;
 
             Joueur* j = new Joueur(i, nomJoueur,Ia);
             //cout << j.getJoueurID();
