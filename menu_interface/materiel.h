@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <random>
 #include <stack>
-#include <QString>
-#include <QDebug>
 
 
 using namespace std;
@@ -35,11 +33,6 @@ namespace materiel {
         int rouge;
         int blanc;
         int noir;
-        int getVert(){return vert;}
-        int getBleu(){return bleu;}
-        int getRouge(){return rouge;}
-        int getBlanc(){return blanc;}
-        int getNoir(){return noir;}
     };
 
     enum class Couleur {
@@ -64,13 +57,9 @@ namespace materiel {
          int prestige;
          TypeCarte type;
          Couleur bonus;
-         //QString PicAddr;  //qt
 
     public:
         static int current_id;
-
-        //QString GetAddress()const{return PicAddr;}
-
         unsigned int getID() const { return ID; }
 
         std::string getNom() const { return Nom; }
@@ -79,7 +68,7 @@ namespace materiel {
 
         Couleur getBonus() const { return bonus; }  // on a oublie ce truc
 
-        int getPrestige() const { return prestige; }
+        int getPrestige() const { return prestige;}
 
 
         TypeCarte getType() const { return type; }

@@ -1032,7 +1032,7 @@
   {
     "Level": "noble",
     "Prestige": "3",
-    "name": "François Ier",
+    "name": "Francois Ier",
     "blanc": "3",
     "bleu": "0",
     "vert": "0",
@@ -1089,4 +1089,5 @@
     "rouge": "0",
     "noir": "0"
   }
+
 ]

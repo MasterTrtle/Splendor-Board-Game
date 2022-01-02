@@ -1,27 +1,28 @@
+#include "splendor.h"
 #include "mainwindow.h"
 #include "game_interface.h"
 #include "game_setting.h"
 #include <QApplication>
-#include "splendor.h"
 
 using namespace Splendor;
-int main(int argc, char *argv[])
-{
-  QApplication a(argc, argv);
- MainWindow w;
-  w.show();
-  return a.exec();
 
-//    try {
+int main(int argc, char *argv[]) {
+    try {
+        QApplication a(argc, argv);
+         MainWindow w;
+          w.show();
+          return a.exec();
 
-//    }
-//    catch (SplendorException& e) {
-//        std::cout << e.getInfo() << "\n";
-//    }
+    }
+    catch (SplendorException& e) {
+        std::cout << e.getInfo() << "\n";
+    }
 //    //Choix du nombre de joueur
+//    bool flag = false; // flag qui indique la fin de partie
+//    int toursRestant = 5;
 //    int nb = -1;
 //    cout << "Choisissez un nombre de joueur: \n";
-//    while ( nb != 2 && nb != 3 && nb != 4) {
+//    while (nb != 2 && nb != 3 && nb != 4) {
 
 //        cin >> nb;
 //    }
@@ -40,7 +41,10 @@ int main(int argc, char *argv[])
 //    c.getPioche(materiel::TypeCarte::N2).printPioche();
 //    c.getPioche(materiel::TypeCarte::N3).printPioche();
 //    */
-//    while (true) {
+//    while (toursRestant>0) {
+//        if (flag){
+//            toursRestant-=1;
+//        }
 //        //on distribue les cartes sur le plateau ( si besoin)
 //        c.distribuerCarte();
 
@@ -71,13 +75,24 @@ int main(int argc, char *argv[])
 //        //affichage des cartes réservées par le joueur
 //        cout << "\nCartes réservées: ";
 //        c.getCurrentJoueur().printCarte(c.getCurrentJoueur().getCarteReserve());
-//        //On fait jouer le joueur tant que on action est invalide
 //        cout << "\n" << c.getCurrentJoueur().GetNom() << " à vous de jouer! \n";
-//        while (!c.action());
+
+//        c.visiteNoble();
+
+//        //on check si joueur est une ia pour on appele l'action correspondante
+//        if (c.getCurrentJoueur().isIa()) { cout <<"test"; c.actionIa();}
+//        else {while (!c.action());}         //On fait jouer le joueur tant que on action est invalide
+
+
+//        if (c.getCurrentJoueur().GetPrestige()>=15 && !flag) {
+//            flag =true;
+//            toursRestant = nb- c.getCurrentJoueur().getJoueurID()-1;
+//        }
+
+
 //        //passage au joueur suivant
 //        c.joueursuivant();
 //    }
 //    system("pause");
 //    return 0;
-
 }
