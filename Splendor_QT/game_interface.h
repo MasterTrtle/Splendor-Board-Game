@@ -27,6 +27,7 @@ class game_interface : public QWidget
 
 public:
     explicit game_interface(int nb,QWidget *parent = nullptr);
+
     ~game_interface();
 
 protected:
@@ -42,11 +43,13 @@ private:
     QString player3_nom;
     QString player4_nom;
     unsigned int nb_players;
-//    Splendor::Regles regles;
-//    Splendor::Controleur controleur;
     vector<vuecarte*> vuecartes;
     QGridLayout* layoutCartes;
     QVBoxLayout* couche;
+    bool flag= false;
+    int toursRestant = 5;
+    Splendor::Regles regle;
+
 
 
 };

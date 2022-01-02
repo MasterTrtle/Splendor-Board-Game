@@ -37,9 +37,11 @@ void vuecarte::paintEvent(QPaintEvent * /* event */)
 
 
     if (carte==nullptr) { // si la vue de carte n'a pas de carte on affiche un message
-        painter.drawText(QRect(15,50,100,60), Qt::AlignCenter, tr("cliquer \n pour \n ajouter \n une carte"));
+        painter.drawText(QRect(15,50,100,60), Qt::AlignCenter, tr("Pas \n de \n carte \n ici"));
         return;
     }
+
+
 
 
 

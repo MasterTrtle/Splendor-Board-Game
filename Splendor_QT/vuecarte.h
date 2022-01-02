@@ -13,7 +13,6 @@ class vuecarte : public QPushButton
 public:
     vuecarte(const materiel::Carte& c, QWidget *parent = nullptr);
     explicit vuecarte(QWidget *parent = nullptr);
-    // affecter une nouvelle carte 鑴la vue
     void setCarte(const materiel::Carte& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
     // vue sans carte
     void setNoCarte() { carte=nullptr; setCheckable(false); update(); }

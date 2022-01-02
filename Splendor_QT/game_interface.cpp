@@ -9,7 +9,8 @@
 game_interface::game_interface(int nb, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::game_interface),
-    vuecartes(12,nullptr)
+    vuecartes(12,nullptr),
+    regle(2) //2 personne;
 {
     couche = new QVBoxLayout;
     ui->setupUi(this);
@@ -18,9 +19,15 @@ game_interface::game_interface(int nb, QWidget *parent) :
     ui->name1->setText("player1");
     ui->name2->setText("player2");
 
+
+    //Splendor::Regles reg = Splendor::Regles(2);
+    //Splendor::Controleur&c = reg.getControleur();
+
+    Splendor::Controleur&c = regle.getControleur();
+    Splendor::Plateau&p = c.getPlateau();
     //test
-    materiel::Prix *p = new materiel::Prix(0,0,0,0,0);
-    materiel::Carte c1 = materiel::Carte("s",p,materiel::Couleur::blanc,3,materiel::TypeCarte::N1);
+    materiel::Prix *p1 = new materiel::Prix(0,0,0,0,0);
+    materiel::Carte c1 = materiel::Carte("s",p1,materiel::Couleur::blanc,3,materiel::TypeCarte::N1);
     layoutCartes = new QGridLayout;
     layoutCartes->setSpacing(0);
     layoutCartes->setHorizontalSpacing(10);

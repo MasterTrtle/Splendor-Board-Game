@@ -668,18 +668,27 @@ namespace Splendor {
     Controleur::Controleur(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
         current_joueur = 0;
         for (int i = 0; i < nombre_joueurs; i++) {
-            string nomJoueur;
-            string Ia;
-            cout << "Nom du joueur " << i + 1 << ": ";
-            cin.ignore();
-            getline(cin, nomJoueur);
-            cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
-            cin >> nomJoueur;
+                    string nomJoueur ="player";
+                    string Ia = "0";
 
-            Joueur* j = new Joueur(i, nomJoueur, Ia);
-            //cout << j.getJoueurID();
-            joueurs.push_back(j);
-        }
+
+                    Joueur* j = new Joueur(i, nomJoueur, Ia);
+                    //cout << j.getJoueurID();
+                    joueurs.push_back(j);
+                }  //pour tester
+//        for (int i = 0; i < nombre_joueurs; i++) {
+//            string nomJoueur;
+//            string Ia;
+//            cout << "Nom du joueur " << i + 1 << ": ";
+//            cin.ignore();
+//            getline(cin, nomJoueur);
+//            cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
+//            cin >> nomJoueur;
+
+//            Joueur* j = new Joueur(i, nomJoueur, Ia);
+//            //cout << j.getJoueurID();
+//            joueurs.push_back(j);
+//        }
         cout << (*joueurs[0]).getJoueurID(); // ici pas de pbs dans l'ID
         piocheN1 = new materiel::Pioche(materiel::TypeCarte::N1);
         piocheN2 = new materiel::Pioche(materiel::TypeCarte::N2);
