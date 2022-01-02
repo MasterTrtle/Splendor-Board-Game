@@ -245,14 +245,16 @@ namespace Splendor {
     public:
         void printCarte(std::vector<materiel::Carte*>& v,ostream&f = cout);
         bool isIa()const {return Ia;}
+
         Joueur(int i, string& n,string& ia) :nom(n), ID(i) {
+            cout <<ia;
             pileRouge = new materiel::Pile(materiel::Couleur::rouge);
             pileVert = new materiel::Pile(materiel::Couleur::vert);
             pileBleu = new materiel::Pile(materiel::Couleur::bleu);
             pileBlanc = new materiel::Pile(materiel::Couleur::blanc);
             pileNoir = new materiel::Pile(materiel::Couleur::noir);
             pileJaune = new materiel::Pile(materiel::Couleur::jaune);
-            Ia=ia == "0";
+            Ia = ia =="0";
             Prix* reduction = new Prix(0, 0, 0, 0,0);
         }
         ~Joueur() {
@@ -342,7 +344,7 @@ namespace Splendor {
         }
 
         bool action(); //distinction des cas de chaque action puis apeler les fonctions privées void donner2jetons(); void donner3jetons(); void reserverCarte();void acheterCarte(); Retourne true ou false, selon si l'action a pu ou non être effectuée
-       
+        void actionIa();
 
 
         void distribuerCarte(); //distribue (si besoin) des cartes sur le plateau
