@@ -11,8 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Splendor MainSurface");
     setFixedSize(1400,800);
-    gameSetting = nullptr;
-    game = nullptr;
 }
 
 MainWindow::~MainWindow()
@@ -27,16 +25,6 @@ void MainWindow::paintEvent(QPaintEvent *)
     pix.load("../menu_interface/image/menu.png");
     painter.drawPixmap(0, 0, 1400, 800, pix);
 }
-
-void MainWindow::on_pushButton_clicked()
-{
-//    if(gameSetting!=nullptr){
-//        game = gameSetting->getGame();
-//        game->show();
-//    }
-
-}
-
 
 void MainWindow::on_pushButton_2_clicked()
 {

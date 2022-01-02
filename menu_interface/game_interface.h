@@ -22,19 +22,6 @@ protected:
 
 private slots:
 
-    void on_card1_clicked();
-    void on_card2_clicked();
-    void on_card3_clicked();
-    void on_card4_clicked();
-    void on_card5_clicked();
-    void on_card6_clicked();
-    void on_card7_clicked();
-    void on_card8_clicked();
-    void on_card9_clicked();
-    void on_card10_clicked();
-    void on_card11_clicked();
-    void on_card12_clicked();
-
 private:
     Ui::game_interface *ui;
     vuecarte* vuecartes;

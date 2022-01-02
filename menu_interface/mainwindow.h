@@ -20,11 +20,9 @@ public:
 private:
     Ui::MainWindow *ui;
     game_setting *gameSetting;
-    game_interface * game;
 protected:
     void paintEvent(QPaintEvent *);
 private slots:
-    void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
 };
