@@ -1,0 +1,159 @@
+\documentclass[a4paper]{article}
+
+%%%%%%%% CREATE DOCUMENT STRUCTURE %%%%%%%%
+%% Language and font encodings
+\usepackage[French]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{subfig}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{sectsty}
+\usepackage{apacite}
+\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+
+%%%%%%%% DOCUMENT %%%%%%%%
+\begin{document}
+
+%%%% Title Page
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 							% horizontal line and its thickness
+\center 
+ 
+% University
+\textsc{\LARGE Université de technologie de Compiègne}\\[1cm]
+
+% Document info
+\textsc{\Large Projet Splendor}\\[0.2cm]
+\textsc{\large LO21-A21}\\[1cm] 										% Course Code
+\HRule \\[0.8cm]
+{ \huge \bfseries Rapport intermédiaire 1}\\[0.7cm]								% Assignment
+\HRule \\[2cm]
+\large
+\emph{Alexandre Laval,Clément Dupuis, LIU Chenxin, Nicolas Vengeon,  }\\
+%name (4511328)\\[1.5cm]													% Author info
+{\large \today}\\[13cm]
+\includegraphics[width=0.4\textwidth]{images/SU-UTC18-70.jpg}\\[1cm] 	% University logo
+\vfill 
+\end{titlepage}
+
+%\begin{abstract}
+%Your abstract.
+%\end{abstract}
+
+%%%% SECTIONS
+%% Section 1
+\section*{1.Introduction}
+
+Dans ce projet, il s’agit de concevoir et développer une application permettant de jouer au jeu de 
+société Splendor créé par Marc André et édité par SPACE Cowboys. 
+L’application devra permettre de jouer des parties standards de 2 à 4 joueurs. Le jeu sera en tour par tour sur une seule machine en joueur contre joueur. En plus du jeu standard, on doit pouvoir aussi jouer
+à au moins une des extensions officielles du jeu: Nous avons choisi l'extension des villes (cartes nobles remplacées par des villes)\\
+\\
+Afin de réaliser ce projet, il faut tout d'abord comprendre les règles du jeu. 
+Pour cela nous avons en jouer en ligne sur spendee.mattle.online.
+Ensuite nous avons réfléchi à la manière de décomposer le jeu en son abstraction la plus élémentaire 
+(afin qu'il soit modulaire) sous forme de classes. 
+Enfin, notre groupe s'est réuni pour consolider les idées de chacun et les rassembler dans une liste de tâches.
+
+
+
+
+
+\section*{2.Identification des tâches et estimation du temps}
+Comme il y a beaucoup de similitudes entre ce jeu et le jeu de société qui se déroule dans LO21 td(set!), nous allons nous inspirer de sa struture.
+%Nous décomposerons le travail selon les classes à créer.
+%Pour l'instant nous identifiant les éléments suivants:
+Nous avons décomposé le processus de développement en quatre parties.\\
+
+\subsection*{2.1.Définition et création d'éléments du jeu}
+La première section est la plus urgente et la plus fondamentale, sur laquelle tout le jeu doit fonctionner. Dans cette section, nous devons définir les éléments du jeu, pour l'instant nous identifiant les éléments suivants: 6 types de jetons, 10 tuiles nobles et 3 types de cartes développement.
+
+-La classe jeton\\
+    Six couleurs incluses
+- La class carte ( developpement et noble).\\
+    Une carte à un coût en jetons, une valeur, niveau , couleur 
+-joueur\\
+Possède des cartes, des cartes réservées ainsi que des jetons
+-plateau \\
+( pioche ( 3 tas), cartes découvertes,cartes nobles, tour ( joueur qui doit jouet etc.) )\\
+\\
+Le temps de travail estimé :  35h.\\
+\\
+La première partie, bien que peu complexe, est la base sur laquelle le programme peut fonctionner avec succès.
+Notre UML de départ était le suivant\\
+\includegraphics[width=0.6\textwidth]{images/UML1.png}
+
+\subsection*{2.2.Définition et création des entités fonctionnelles du jeu}
+-action \\
+( réserver, acheter, prendre 3 jetons differents, prendre 2 jetons identiques)
+    → sous tache: reserver/acheter ou prendre jetons
+-pioche \\
+(automatiquement quand une carte est achetée ou réservée)
+
+\subsection*{2.3.Définition détaillés pour les actions de jeu}
+
+Porte sur toutes les actions de contrôle du jeu:
+
+- regarder s’il y a un vainqueur
+- verifier la faisabilité des actions
+
+\subsection*{2.4.Création d'interfaces (QT) et de connexions au code}
+-affichage et représentation  du plateau:
+ Sous tâches:
+ - representer une carte
+ - representer le plateau
+ - representer les joueurs
+
+
+
+\section*{3.Répartition des tâches}
+Par conséquent, le travail attendu (pour le deuxième rapport) est:\\
+1.Elaboration d'une première version de l'UML commun 2h\\
+2.Définition détaillés des entités structurelles du projet 10h\\
+3.Définition détaillés des entités fonctionnelles du projet 15h\\
+4.Conceptualisation et l’implémentation la première partie 10h\\
+\\
+Estimation du total des heures de travail: 37 h\\
+\\
+UML → LIU Chenxin, Nicolas Vengeon, Alexandre Laval\\
+Entités structurelles et fonctionnelles → Alexandre Laval, 	Clement Dupuis\\
+Conceptualisation et l’implémentation → LIU Chenxin, Nicolas Vengeon\\
+
+\section*{4.Conclusion}
+Nous avons commencé à concevoir les différentes tâches nécessaires au projet par étapes. Ces parties et tâches peuvent encore être affinées ou modifiées, mais grâce à ce travail, nous avons commencé à étoffer le projet et à mieux le comprendre.\\
+ Il est prévu que d'ici le prochain rapport, nous ayons terminé la première partie (l'intégration de l'UML global et la première partie du code) et adapté celle-ci à la situation réelle.
+
+
+%%%%%%%% EXTRA TIPS %%%%%%%%
+%% If you want to include an figure
+%%\begin{figure}[H]
+%%\includegraphics[]{Pendulum.jpg}
+%%\caption{Sketch of the pendulum}
+%%\label{fig:pendulum}
+%%\end{figure}
+
+%% You can then reference with \ref{fig:pendulum}
+
+
+%%\newpage
+%%\bibliographystyle{apacite}
+%%\bibliography{sample}
+
+\end{document}
