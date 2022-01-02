@@ -9,13 +9,11 @@ int main() {
     catch (SplendorException& e) {
         std::cout << e.getInfo() << "\n";
     }
-    bool flag = false; // flag qui indique la fin de partie
-    int toursRestant = 5;
     //Choix du nombre de joueur
     int nb = -1;
     cout << "Choisissez un nombre de joueur: \n";
-    while ( nb != 2 && nb != 3 && nb != 4) {
-       
+    while (nb != 2 && nb != 3 && nb != 4) {
+
         cin >> nb;
     }
     cin.clear();
@@ -33,10 +31,7 @@ int main() {
     c.getPioche(materiel::TypeCarte::N2).printPioche();
     c.getPioche(materiel::TypeCarte::N3).printPioche();
     */
-    while (toursRestant>0) {
-        if (flag){
-            toursRestant-=1;
-        }
+    while (true) {
         //on distribue les cartes sur le plateau ( si besoin)
         c.distribuerCarte();
 
@@ -69,17 +64,9 @@ int main() {
         c.getCurrentJoueur().printCarte(c.getCurrentJoueur().getCarteReserve());
         //On fait jouer le joueur tant que on action est invalide
         cout << "\n" << c.getCurrentJoueur().GetNom() << " à vous de jouer! \n";
-        //on check si joueur est une ia pour on appele l'action correspondante
-
-
-        if (c.getCurrentJoueur().isIa()) { cout <<"test"; c.actionIa();}
-        else {while (!c.action());}
+        while (!c.action());
+        c.visiteNoble();
         //passage au joueur suivant
-
-        if (c.getCurrentJoueur().GetPrestige()>=15 && !flag) {
-            flag =true;
-            toursRestant = nb- c.getCurrentJoueur().getJoueurID()-1;
-        }
         c.joueursuivant();
     }
     system("pause");

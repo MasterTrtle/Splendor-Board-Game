@@ -132,7 +132,7 @@ namespace Splendor {
                 if (isDone()) throw SplendorException("Iterateur en fin de sequence");
                 i++;
                 if (!parcourtTout) {
-                    while (!isDone() && getInstance().getJeton(i).getCouleur()!= couleur) {
+                    while (!isDone() && getInstance().getJeton(i).getCouleur() != couleur) {
                         i++;
                     }
                 }
@@ -160,8 +160,8 @@ namespace Splendor {
 
             };
             IteratorJeton() : couleur(Couleur::bleu), parcourtTout(true) { };
-           
-           
+
+
         };
         //parcourir qu'un type de couleur
         IteratorJeton getIteratorJeton(Couleur c) const { return IteratorJeton(c); }
@@ -188,7 +188,7 @@ namespace Splendor {
         materiel::Pile* pileNoir;
         materiel::Pile* pileBlanc;
         //const Jeton** jetons = nullptr;
-        
+
         const size_t nbMax = 4;
 
     public:
@@ -199,17 +199,17 @@ namespace Splendor {
         ~Plateau();
         std::vector<Carte*>& getCarte(materiel::TypeCarte t);
         materiel::Pile& getPile(materiel::Couleur c);
-        void ajouterCarte( materiel::Carte& c);
+        void ajouterCarte(materiel::Carte& c);
 
         void printCarte(ostream& f = std::cout) const;
 
-         const size_t getNbCartesN1() const { return cartesN1.size(); }
+        const size_t getNbCartesN1() const { return cartesN1.size(); }
 
-         const size_t getNbCartesN2()const { return cartesN2.size(); }
+        const size_t getNbCartesN2()const { return cartesN2.size(); }
 
-         const size_t getNbCartesN3() const{ return cartesN3.size(); }
+        const size_t getNbCartesN3() const { return cartesN3.size(); }
 
-        const size_t getNbCartesNoble() const{ return cartesNoble.size(); }
+        const size_t getNbCartesNoble() const { return cartesNoble.size(); }
 
 
     };
@@ -243,19 +243,19 @@ namespace Splendor {
         */
 
     public:
-        void printCarte(std::vector<materiel::Carte*>& v,ostream&f = cout);
-        bool isIa()const {return Ia;}
+        void printCarte(std::vector<materiel::Carte*>& v, ostream& f = cout);
+        bool isIa()const { return Ia; }
 
-        Joueur(int i, string& n,string& ia) :nom(n), ID(i) {
-            cout <<ia;
+        Joueur(int i, string& n, string& ia) :nom(n), ID(i) {
+            cout << ia;
             pileRouge = new materiel::Pile(materiel::Couleur::rouge);
             pileVert = new materiel::Pile(materiel::Couleur::vert);
             pileBleu = new materiel::Pile(materiel::Couleur::bleu);
             pileBlanc = new materiel::Pile(materiel::Couleur::blanc);
             pileNoir = new materiel::Pile(materiel::Couleur::noir);
             pileJaune = new materiel::Pile(materiel::Couleur::jaune);
-            Ia = ia =="0";
-            Prix* reduction = new Prix(0, 0, 0, 0,0);
+            Ia = ia == "0";
+            Prix* reduction = new Prix(0, 0, 0, 0, 0);
         }
         ~Joueur() {
             delete pileBlanc;
@@ -274,7 +274,7 @@ namespace Splendor {
         const int getJoueurID() const { return ID; };
         materiel::Pile& getPile(materiel::Couleur c);
 
-       
+
         Prix* GetReduction();
         //Couleur GetBonus(); // pour calculer le bonus de joueur
         int GetPrestige() { return prestige; };
@@ -305,19 +305,27 @@ namespace Splendor {
         Plateau plateau;
         //Joueur* joueurs;
 
+       
         bool donnerJeton(Couleur c);
         bool donner2jetons(Couleur c);
         bool donner3jetons();
         bool reserverCarte(Carte& c);
+        
+        bool verifier_possibilite_achat(Carte& c);
         bool acheterCarte(Carte& c);
+        //fonction pour aidant a la construction des deux fonctions du dessus
+        bool verifierDansPile(std::vector<Carte*>& v, Carte& c);
         bool acheterDansPile(std::vector<Carte*>& v, Carte& c);
-        bool verification_couleur(const int prix,Couleur couleur, int& joker);
+
+
+        bool verification_couleur(const int prix, Couleur couleur, int& joker);
         Controleur(int nb_joueurs);
         friend class Regles;
 
         int current_joueur;
 
     public:
+        void visiteNoble();
         int getNombreJoueurs() const { return nombre_joueurs; };
         void verifierRendreJetons();
         Controleur(const Controleur& c) = delete;
@@ -333,9 +341,9 @@ namespace Splendor {
         }//delete pile; }
 
         materiel::Pioche& getPioche(materiel::TypeCarte t);
-       
 
-        
+
+
         Plateau& getPlateau() { return plateau; }
         void addPlayer();
         Joueur& getCurrentJoueur() { return *joueurs[current_joueur]; };
@@ -353,13 +361,13 @@ namespace Splendor {
         friend class Controleur;
         int nombre_joueurs;
         Controleur* controleur = new Controleur(nombre_joueurs);
-      
-       
+
+
     public:
 
 
         Regles(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
-            
+
         };
         Controleur& getControleur() {
 

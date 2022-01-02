@@ -27,8 +27,8 @@ namespace Splendor {
     Partie::Partie() {
 
         cout << "\n" << " ---  constructeur de partie et de la génération des cartes --- " << "\n";
-        std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
-        //std::ifstream ifs("cartes.json");
+        //std::ifstream ifs(R"(D:\Alex\Etude\Superieur\UTC\Informatique\LO21\lo21-projet-splendor-a21\cartes.json)");
+        std::ifstream ifs("cartes.json");
         json jf = json::parse(ifs);
         string vert, bleu, rouge, blanc, noir, Prestige, couleur, type;
         materiel::Couleur tempCouleur;
@@ -54,9 +54,10 @@ namespace Splendor {
             if (type == "noble") { // creatition des cartes nobles
                 tempType = materiel::TypeCarte::Noble;
                 cartes[i] = new materiel::Carte(jf[i]["name"],
-                                                new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
-                                                                   stoi(noir)), stoi(Prestige));
-            } else { // creation des cartes de developpement
+                    new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
+                        stoi(noir)), stoi(Prestige));
+            }
+            else { // creation des cartes de developpement
                 couleur = jf[i]["Gem color"];
                 if (couleur == "red")
                     tempCouleur = materiel::Couleur::rouge;
@@ -69,9 +70,9 @@ namespace Splendor {
                 if (couleur == "black")
                     tempCouleur = materiel::Couleur::noir;
                 cartes[i] = new materiel::Carte(jf[i]["name"],
-                                                new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
-                                                                   stoi(noir)),
-                                                tempCouleur, stoi(Prestige), tempType);
+                    new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
+                        stoi(noir)),
+                    tempCouleur, stoi(Prestige), tempType);
             }
             cout << *cartes[i] << "\n";
         }
@@ -126,7 +127,7 @@ namespace Splendor {
                 temp, stoi(Prestige), TypeCarte::N3);
             //cout << *cartes[i] << "\n";
         }
-        
+
         //generation des jeton
         for (int i = 0; i < 7; i++) {
             jetons[i] = new materiel::Jeton(materiel::Couleur::rouge);
@@ -172,7 +173,7 @@ namespace Splendor {
         pileJaune = new materiel::Pile(materiel::Couleur::jaune);
         pileJaune->remplir();
     }
-    Plateau::Plateau(int nbjoueurs){
+    Plateau::Plateau(int nbjoueurs) {
         pileRouge = new materiel::Pile(materiel::Couleur::rouge);
         pileRouge->remplir();
         pileVert = new materiel::Pile(materiel::Couleur::vert);
@@ -263,8 +264,105 @@ namespace Splendor {
     }
 
     bool Controleur::acheterDansPile(std::vector<Carte*>& v, Carte& c) {
-        if (c.getType() == materiel::TypeCarte::Noble) return false; // on ne peut pas acheter de carte noble
         std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
+        int* joker = new int;
+        *joker = getCurrentJoueur().getPile(Couleur::jaune).getNombre();
+
+        if (std::count(v.begin(), v.end(), &c)) {
+            //verification que le joueur à assez pour acheter
+            Prix p = (c.getPrix());
+            Prix* prixReduit = new Prix(
+                p.vert - getCurrentJoueur().GetReduction()->vert,
+                p.bleu - getCurrentJoueur().GetReduction()->bleu,
+                p.rouge - getCurrentJoueur().GetReduction()->rouge,
+                p.blanc - getCurrentJoueur().GetReduction()->blanc,
+                p.noir - getCurrentJoueur().GetReduction()->noir
+            );
+
+            Couleur vert = Couleur::vert;
+            Couleur bleu = Couleur::bleu;
+            Couleur blanc = Couleur::blanc;
+            Couleur rouge = Couleur::rouge;
+            Couleur noir = Couleur::noir;
+            //verification si le joueur a assez de jetons ( joker pour prendre en  compte les jetons dorés)
+
+                //si il y a assez de jetons verts en prenant en compte les joker
+
+                    //on les enlève
+            while (prixReduit->vert > 0) {
+                if (getCurrentJoueur().getPile(Couleur::vert).getNombre() != 0)
+                {
+                    getCurrentJoueur().getPile(Couleur::vert).retirerJeton();
+
+                }
+                //si plus de jetons, on doit enlever un jeton joker
+                else {
+                    getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                }
+                prixReduit->vert -= 1;
+            }
+            while (prixReduit->rouge > 0) {
+                if (getCurrentJoueur().getPile(Couleur::rouge).getNombre() != 0)
+                {
+                    getCurrentJoueur().getPile(Couleur::rouge).retirerJeton();
+
+                }
+                //si plus de jetons, on doit enlever un jeton joker
+                else {
+                    getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                }
+                prixReduit->rouge -= 1;
+            }
+            while (prixReduit->bleu > 0) {
+                if (getCurrentJoueur().getPile(Couleur::bleu).getNombre() != 0)
+                {
+                    getCurrentJoueur().getPile(Couleur::bleu).retirerJeton();
+
+                }
+                //si plus de jetons, on doit enlever un jeton joker
+                else {
+                    getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                }
+                prixReduit->bleu -= 1;
+            }
+            while (prixReduit->blanc > 0) {
+                if (getCurrentJoueur().getPile(Couleur::blanc).getNombre() != 0)
+                {
+                    getCurrentJoueur().getPile(Couleur::blanc).retirerJeton();
+
+                }
+                //si plus de jetons, on doit enlever un jeton joker
+                else {
+                    getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                }
+                prixReduit->blanc -= 1;
+            }
+            while (prixReduit->noir > 0) {
+                if (getCurrentJoueur().getPile(Couleur::noir).getNombre() != 0)
+                {
+                    getCurrentJoueur().getPile(Couleur::noir).retirerJeton();
+
+                }
+                //si plus de jetons, on doit enlever un jeton joker
+                else {
+                    getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
+                }
+                prixReduit->noir -= 1;
+            }
+            cout << "Vous achetez la carte " << c.getNom();
+            v.erase(std::find(v.begin(), v.end(), &c));
+            vachete.push_back(&c);
+            return true;
+        }
+
+
+
+
+        return false;
+
+    }
+    bool Controleur::verifierDansPile(std::vector<Carte*>& v, Carte& c) {
+
         int* joker = new int;
         *joker = getCurrentJoueur().getPile(Couleur::jaune).getNombre();
 
@@ -291,105 +389,71 @@ namespace Splendor {
                 verification_couleur(prixReduit->rouge, rouge, *joker) &&
                 verification_couleur(prixReduit->noir, noir, *joker))
             {
-                //si il y a assez de jetons verts en prenant en compte les joker
 
-                    //on les enlève
-                while (prixReduit->vert > 0) {
-                    if (getCurrentJoueur().getPile(Couleur::vert).getNombre() != 0)
-                    {
-                        getCurrentJoueur().getPile(Couleur::vert).retirerJeton();
-                        
-                    }
-                    //si plus de jetons, on doit enlever un jeton joker
-                    else {
-                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
-                    }
-                    prixReduit->vert -= 1;
-                    }
-                while (prixReduit->rouge > 0) {
-                    if (getCurrentJoueur().getPile(Couleur::rouge).getNombre() != 0)
-                    {
-                        getCurrentJoueur().getPile(Couleur::rouge).retirerJeton();
-
-                    }
-                    //si plus de jetons, on doit enlever un jeton joker
-                    else {
-                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
-                    }
-                    prixReduit->rouge -= 1;
-                }
-                while (prixReduit->bleu > 0) {
-                    if (getCurrentJoueur().getPile(Couleur::bleu).getNombre() != 0)
-                    {
-                        getCurrentJoueur().getPile(Couleur::bleu).retirerJeton();
-
-                    }
-                    //si plus de jetons, on doit enlever un jeton joker
-                    else {
-                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
-                    }
-                    prixReduit->bleu -= 1;
-                }
-                while (prixReduit->blanc > 0) {
-                    if (getCurrentJoueur().getPile(Couleur::blanc).getNombre() != 0)
-                    {
-                        getCurrentJoueur().getPile(Couleur::blanc).retirerJeton();
-
-                    }
-                    //si plus de jetons, on doit enlever un jeton joker
-                    else {
-                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
-                    }
-                    prixReduit->blanc -= 1;
-                }
-                while (prixReduit->noir > 0) {
-                    if (getCurrentJoueur().getPile(Couleur::noir).getNombre() != 0)
-                    {
-                        getCurrentJoueur().getPile(Couleur::noir).retirerJeton();
-
-                    }
-                    //si plus de jetons, on doit enlever un jeton joker
-                    else {
-                        getCurrentJoueur().getPile(Couleur::jaune).retirerJeton();
-                    }
-                    prixReduit->noir -= 1;
-                }
-                cout << "Vous achetez la carte " << c.getNom();
-                v.erase(std::find(v.begin(), v.end(), &c));
-                vachete.push_back(&c);
                 return true;
-        }
+            }
             else {
-                cout << "\nVous n'avez pas assez pour acheter cette carte\n";
+
                 return false;
             }
-           
+
         }
-        
+
         return false;
 
+
+
     }
-    bool Controleur::acheterCarte(Carte& c) {
-        if (c.getType() == materiel::TypeCarte::Noble) return false;
+    bool Controleur::verifier_possibilite_achat(Carte& c) {
         std::vector<materiel::Carte*>& v1 = getPlateau().getCarte(TypeCarte::N1);
         std::vector<materiel::Carte*>& v2 = getPlateau().getCarte(TypeCarte::N2);
         std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
-        std::vector<materiel::Carte*>& vreserved= getCurrentJoueur().getCarteReserve();
-       
+        std::vector<materiel::Carte*>& vreserved = getCurrentJoueur().getCarteReserve();
+
         if (
-            acheterDansPile(v1, c) ||
-            acheterDansPile(v2, c) ||
-            acheterDansPile(v3, c) ||
-            acheterDansPile(vreserved, c)
+            verifierDansPile(v1, c) ||
+            verifierDansPile(v2, c) ||
+            verifierDansPile(v3, c) ||
+            verifierDansPile(vreserved, c)
             ) return true;
 
-        //on affiche rien pour l'ia
-        if (!getCurrentJoueur().isIa())
-            cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations,\n";
+
+
+        return false;
+
+    }
+    void Controleur::visiteNoble() {
+        std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
+        std::vector<materiel::Carte*>& v = getPlateau().getCarte(TypeCarte::Noble);
+        for (int i = 0; i < v.size(); i++) {
+            if (verifier_possibilite_achat(*v[i])) {
+                v.erase(std::find(v.begin(), v.end(), v[i]));
+                vachete.push_back(v[i]);
+                cout << " \n Un noble vous a réndu visite \n";
+            }
+
+        }
+    }
+    bool Controleur::acheterCarte(Carte& c) {
+        if (verifier_possibilite_achat(c)) {
+            std::vector<materiel::Carte*>& v1 = getPlateau().getCarte(TypeCarte::N1);
+            std::vector<materiel::Carte*>& v2 = getPlateau().getCarte(TypeCarte::N2);
+            std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
+            std::vector<materiel::Carte*>& vreserved = getCurrentJoueur().getCarteReserve();
+
+            if (
+                acheterDansPile(v1, c) ||
+                acheterDansPile(v2, c) ||
+                acheterDansPile(v3, c) ||
+                acheterDansPile(vreserved, c)
+                ) return true;
+
+        }
+        cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations ou alors vous n'avez pas assez pour l'acheter\n";
         return false;
     }
-       
-        
+
+
     bool Controleur::donnerJeton(Couleur c) {
         if (getPlateau().getPile(c).getNombre() > 0) {
             cout << getCurrentJoueur().GetNom() << " a pioché un jeton " << c;
@@ -400,8 +464,8 @@ namespace Splendor {
         return false;
     }
     bool Controleur::donner2jetons(Couleur c) {
-        if (getPlateau(). getPile(c).getNombre() >= 4) {
-            cout << getCurrentJoueur().GetNom()<< " a pioché deux jetons " << c;
+        if (getPlateau().getPile(c).getNombre() >= 4) {
+            cout << getCurrentJoueur().GetNom() << " a pioché deux jetons " << c;
             getCurrentJoueur().getPile(c).ajouterJeton(getPlateau().getPile(c).retirerJeton());
             getCurrentJoueur().getPile(c).ajouterJeton(getPlateau().getPile(c).retirerJeton());
             return true;
@@ -419,7 +483,7 @@ namespace Splendor {
             while (choix != 1 && choix != 2) {
                 cin >> choix;
                 if (choix == 1) return false;
-            
+
             }
             c1 = getCurrentJoueur().choisirJeton();
         }
@@ -451,7 +515,7 @@ namespace Splendor {
         getCurrentJoueur().getPile(c1).ajouterJeton(getPlateau().getPile(c1).retirerJeton());
         getCurrentJoueur().getPile(c2).ajouterJeton(getPlateau().getPile(c2).retirerJeton());
         getCurrentJoueur().getPile(c3).ajouterJeton(getPlateau().getPile(c3).retirerJeton());
-           
+
         cout << "\n Don de trois jetons à " << getCurrentJoueur().GetNom();
         return true;
     }
@@ -460,7 +524,7 @@ namespace Splendor {
         std::vector<materiel::Carte*>& v2 = getPlateau().getCarte(TypeCarte::N2);
         std::vector<materiel::Carte*>& v3 = getPlateau().getCarte(TypeCarte::N3);
         std::vector<materiel::Carte*>& vreserved = getCurrentJoueur().getCarteReserve();
-       
+
         if (vreserved.size() < 3) {
             if (std::count(v1.begin(), v1.end(), &c)) {
                 cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
@@ -489,7 +553,7 @@ namespace Splendor {
             cout << "\nVous avez déjà 3 réservations, impossible d'en reserver plus\n";
             return false;
         }
-        
+
     }
     bool Controleur::action() {
         materiel::typeActions t = getCurrentJoueur().ChoisirAction();
@@ -507,7 +571,7 @@ namespace Splendor {
         case materiel::typeActions::piocher3jetons:
             if (!donner3jetons()) return false;
             break;
-            
+
         }
         verifierRendreJetons();
         return true;
@@ -521,11 +585,11 @@ namespace Splendor {
             if (acheterCarte(it.currentItem())) return;
         }
         // on essaye de piocher chaque jeton
-        if (donner2jetons(materiel::Couleur::vert)) {verifierRendreJetons(); return;}
-        if (donner2jetons(materiel::Couleur::bleu)) {verifierRendreJetons();return ;}
-        if (donner2jetons(materiel::Couleur::rouge)) {verifierRendreJetons();return ;}
-        if (donner2jetons(materiel::Couleur::noir)) {verifierRendreJetons();return ;}
-        if (donner2jetons(materiel::Couleur::blanc)) {verifierRendreJetons();return ;}
+        if (donner2jetons(materiel::Couleur::vert)) { verifierRendreJetons(); return; }
+        if (donner2jetons(materiel::Couleur::bleu)) { verifierRendreJetons(); return; }
+        if (donner2jetons(materiel::Couleur::rouge)) { verifierRendreJetons(); return; }
+        if (donner2jetons(materiel::Couleur::noir)) { verifierRendreJetons(); return; }
+        if (donner2jetons(materiel::Couleur::blanc)) { verifierRendreJetons(); return; }
     }
 
 
@@ -537,8 +601,8 @@ namespace Splendor {
             return *piocheN2;
         case TypeCarte::N3:
             return *piocheN3;
-        
-        
+
+
         }
         throw SplendorException("le type de pioche n'a pas ete defini dans la fonction getPioche");
 
@@ -551,11 +615,13 @@ namespace Splendor {
             return cartesN2;
         case TypeCarte::N3:
             return cartesN3;
+        case TypeCarte::Noble:
+            return cartesNoble;
 
         }
     }
     std::vector<Carte*>& Joueur::getCarteReserve() {
-            return Reserved;
+        return Reserved;
 
     }
     std::vector<Carte*>& Joueur::getCarteAchetes() {
@@ -564,19 +630,19 @@ namespace Splendor {
     }
     materiel::Pile& Plateau::getPile(materiel::Couleur c) {
         switch (c) {
-            case Couleur::blanc:
-               
-                return *pileBlanc;
-            case Couleur::bleu:
-                return *pileBleu;
-            case Couleur::noir:
-                return *pileNoir;
-            case Couleur::vert:
-                return *pileVert;
-            case Couleur::rouge:
-                return *pileRouge;
-            case Couleur::jaune:
-                return *pileJaune;
+        case Couleur::blanc:
+
+            return *pileBlanc;
+        case Couleur::bleu:
+            return *pileBleu;
+        case Couleur::noir:
+            return *pileNoir;
+        case Couleur::vert:
+            return *pileVert;
+        case Couleur::rouge:
+            return *pileRouge;
+        case Couleur::jaune:
+            return *pileJaune;
 
         }
 
@@ -608,9 +674,9 @@ namespace Splendor {
             cin.ignore();
             getline(cin, nomJoueur);
             cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
-            cin>> nomJoueur;
+            cin >> nomJoueur;
 
-            Joueur* j = new Joueur(i, nomJoueur,Ia);
+            Joueur* j = new Joueur(i, nomJoueur, Ia);
             //cout << j.getJoueurID();
             joueurs.push_back(j);
         }
@@ -632,12 +698,12 @@ namespace Splendor {
             getPlateau().getPile(Couleur::blanc).retirerJeton();
             getPlateau().getPile(Couleur::noir).retirerJeton();
         }
-       
-       
-        
+
+
+
     };
 
-    void Plateau::ajouterCarte( materiel::Carte& c) {
+    void Plateau::ajouterCarte(materiel::Carte& c) {
         if (c.materiel::Carte::getType() == TypeCarte::N1) {
             if (getNbCartesN1() < nbMax) {
                 cartesN1.push_back(&c);
@@ -659,7 +725,7 @@ namespace Splendor {
             else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
         }
         else if (c.getType() == TypeCarte::Noble) {
-            if (getNbCartesNoble() <  nbMax) {
+            if (getNbCartesNoble() < nbMax) {
                 cartesNoble.push_back(&c);
             }
             else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
@@ -692,17 +758,17 @@ namespace Splendor {
             cout << "--fin distribution--";
 
         }
-        
+
 
     }
-    void Joueur::printCarte(std::vector<materiel::Carte*> &v, ostream& f ) {
-        
+    void Joueur::printCarte(std::vector<materiel::Carte*>& v, ostream& f) {
+
         f << "\nles cartes: \n";
         for (size_t i = 0; i < v.size(); i++) {
             f << *v[i] << "\n ";
 
         }
-        
+
     }
     void Plateau::printCarte(ostream& f) const {
         f << " \n Plateau::printcarte(), Cartes presentes sur le plateau: \n";
