@@ -68,7 +68,7 @@ namespace materiel {
 
         Couleur getBonus() const { return bonus; }  // on a oublie ce truc
 
-        int getPrestige() const { return prestige; }
+        int getPrestige() const { return prestige;}
 
 
         TypeCarte getType() const { return type; }

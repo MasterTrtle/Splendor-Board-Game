@@ -277,7 +277,7 @@ namespace Splendor {
 
         Prix* GetReduction();
         //Couleur GetBonus(); // pour calculer le bonus de joueur
-        int GetPrestige() { return prestige; };
+        int GetPrestige() const;
         const  string  GetNom() const {
             return nom;
         };

@@ -797,6 +797,15 @@ namespace Splendor {
 
 
     }
+
+    int Joueur::GetPrestige() const{
+        int resultat =0;
+        for (auto &i :Cartes){
+            resultat +=i->getPrestige();
+        }
+        return resultat;
+    }
+
     materiel::typeActions Joueur::ChoisirAction() {
 
         int x = 0;
