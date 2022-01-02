@@ -2,8 +2,20 @@
 #define GAME_INTERFACE_H
 
 #include <QWidget>
+#include <vector>
 #include "vuecarte.h"
+#include "splendor.h"
+#include "materiel.h"
 
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QHBoxLayout;
+class QVBoxLayout;
+class QGridLayout;
+class QProgressBar;
+class QLCDNumber;
+class VueCarte;
 
 namespace Ui {
 class game_interface;
@@ -24,12 +36,19 @@ private slots:
 
 private:
     Ui::game_interface *ui;
-    vuecarte* vuecartes;
+    //vuecarte* vuecartes;
     QString player1_nom;
     QString player2_nom;
     QString player3_nom;
     QString player4_nom;
     unsigned int nb_players;
+//    Splendor::Regles regles;
+//    Splendor::Controleur controleur;
+    vector<vuecarte*> vuecartes;
+    QGridLayout* layoutCartes;
+    QVBoxLayout* couche;
+
+
 };
 
 #endif // GAME_INTERFACE_H
