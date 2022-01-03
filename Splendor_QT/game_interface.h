@@ -48,6 +48,14 @@ private slots:
 
     void on_white_num_textChanged();
 
+    void on_Pioche3_clicked();
+
+    void on_pioche2_clicked();
+
+    void on_Acheter_clicked();
+
+    void on_Reserver_clicked();
+
 private:
     Ui::game_interface *ui;
     //vuecarte* vuecartes;
@@ -67,6 +75,12 @@ private:
     game_end* end;
 
     void textChanged();//met a jour les texte a chaque fois
+
+    void player1_textChanged(); //on met a jour les information de chaque joueur
+    void player2_textChanged();
+    void player3_textChanged();
+    void player4_textChanged();
+
     void JetonsClicked(materiel::Couleur);
     void carteDevClicked(VueCarte* vc);
     void carteNobleClicked(VueCarte vc);
