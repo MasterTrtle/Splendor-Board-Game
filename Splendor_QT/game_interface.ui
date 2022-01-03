@@ -460,7 +460,7 @@ border-image: url(:/images/card/blue-high/1.png);
   <widget class="QTextBrowser" name="gold_num">
    <property name="geometry">
     <rect>
-     <x>1040</x>
+     <x>1030</x>
      <y>120</y>
      <width>41</width>
      <height>41</height>
@@ -482,8 +482,8 @@ p, li { white-space: pre-wrap; }
   <widget class="QTextBrowser" name="black_num">
    <property name="geometry">
     <rect>
-     <x>1030</x>
-     <y>220</y>
+     <x>1020</x>
+     <y>230</y>
      <width>51</width>
      <height>51</height>
     </rect>
@@ -571,7 +571,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>1040</x>
-     <y>620</y>
+     <y>640</y>
      <width>41</width>
      <height>41</height>
     </rect>
@@ -604,60 +604,6 @@ border-radius:15px;
 border:1px solid rgb(197, 197, 98);
 font: 18pt &quot;隶书&quot;;
 color:white;</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="reserved1">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>660</y>
-     <width>71</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 80);
-border-radius:18px;
-border:2px solid rgb(176, 176, 87);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="reserved2">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>660</y>
-     <width>71</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 80);
-border-radius:18px;
-border:2px solid rgb(176, 176, 87);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="reserved3">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>660</y>
-     <width>71</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 80);
-border-radius:18px;
-border:2px solid rgb(176, 176, 87);</string>
    </property>
    <property name="text">
     <string/>
@@ -882,7 +828,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>160</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -969,7 +915,7 @@ border-radius:15px;
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>220</y>
+     <y>290</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -1008,8 +954,8 @@ color:white;</string>
   <widget class="QPushButton" name="Pioche3">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>810</y>
+     <x>380</x>
+     <y>630</y>
      <width>151</width>
      <height>41</height>
     </rect>
@@ -1021,8 +967,8 @@ color:white;</string>
   <widget class="QPushButton" name="pioche2">
    <property name="geometry">
     <rect>
-     <x>530</x>
-     <y>810</y>
+     <x>540</x>
+     <y>630</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -1034,8 +980,8 @@ color:white;</string>
   <widget class="QPushButton" name="Acheter">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>810</y>
+     <x>710</x>
+     <y>630</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -1047,8 +993,8 @@ color:white;</string>
   <widget class="QPushButton" name="Reserver">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>810</y>
+     <x>880</x>
+     <y>630</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -1056,6 +1002,76 @@ color:white;</string>
    <property name="text">
     <string>Reserver une carte</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>80</y>
+     <width>601</width>
+     <height>541</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="carte_dev_layout"/>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>110</y>
+     <width>161</width>
+     <height>501</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="noble_layout"/>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>680</y>
+     <width>291</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="Reserve_layout">
+    <item>
+     <widget class="QToolButton" name="reserved3">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 80);
+border-radius:18px;
+border:2px solid rgb(176, 176, 87);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="reserved2">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 80);
+border-radius:18px;
+border:2px solid rgb(176, 176, 87);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="reserved1">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 80);
+border-radius:18px;
+border:2px solid rgb(176, 176, 87);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

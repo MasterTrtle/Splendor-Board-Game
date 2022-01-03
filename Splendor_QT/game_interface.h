@@ -66,9 +66,9 @@ private:
     int AI_switch;   //Interrupteurs Ai
     unsigned int nb_players;
     vector<vuecarte*> vuecartes;
-    QGridLayout* layoutCartes_DEV;
-    QHBoxLayout* layoutCartes_NOBLE;
-    QVBoxLayout* couche;
+    //QGridLayout* layoutCartes_DEV;
+    //QHBoxLayout* layoutCartes_NOBLE;
+    //QVBoxLayout* couche;
     bool flag= false;  // Est-ce que le jeu continue
     int toursRestant = 5;
     Splendor::Regles regle;

@@ -19,21 +19,24 @@ game_interface::game_interface(int nb,QString player1,QString player2,QString pl
     player2_nom = player3;
     player4_nom = player4;
     nb_players = nb;
-    couche = new QVBoxLayout;
+    //couche = new QVBoxLayout;
 
     setWindowTitle("Splendor!");
     setFixedSize(1400,800);
 
     ui->name1->setText(player1_nom);
-    ui->name2->setText(player2_nom);
+    ui->name2->setText(player1_nom);
+
     ui->name3->setVisible(false);
     ui->name4->setVisible(false);
     if (nb_players==3){
-        ui->name1->setText(player3_nom);
-        ui->name4->setVisible(true);
+        ui->name3->setText(player3_nom);
+        ui->name3->setVisible(true);
     }
     if (nb_players==4){
-        ui->name1->setText(player4_nom);
+        ui->name4->setText(player4_nom);
+        ui->name3->setText(player3_nom);
+        ui->name3->setVisible(true);
         ui->name3->setVisible(true);
     }
 
@@ -46,15 +49,15 @@ game_interface::game_interface(int nb,QString player1,QString player2,QString pl
     //test
     materiel::Prix *p1 = new materiel::Prix(0,0,0,0,0);
     materiel::Carte c1 = materiel::Carte("s",p1,materiel::Couleur::blanc,3,materiel::TypeCarte::N1);
-    layoutCartes_DEV = new QGridLayout;
-    layoutCartes_DEV->setSpacing(0);
-    layoutCartes_DEV->setHorizontalSpacing(10);
+   // layoutCartes_DEV = new QGridLayout;
+    //layoutCartes_DEV->setSpacing(0);
+    //layoutCartes_DEV->setHorizontalSpacing(10);
     std::cout << "test game interface "<< endl;
     for(size_t i=0; i<12;i++)  //12 cartes de développement
         vuecartes[i] = new vuecarte(c1,this);
 
     for(size_t i=0; i<12;i++){
-        layoutCartes_DEV->addWidget(vuecartes[i],i/4,i%4);
+       ui->carte_dev_layout->addWidget(vuecartes[i],i/4,i%4);
         //connect(vuecartes[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(carteClique(VueCarte*)));
     }
 
@@ -64,19 +67,26 @@ game_interface::game_interface(int nb,QString player1,QString player2,QString pl
    // c.getPioche(materiel::TypeCarte::N3);
 
 
-    layoutCartes_NOBLE =  new QHBoxLayout;
-    for(size_t i=12; i<16;i++)  //4 cartes noble
+    //layoutCartes_NOBLE =  new QHBoxLayout;
+    for(size_t i=13; i<16;i++)  //3 cartes noble
         vuecartes[i] = new vuecarte(c1,this);
-    for(size_t i=12; i<16;i++){
-        layoutCartes_NOBLE->addWidget(vuecartes[i]);
+    for(size_t i=13; i<16;i++){
+        ui->noble_layout->addWidget(vuecartes[i]);
         connect(vuecartes[i],SIGNAL(carteDevClicked(VueCarte*)),this,SLOT(carteDevClique(VueCarte*)));
     }
    // c.getPioche(materiel::TypeCarte::Noble);
-    couche->addLayout(layoutCartes_NOBLE);
-    couche->addLayout(layoutCartes_DEV);
-    setLayout(couche);
+   // couche->addLayout(layoutCartes_NOBLE);
+   // couche->addLayout(layoutCartes_DEV);
+   // setLayout(couche);
 
     //Splendor::Regles r = Splendor::Regles(nb);
+
+    for(size_t i=16; i<19;i++)  //3 Cartes réservées
+        vuecartes[i] = new vuecarte(c1,this);
+    for(size_t i=16; i<19;i++){
+        ui->Reserve_layout->addWidget(vuecartes[i]);
+        connect(vuecartes[i],SIGNAL(carteDevClicked(VueCarte*)),this,SLOT(carteDevClique(VueCarte*)));
+    }
 }
 
 game_interface::~game_interface()
