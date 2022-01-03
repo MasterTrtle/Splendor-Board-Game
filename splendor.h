@@ -316,6 +316,8 @@ namespace Splendor {
         bool donnerJeton(Couleur c);
         bool donner2jetons(Couleur c);
         bool donner3jetons();
+        void donner3jetonsIa();
+
         bool reserverCarte(Carte& c);
         bool verifier_possibilite_cite(Carte& c);
         bool verifier_possibilite_achat(Carte& c);
