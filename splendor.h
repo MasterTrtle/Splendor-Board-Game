@@ -40,13 +40,14 @@ namespace Splendor {
     class Partie {
     private:
 
-        const size_t nb_cartes = 100;
+        const size_t nb_cartes = 106;
         const size_t nb_cartesN1 = 40;
         const size_t nb_cartesN2 = 30;
         const size_t nb_cartesN3 = 20;
         const size_t nb_cartesNoble = 10;
+        const size_t nb_cartesCite = 6;
         const size_t nb_jetons = 40;
-        materiel::Carte* cartes[100];
+        materiel::Carte* cartes[106];
         materiel::Jeton* jetons[40];
         //Jeton* jetons[40];
 
@@ -237,6 +238,7 @@ namespace Splendor {
         materiel::Carte& choisirCarte();
         materiel::Couleur choisirJeton();
         friend class Controleur;
+        bool hasciteCard;
         /*
         void ajouterJeton(Jeton* j) { Jetons.push(j); };
         Jeton* retirerJeton();
@@ -247,8 +249,8 @@ namespace Splendor {
     public:
         void printCarte(std::vector<materiel::Carte*>& v, ostream& f = cout);
         bool isIa()const { return Ia; }
-
-        Joueur(int i, string& n, string& ia) :nom(n), ID(i) {
+        bool hasCite() { return hasciteCard; }
+        Joueur(int i, string& n, string& ia) :nom(n), ID(i),hasciteCard(false) {
             cout << ia;
             pileRouge = new materiel::Pile(materiel::Couleur::rouge);
             pileVert = new materiel::Pile(materiel::Couleur::vert);
@@ -294,6 +296,8 @@ namespace Splendor {
 
     };
     class Controleur {
+        
+        bool someoneHasCite = false;
         int nombre_joueurs;
         materiel::Pioche* piocheN1;
         materiel::Pioche* piocheN2;
@@ -313,7 +317,7 @@ namespace Splendor {
         bool donner2jetons(Couleur c);
         bool donner3jetons();
         bool reserverCarte(Carte& c);
-
+        bool verifier_possibilite_cite(Carte& c);
         bool verifier_possibilite_achat(Carte& c);
         bool acheterCarte(Carte& c);
         //fonction pour aidant a la construction des deux fonctions du dessus
@@ -328,6 +332,8 @@ namespace Splendor {
         int current_joueur;
 
     public:
+        bool hasSomeoneWon();
+        void printPlayerWinner();
         void visiteNoble();
         int getNombreJoueurs() const { return nombre_joueurs; };
         void verifierRendreJetons();

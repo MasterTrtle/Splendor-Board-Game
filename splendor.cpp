@@ -14,7 +14,7 @@ namespace Splendor {
         if (t == TypeCarte::N2) return nb_cartesN2;
         if (t == TypeCarte::N3) return nb_cartesN3;
         if (t == TypeCarte::Noble) return nb_cartesNoble;
-
+        if (t == TypeCarte::cite) return nb_cartesCite;
         else return 0;
     }
 
@@ -55,12 +55,13 @@ namespace Splendor {
                 tempType = materiel::TypeCarte::Noble;
                 cartes[i] = new materiel::Carte(jf[i]["name"],
                     new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
-                        stoi(noir)), stoi(Prestige));
+                        stoi(noir)), stoi(Prestige),tempType);
             }
             else if (type == "cite") {
+                tempType = materiel::TypeCarte::cite;
                 cartes[i] = new materiel::Carte(jf[i]["name"],
                     new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
-                        stoi(noir)), stoi(Prestige));
+                        stoi(noir)), stoi(Prestige),tempType);
                 cout << *cartes[i];
             }
             else  { // creation des cartes de developpement
@@ -201,6 +202,8 @@ namespace Splendor {
         cartesN1.clear();
         cartesN2.clear();
         cartesN3.clear();
+        cartesNoble.clear();
+        cartesCite.clear();
         delete pileBlanc;
         delete pileBleu;
         delete pileRouge;
@@ -429,6 +432,25 @@ namespace Splendor {
         return false;
 
     }
+    bool Controleur::verifier_possibilite_cite(Carte& c) {
+        //Si le joueur  a assez de prestige
+        if (getCurrentJoueur().GetPrestige() >= c.getPrestige()) {
+            if (getCurrentJoueur().getPile(Couleur::blanc).getNombre() >= c.getPrix().blanc
+                && getCurrentJoueur().getPile(Couleur::bleu).getNombre() >= c.getPrix().bleu
+                && getCurrentJoueur().getPile(Couleur::noir).getNombre() >= c.getPrix().noir
+                && getCurrentJoueur().getPile(Couleur::vert).getNombre() >= c.getPrix().vert
+                && getCurrentJoueur().getPile(Couleur::rouge).getNombre() >= c.getPrix().rouge) {
+                return true;
+            } 
+            
+            
+
+        }
+        cout << "\nVous n'avez pas les conditions requises pour avoir cette carte cité \n";
+        return false;
+
+    }
+
     void Controleur::visiteNoble() {
         std::vector<materiel::Carte*>& vachete = getCurrentJoueur().getCarteAchetes();
         std::vector<materiel::Carte*>& v = getPlateau().getCarte(TypeCarte::Noble);
@@ -456,8 +478,29 @@ namespace Splendor {
                 ) return true;
 
         }
-        if(!getCurrentJoueur().isIa())
-        cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations ou alors vous n'avez pas assez pour l'acheter\n";
+        
+        if (isExtension) {
+            //Si c'est une carte de cité
+            if (verifier_possibilite_cite(c)) {
+                std::vector<materiel::Carte*>& vcite = getPlateau().getCarte(TypeCarte::cite);
+                vcite.erase(std::find(vcite.begin(), vcite.end(), &c));
+                //On change le joueur victorieux seulement si un autre a pas déja acheter une carte cite et a plus de prestige
+                cout << "\n Vous avez maintenant une carte cité! \n";
+                cout << "\n Si personne d'autre n'achete de carte cité avant la fin du tour ( et possède plus de prestige), " << getCurrentJoueur().GetNom() << "ganera! \n";
+                   getCurrentJoueur().hasciteCard = true;
+                   someoneHasCite = true;
+                return true;
+            }
+            else {
+                if (!getCurrentJoueur().isIa())
+                    cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations ou alors vous n'avez pas assez pour l'acheter\n";
+            
+            }
+        }
+        else {
+            if (!getCurrentJoueur().isIa())
+                cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations ou alors vous n'avez pas assez pour l'acheter\n";
+        }
         return false;
     }
 
@@ -625,7 +668,10 @@ namespace Splendor {
             return *piocheN2;
         case TypeCarte::N3:
             return *piocheN3;
-
+        case TypeCarte::Noble:
+            return *piocheNoble;
+        case TypeCarte::cite:
+            return *piocheCite;
 
         }
         throw SplendorException("le type de pioche n'a pas ete defini dans la fonction getPioche");
@@ -641,6 +687,8 @@ namespace Splendor {
             return cartesN3;
         case TypeCarte::Noble:
             return cartesNoble;
+        case TypeCarte::cite:
+            return cartesCite;
 
         }
     }
@@ -690,8 +738,7 @@ namespace Splendor {
         }
     }
     Controleur::Controleur(int nb_joueurs,bool ext) :nombre_joueurs(nb_joueurs),isExtension(ext) {
-        cout << "\n extension: "<<ext;
-        cout << "\n nbJoueur: " << nb_joueurs;
+       
         current_joueur = 0;
         for (int i = 0; i < nombre_joueurs; i++) {
             string nomJoueur;
@@ -716,11 +763,12 @@ namespace Splendor {
             piocheNoble = new materiel::Pioche(materiel::TypeCarte::Noble);
         }
         else {
+            
             piocheCite = new materiel::Pioche(materiel::TypeCarte::cite);
-                //On remplit les cartes cite de l'extension
-             //On remplit les cartes cite de l'extension
-            while (!piocheCite->estVide() && getPlateau().getNbCartesCite() < 3) {
-               getPlateau(). ajouterCarte(piocheCite->piocher());
+           
+            while (!piocheCite->estVide() && plateau.getNbCartesCite() < 3) {
+                
+                plateau.ajouterCarte(piocheCite->piocher());
             }
             
         }
@@ -769,6 +817,12 @@ namespace Splendor {
             }
             else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
         }
+        else if (c.getType() == TypeCarte::cite) {
+            if (getNbCartesCite() < nbMax) {
+                cartesCite.push_back(&c);
+            }
+            else throw SplendorException("trop de cartes sur le plateau N3 pour piocher");
+        }
 
 
     }
@@ -789,11 +843,13 @@ namespace Splendor {
 
                 plateau.ajouterCarte(piocheN3->piocher());
             }
-            while (!piocheNoble->estVide() && plateau.getNbCartesNoble() < 4) {
-                plateau.ajouterCarte(piocheNoble->piocher());
+            if (!isExtension) {
+                while (!piocheNoble->estVide() && plateau.getNbCartesNoble() < 4) {
+                    plateau.ajouterCarte(piocheNoble->piocher());
+                }
             }
 
-
+           
             cout << "--fin distribution--";
 
         }
@@ -833,6 +889,7 @@ namespace Splendor {
         }
         f << "\n";
         f << "Cartes Cité: \n";
+        cout << getNbCartesCite() << "nombre carte citééééééééé\n";
         for (size_t i = 0; i < getNbCartesCite(); i++) {
             f << *cartesCite[i] << " \n";
         }
@@ -858,6 +915,7 @@ namespace Splendor {
         cout << "2: Piocher 2 jetons identiques\n";
         cout << "3: Acheter une carte\n";
         cout << "4: Réserver une carte\n";
+
         cin >> x;
         while (x != 1 && x != 2 && x != 3 && x != 4) {
             cout << "Veuillez choisir un nombre valide";
@@ -894,7 +952,26 @@ namespace Splendor {
 
 
     }
+    bool Controleur::hasSomeoneWon() {
+        if (someoneHasCite) return true;
+        return false;
+    }
+    //Verifie qui a le plus de prestige en tenant compte de l'extension ( si un joueur a une carte cité, il gagne et si plusieurs en ont, c'est celui avec le plus de prestige parmi ceux en possedant)
+    void Controleur::printPlayerWinner() {
+        int mostPrestige = 0;
+        bool hasMostprestigeCite = false;
+        Joueur* j = joueurs[0];
+        for (size_t i = 0; i < getNombreJoueurs(); i++) {
+            
+            if ((joueurs[i]->GetPrestige() > mostPrestige && !hasMostprestigeCite ) || (joueurs[i]->GetPrestige() > mostPrestige && joueurs[i]->hasCite()) ) {
+                mostPrestige = joueurs[i]->GetPrestige();
+                j = joueurs[i];
+                hasMostprestigeCite = j->hasCite();
+           }
 
+        }
+        cout << "\n" << j->GetNom() << " est le gagnant! (id: " << j->getJoueurID() << "). Il a " << j->GetPrestige() << " prestige. \n";
+    }
     materiel::Couleur Joueur::choisirJeton() {
         cout << "\nVous devez choisir un jeton, donnez sa couleur: \n";
         cout << "1: vert\n";

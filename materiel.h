@@ -79,8 +79,9 @@ namespace materiel {
             prestige(p),
             type(t) {}; // constructeur pour les cartes de developpement
 
-        Carte(string n, Prix* c, int p) : ID(current_id++), Nom(n), prix(c), prestige(p),
-            type(materiel::TypeCarte::Noble) {}; // contructeur pour les cartes nobles
+        Carte(string n, Prix* c, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), prestige(p),
+            type(t) {}; // contructeur pour les cartes nobles et cite
+        
     };
 
 

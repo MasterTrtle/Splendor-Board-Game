@@ -86,16 +86,24 @@ int main() {
         c.visiteNoble();
         cout<< "\nPrestige du joueur: "<< c.getCurrentJoueur().GetPrestige();
         cout << "\n appuyez sur une touche pour passer au joueur suivant";
-        system("pause");
+        
         if (c.getCurrentJoueur().GetPrestige() >= 15 && !flag) {
             flag = true;
             toursRestant = nb - c.getCurrentJoueur().getJoueurID() - 1;
         }
-
+        // On check les conditions de victoire (notemment dans le cas de l'extension)
+        if (c.hasSomeoneWon() && !flag) {
+            flag = true;
+            toursRestant = nb - c.getCurrentJoueur().getJoueurID() - 1;
+            cout << "\nDernier tour, une personne possède une carte cité \n";
+        }
+        system("pause");
 
         //passage au joueur suivant
         c.joueursuivant();
     }
+    //afficher le vainqueur( joueur avec le plus de prestige) ou alors possedant une carte visite
+    c.printPlayerWinner();
     
     return 0;
 }
