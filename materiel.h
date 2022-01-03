@@ -44,7 +44,7 @@ namespace materiel {
     };
 
     enum class TypeCarte {
-        N1, N2, N3, Noble
+        N1, N2, N3, Noble, cite
     };
 
 
@@ -52,11 +52,11 @@ namespace materiel {
     private:
         const unsigned int ID;
 
-         std::string Nom;
-         Prix* prix;
-         int prestige;
-         TypeCarte type;
-         Couleur bonus;
+        std::string Nom;
+        Prix* prix;
+        int prestige;
+        TypeCarte type;
+        Couleur bonus;
 
     public:
         static int current_id;
@@ -68,32 +68,32 @@ namespace materiel {
 
         Couleur getBonus() const { return bonus; }  // on a oublie ce truc
 
-        int getPrestige() const { return prestige;}
+        int getPrestige() const { return prestige; }
 
 
         TypeCarte getType() const { return type; }
 
         ~Carte() = default;
 
-        Carte(string n, Prix *c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b),
-                                                                  prestige(p),
-                                                                  type(t) {}; // constructeur pour les cartes de developpement
+        Carte(string n, Prix* c, Couleur b, int p, TypeCarte t) : ID(current_id++), Nom(n), prix(c), bonus(b),
+            prestige(p),
+            type(t) {}; // constructeur pour les cartes de developpement
 
-        Carte(string n, Prix *c, int p) : ID(current_id++), Nom(n), prix(c), prestige(p),
-                                          type(materiel::TypeCarte::Noble) {}; // contructeur pour les cartes nobles
+        Carte(string n, Prix* c, int p) : ID(current_id++), Nom(n), prix(c), prestige(p),
+            type(materiel::TypeCarte::Noble) {}; // contructeur pour les cartes nobles
     };
 
 
     class Pioche {
     private:
-       
+
         TypeCarte type_cartes;
         vector<Carte*> cartes = {};
 
     public:
         bool estVide() const { return cartes.size() == 0; }
 
-        Pioche(TypeCarte t) ; // on construit uniquement avec le type, les cartes sont choisies dans le constructeur directement
+        Pioche(TypeCarte t); // on construit uniquement avec le type, les cartes sont choisies dans le constructeur directement
 
         //Pioche(TypeCarte t, vector<Carte*> c) : type_cartes(t), cartes(c) {};
 
@@ -101,7 +101,7 @@ namespace materiel {
         size_t getNbCartes() { return cartes.size(); }
 
 
-         Carte& piocher();
+        Carte& piocher();
 
         Pioche& operator<<(Carte& e);
 
@@ -127,8 +127,8 @@ namespace materiel {
     class Pile {
     private:
         const Couleur couleur;
-        
-       
+
+
         stack<Jeton*> jetons = {};
     public:
         bool estVide() const { return getNombre() == 0; }

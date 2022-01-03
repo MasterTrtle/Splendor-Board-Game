@@ -178,6 +178,7 @@ namespace Splendor {
         std::vector<Carte*> cartesN2;
         std::vector<Carte*> cartesN3;
         std::vector<Carte*> cartesNoble;
+        std::vector<Carte*> cartesCite;
         int nombre_joueurs;
 
 
@@ -195,7 +196,7 @@ namespace Splendor {
         Plateau();
         Plateau(int nbjoueurs);
 
-
+       
         ~Plateau();
         std::vector<Carte*>& getCarte(materiel::TypeCarte t);
         materiel::Pile& getPile(materiel::Couleur c);
@@ -208,6 +209,7 @@ namespace Splendor {
         const size_t getNbCartesN2()const { return cartesN2.size(); }
 
         const size_t getNbCartesN3() const { return cartesN3.size(); }
+        const size_t getNbCartesCite() const { return cartesCite.size(); }
 
         const size_t getNbCartesNoble() const { return cartesNoble.size(); }
 
@@ -297,7 +299,8 @@ namespace Splendor {
         materiel::Pioche* piocheN2;
         materiel::Pioche* piocheN3;
         materiel::Pioche* piocheNoble;
-
+        materiel::Pioche* piocheCite;
+        bool isExtension;
 
         std::vector<Joueur*> joueurs;
         //Pile* pile;
@@ -305,12 +308,12 @@ namespace Splendor {
         Plateau plateau;
         //Joueur* joueurs;
 
-       
+
         bool donnerJeton(Couleur c);
         bool donner2jetons(Couleur c);
         bool donner3jetons();
         bool reserverCarte(Carte& c);
-        
+
         bool verifier_possibilite_achat(Carte& c);
         bool acheterCarte(Carte& c);
         //fonction pour aidant a la construction des deux fonctions du dessus
@@ -319,7 +322,7 @@ namespace Splendor {
 
 
         bool verification_couleur(const int prix, Couleur couleur, int& joker);
-        Controleur(int nb_joueurs);
+        Controleur(int nb_joueurs,bool ext);
         friend class Regles;
 
         int current_joueur;
@@ -360,13 +363,15 @@ namespace Splendor {
     class Regles {
         friend class Controleur;
         int nombre_joueurs;
-        Controleur* controleur = new Controleur(nombre_joueurs);
-
+        bool isExtension;
+        Controleur* controleur = new Controleur(nombre_joueurs,isExtension);
+        
 
     public:
 
 
-        Regles(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
+        Regles(int nb_joueurs, bool ext) :nombre_joueurs(nb_joueurs),isExtension(ext) {
+          
 
         };
         Controleur& getControleur() {

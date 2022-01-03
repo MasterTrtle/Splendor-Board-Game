@@ -1088,6 +1088,67 @@
     "vert": "0",
     "rouge": "0",
     "noir": "0"
+  },
+  {
+    "Level": "cite",
+    "Prestige": "17",
+    "name": "carte de cite",
+    "blanc": "0",
+    "bleu": "0",
+    "vert": "0",
+    "rouge": "0",
+    "noir": "0"
+  },
+  
+  {
+    "Level": "cite",
+    "Prestige": "13",
+    "name": "carte de cite",
+    "blanc": "4",
+    "bleu": "3",
+    "vert": "0",
+    "rouge": "0",
+    "noir": "0"
+  },
+  {
+    "Level": "cite",
+    "Prestige": "13",
+    "name": "carte de cite",
+    "blanc": "0",
+    "bleu": "0",
+    "vert": "0",
+    "rouge": "4",
+    "noir": "3"
+  },
+  {
+    "Level": "cite",
+    "Prestige": "13",
+    "name": "carte de cite",
+    "blanc": "0",
+    "bleu": "3",
+    "vert": "4",
+    "rouge": "0",
+    "noir": "0"
+  },
+  {
+    "Level": "cite",
+    "Prestige": "14",
+    "name": "carte de cite",
+    "blanc": "2",
+    "bleu": "1",
+    "vert": "1",
+    "rouge": "2",
+    "noir": "2"
+  },
+  {
+    "Level": "cite",
+    "Prestige": "11",
+    "name": "carte de cite",
+    "blanc": "3",
+    "bleu": "0",
+    "vert": "3",
+    "rouge": "3",
+    "noir": "3"
   }
 
 ]

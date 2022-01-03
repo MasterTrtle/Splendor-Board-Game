@@ -57,7 +57,13 @@ namespace Splendor {
                     new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
                         stoi(noir)), stoi(Prestige));
             }
-            else { // creation des cartes de developpement
+            else if (type == "cite") {
+                cartes[i] = new materiel::Carte(jf[i]["name"],
+                    new materiel::Prix(stoi(vert), stoi(bleu), stoi(rouge), stoi(blanc),
+                        stoi(noir)), stoi(Prestige));
+                cout << *cartes[i];
+            }
+            else  { // creation des cartes de developpement
                 couleur = jf[i]["Gem color"];
                 if (couleur == "red")
                     tempCouleur = materiel::Couleur::rouge;
@@ -172,6 +178,7 @@ namespace Splendor {
         pileNoir->remplir();
         pileJaune = new materiel::Pile(materiel::Couleur::jaune);
         pileJaune->remplir();
+        
     }
     Plateau::Plateau(int nbjoueurs) {
         pileRouge = new materiel::Pile(materiel::Couleur::rouge);
@@ -449,6 +456,7 @@ namespace Splendor {
                 ) return true;
 
         }
+        if(!getCurrentJoueur().isIa())
         cout << "\nLa carte que vous voulez acheter n'est ni sur le plateau, ni dans vos réservations ou alors vous n'avez pas assez pour l'acheter\n";
         return false;
     }
@@ -460,6 +468,7 @@ namespace Splendor {
             getCurrentJoueur().getPile(c).ajouterJeton(getPlateau().getPile(c).retirerJeton());
             return true;
         }
+        if(!getCurrentJoueur().isIa())
         cout << "Il n'y a pas assez de jetons dans la pile des jetons joker  (" << getPlateau().getPile(c).getNombre() << "), aucun ne vous sera donc distribuer";
         return false;
     }
@@ -470,6 +479,7 @@ namespace Splendor {
             getCurrentJoueur().getPile(c).ajouterJeton(getPlateau().getPile(c).retirerJeton());
             return true;
         }
+        if (!getCurrentJoueur().isIa())
         cout << "Il n'y a pas assez de jetons  (" << getPlateau().getPile(c).getNombre() << "), il en faut au minimum 4 pour en piocher 2";
         return false;
     }
@@ -477,8 +487,10 @@ namespace Splendor {
         cout << "\nChoisissez le premier jeton:";
         Couleur c1 = getCurrentJoueur().choisirJeton();
         while (getPlateau().getPile(c1).estVide()) {
+            if (!getCurrentJoueur().isIa())
             cout << "\n Il ne reste plus de jetons de cette couleur, veuillez en choisir un autre: ";
             int choix = 3;
+            if (!getCurrentJoueur().isIa())
             cout << " \nSi vous voulez changer d'action, entrez 1, si vous voulez continuer votre choix, entrez 2\n";
             while (choix != 1 && choix != 2) {
                 cin >> choix;
@@ -490,8 +502,10 @@ namespace Splendor {
         cout << "\nChoisissez un second jeton d'une couleur différente:";
         Couleur c2 = getCurrentJoueur().choisirJeton();
         while (getPlateau().getPile(c2).estVide() || c2 == c1) {
+            if (!getCurrentJoueur().isIa())
             cout << "\n Il ne reste plus de jetons de cette couleur ou alors vous avez deja choisi un jeton de cette couleur, veuillez en choisir un autre: ";
             int choix = 3;
+            if (!getCurrentJoueur().isIa())
             cout << "\n Si vous voulez changer d'action, entrez 1, si vous voulez continuer votre choix, entrez 2\n";
             while (choix != 1 && choix != 2) {
                 cin >> choix;
@@ -503,8 +517,10 @@ namespace Splendor {
         Couleur c3 = getCurrentJoueur().choisirJeton();
 
         while (getPlateau().getPile(c3).estVide() || c3 == c2 || c3 == c1) {
+            if (!getCurrentJoueur().isIa())
             cout << "\n Il ne reste plus de jetons de cette couleur ou alors vous avez deja choisi un jeton de cette couleur, veuillez en choisir un autre: ";
             int choix = 3;
+            if (!getCurrentJoueur().isIa())
             cout << "\n Si vous voulez changer d'action, entrez 1, si vous voulez continuer votre choix, entrez 2\n";
             while (choix != 1 && choix != 2) {
                 cin >> choix;
@@ -546,34 +562,42 @@ namespace Splendor {
                 donnerJeton(Couleur::jaune);
                 return true;
             }
+            if (!getCurrentJoueur().isIa())
             cout << "\nLa carte que vous voulez réserver n'est pas sur le plateau\n";
             return false;
         }
         else {
+            if (!getCurrentJoueur().isIa())
             cout << "\nVous avez déjà 3 réservations, impossible d'en reserver plus\n";
             return false;
         }
 
     }
     bool Controleur::action() {
-        materiel::typeActions t = getCurrentJoueur().ChoisirAction();
-        cout << "action effectuée par le joueur: " << getCurrentJoueur().GetNom(); //id incorrecte ??
-        switch (t) {
-        case materiel::typeActions::acheter:
-            if (!acheterCarte(getCurrentJoueur().choisirCarte()))  return false;
-            break;
-        case materiel::typeActions::reserver:
-            if (!reserverCarte(getCurrentJoueur().choisirCarte())) return false;
-            break;
-        case materiel::typeActions::piocher2jetons:
-            if (!donner2jetons(getCurrentJoueur().choisirJeton())) return false;
-            break;
-        case materiel::typeActions::piocher3jetons:
-            if (!donner3jetons()) return false;
-            break;
-
+        if (getCurrentJoueur().isIa()) {
+            actionIa();
         }
-        verifierRendreJetons();
+        else {
+            materiel::typeActions t = getCurrentJoueur().ChoisirAction();
+            cout << "action effectuée par le joueur: " << getCurrentJoueur().GetNom(); //id incorrecte ??
+            switch (t) {
+            case materiel::typeActions::acheter:
+                if (!acheterCarte(getCurrentJoueur().choisirCarte()))  return false;
+                break;
+            case materiel::typeActions::reserver:
+                if (!reserverCarte(getCurrentJoueur().choisirCarte())) return false;
+                break;
+            case materiel::typeActions::piocher2jetons:
+                if (!donner2jetons(getCurrentJoueur().choisirJeton())) return false;
+                break;
+            case materiel::typeActions::piocher3jetons:
+                if (!donner3jetons()) return false;
+                break;
+
+            }
+            verifierRendreJetons();
+            return true;
+        }
         return true;
     }
     void Controleur::actionIa() {
@@ -665,7 +689,9 @@ namespace Splendor {
 
         }
     }
-    Controleur::Controleur(int nb_joueurs) :nombre_joueurs(nb_joueurs) {
+    Controleur::Controleur(int nb_joueurs,bool ext) :nombre_joueurs(nb_joueurs),isExtension(ext) {
+        cout << "\n extension: "<<ext;
+        cout << "\n nbJoueur: " << nb_joueurs;
         current_joueur = 0;
         for (int i = 0; i < nombre_joueurs; i++) {
             string nomJoueur;
@@ -674,7 +700,8 @@ namespace Splendor {
             cin.ignore();
             getline(cin, nomJoueur);
             cout << "Le joueur est-il une IA  ?,\n Entrez [0] si oui \n Entrez [1] si non ";
-            cin >> nomJoueur;
+            cin >> Ia;
+            cin.ignore();
 
             Joueur* j = new Joueur(i, nomJoueur, Ia);
             //cout << j.getJoueurID();
@@ -684,7 +711,19 @@ namespace Splendor {
         piocheN1 = new materiel::Pioche(materiel::TypeCarte::N1);
         piocheN2 = new materiel::Pioche(materiel::TypeCarte::N2);
         piocheN3 = new materiel::Pioche(materiel::TypeCarte::N3);
-        piocheNoble = new materiel::Pioche(materiel::TypeCarte::Noble);
+        if (!isExtension) {
+            
+            piocheNoble = new materiel::Pioche(materiel::TypeCarte::Noble);
+        }
+        else {
+            piocheCite = new materiel::Pioche(materiel::TypeCarte::cite);
+                //On remplit les cartes cite de l'extension
+             //On remplit les cartes cite de l'extension
+            while (!piocheCite->estVide() && getPlateau().getNbCartesCite() < 3) {
+               getPlateau(). ajouterCarte(piocheCite->piocher());
+            }
+            
+        }
 
 
         //on adapte la pile de jeton en fonction du nombre de joueur
@@ -702,7 +741,7 @@ namespace Splendor {
 
 
     };
-
+   
     void Plateau::ajouterCarte(materiel::Carte& c) {
         if (c.materiel::Carte::getType() == TypeCarte::N1) {
             if (getNbCartesN1() < nbMax) {
@@ -789,8 +828,13 @@ namespace Splendor {
         }
         f << "\n";
         f << "Cartes Nobles: \n";
-        for (size_t i = 0; i < getNbCartesN3(); i++) {
+        for (size_t i = 0; i < getNbCartesNoble(); i++) {
             f << *cartesNoble[i] << " \n";
+        }
+        f << "\n";
+        f << "Cartes Cité: \n";
+        for (size_t i = 0; i < getNbCartesCite(); i++) {
+            f << *cartesCite[i] << " \n";
         }
         f << "fin de Plateau::printcarte()";
         f << "\n";
@@ -798,10 +842,10 @@ namespace Splendor {
 
     }
 
-    int Joueur::GetPrestige() const{
-        int resultat =0;
-        for (auto &i :Cartes){
-            resultat +=i->getPrestige();
+    int Joueur::GetPrestige() const {
+        int resultat = 0;
+        for (auto& i : Cartes) {
+            resultat += i->getPrestige();
         }
         return resultat;
     }
