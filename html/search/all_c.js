@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['n1_0',['N1',['../namespacemateriel.html#a0ee0b188b946611a73e770466ed90ec7a86bc43e556b1df283839f053eb02e2bb',1,'materiel']]],
+  ['n2_1',['N2',['../namespacemateriel.html#a0ee0b188b946611a73e770466ed90ec7ac74b82067996a9bc955560b9356f904c',1,'materiel']]],
+  ['n3_2',['N3',['../namespacemateriel.html#a0ee0b188b946611a73e770466ed90ec7aabee0c793b3b1ded0e9b48057599957b',1,'materiel']]],
+  ['nb_5fcartes_3',['nb_cartes',['../class_splendor_1_1_partie.html#a8967951d7e2830c1fae8a66e453c9d6a',1,'Splendor::Partie']]],
+  ['nb_5fcartescite_4',['nb_cartesCite',['../class_splendor_1_1_partie.html#a6be244da6fadc3cef665c4b945a8fe08',1,'Splendor::Partie']]],
+  ['nb_5fcartesn1_5',['nb_cartesN1',['../class_splendor_1_1_partie.html#a4135857a625edd810febc8d1d3ba428f',1,'Splendor::Partie']]],
+  ['nb_5fcartesn2_6',['nb_cartesN2',['../class_splendor_1_1_partie.html#affcd1aca0b4ca1d28802c55a1c765c19',1,'Splendor::Partie']]],
+  ['nb_5fcartesn3_7',['nb_cartesN3',['../class_splendor_1_1_partie.html#a30161a4fb6dc7b5d8714ff334cc86102',1,'Splendor::Partie']]],
+  ['nb_5fcartesnoble_8',['nb_cartesNoble',['../class_splendor_1_1_partie.html#a5b90c9e1c0689697bf13c717fd090de5',1,'Splendor::Partie']]],
+  ['nb_5fjetons_9',['nb_jetons',['../class_splendor_1_1_partie.html#af8f78bd9eb977309838782fe3f174d47',1,'Splendor::Partie']]],
+  ['nbmax_10',['nbMax',['../class_splendor_1_1_plateau.html#a5796d1c256b6657b79f7a34d4fe95729',1,'Splendor::Plateau']]],
+  ['next_11',['next',['../class_splendor_1_1_partie_1_1_iterator.html#a66a1d9304d978712755ab1b82293c397',1,'Splendor::Partie::Iterator::next()'],['../class_splendor_1_1_partie_1_1_iterator_jeton.html#a7a99c02cb0269cace0b60ccb4a05f1c3',1,'Splendor::Partie::IteratorJeton::next()']]],
+  ['noble_12',['Noble',['../namespacemateriel.html#a0ee0b188b946611a73e770466ed90ec7ad5074bd3a869a4392ac0a751da37cff7',1,'materiel']]],
+  ['noir_13',['noir',['../classmateriel_1_1_prix.html#aff4638df2cc5502cf71bc65f01436e28',1,'materiel::Prix::noir()'],['../namespacemateriel.html#a86468bcd739efee91f38a3c74c641479a619b446f1df515147442f2e5f66be628',1,'materiel::noir()']]],
+  ['nom_14',['Nom',['../classmateriel_1_1_carte.html#a2d1f72e42f0cd5a7987045a66d137cd1',1,'materiel::Carte']]],
+  ['nom_15',['nom',['../class_splendor_1_1_joueur.html#af39842d335b78295ddde3404d38cf230',1,'Splendor::Joueur']]],
+  ['nombre_5fjoueurs_16',['nombre_joueurs',['../class_splendor_1_1_plateau.html#a8a5516b04f6cd076e28b291415f627c6',1,'Splendor::Plateau::nombre_joueurs()'],['../class_splendor_1_1_controleur.html#a1b8e11d75ac3339932f602e547b4f669',1,'Splendor::Controleur::nombre_joueurs()'],['../class_splendor_1_1_regles.html#aa8c872c593385f3a65d4e4c69ae1cd57',1,'Splendor::Regles::nombre_joueurs()']]]
+];
