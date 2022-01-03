@@ -20,11 +20,12 @@ game_setting::~game_setting()
 void game_setting::on_buttonBox_accepted()
 {
    QString player1 = ui->usename1->text();
-   QString player2 = ui->usename1->text();
-   QString player3 = ui->usename1->text();
-   QString player4 = ui->usename1->text();
+   QString player2 = ui->usename1_2->text();
+   QString player3 = ui->usename1_3->text();
+   QString player4 = ui->usename1_4->text(); // Nous obtenons des noms
+   int Ai = ui->AI_checkBox->checkState();
    int nb = ui->nb_jouers->value();
-   game = new game_interface(nb);
+   game = new game_interface(nb,player1,player2,player3,player4,Ai);
    game->show();
 }
 

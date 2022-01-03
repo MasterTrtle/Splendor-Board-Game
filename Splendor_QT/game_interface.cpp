@@ -6,18 +6,36 @@
 #include "vuecarte.h"
 #include "materiel.h"
 
-game_interface::game_interface(int nb, QWidget *parent) :
+game_interface::game_interface(int nb,QString player1,QString player2,QString player3,QString player4,int AI,QWidget *parent) : //
     QWidget(parent),
     ui(new Ui::game_interface),
-    vuecartes(12,nullptr),
-    regle(2) //2 personne;
+    vuecartes(100,nullptr),
+    regle(nb)//nb personne pour regle;
 {
-    couche = new QVBoxLayout;
     ui->setupUi(this);
+    AI_switch = AI;
+    player1_nom = player1;
+    player2_nom = player2;
+    player2_nom = player3;
+    player4_nom = player4;
+    nb_players = nb;
+    couche = new QVBoxLayout;
+
     setWindowTitle("Splendor!");
     setFixedSize(1400,800);
-    ui->name1->setText("player1");
-    ui->name2->setText("player2");
+
+    ui->name1->setText(player1_nom);
+    ui->name2->setText(player2_nom);
+    ui->name3->setVisible(false);
+    ui->name4->setVisible(false);
+    if (nb_players==3){
+        ui->name1->setText(player3_nom);
+        ui->name4->setVisible(true);
+    }
+    if (nb_players==4){
+        ui->name1->setText(player4_nom);
+        ui->name3->setVisible(true);
+    }
 
 
     //Splendor::Regles reg = Splendor::Regles(2);
@@ -28,16 +46,34 @@ game_interface::game_interface(int nb, QWidget *parent) :
     //test
     materiel::Prix *p1 = new materiel::Prix(0,0,0,0,0);
     materiel::Carte c1 = materiel::Carte("s",p1,materiel::Couleur::blanc,3,materiel::TypeCarte::N1);
-    layoutCartes = new QGridLayout;
-    layoutCartes->setSpacing(0);
-    layoutCartes->setHorizontalSpacing(10);
+    layoutCartes_DEV = new QGridLayout;
+    layoutCartes_DEV->setSpacing(0);
+    layoutCartes_DEV->setHorizontalSpacing(10);
     std::cout << "test game interface "<< endl;
-    for(size_t i=0; i<12;i++)
+    for(size_t i=0; i<12;i++)  //12 cartes de développement
         vuecartes[i] = new vuecarte(c1,this);
+
     for(size_t i=0; i<12;i++){
-        layoutCartes->addWidget(vuecartes[i],i/4,i%4);
+        layoutCartes_DEV->addWidget(vuecartes[i],i/4,i%4);
+        //connect(vuecartes[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(carteClique(VueCarte*)));
     }
-    couche->addLayout(layoutCartes);
+
+    c.distribuerCarte();
+    //c.getPioche(materiel::TypeCarte::N1);
+   // c.getPioche(materiel::TypeCarte::N2);
+   // c.getPioche(materiel::TypeCarte::N3);
+
+
+    layoutCartes_NOBLE =  new QHBoxLayout;
+    for(size_t i=12; i<16;i++)  //4 cartes noble
+        vuecartes[i] = new vuecarte(c1,this);
+    for(size_t i=12; i<16;i++){
+        layoutCartes_NOBLE->addWidget(vuecartes[i]);
+        //connect(vuecartes[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(carteClique(VueCarte*)));
+    }
+   // c.getPioche(materiel::TypeCarte::Noble);
+    couche->addLayout(layoutCartes_NOBLE);
+    couche->addLayout(layoutCartes_DEV);
     setLayout(couche);
 
     //Splendor::Regles r = Splendor::Regles(nb);
@@ -56,4 +92,15 @@ void game_interface::paintEvent(QPaintEvent *)
     painter.drawPixmap(0, 0, 1400, 800, pix);
 }
 
+
+
+
+
+void game_interface::game_over(bool Flag){
+    if(Flag==0){
+        QString winner;
+        end = new game_end(winner,this);
+        end->show();
+    }
+}
 
