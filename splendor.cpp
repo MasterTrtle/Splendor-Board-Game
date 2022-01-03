@@ -532,13 +532,12 @@ namespace Splendor {
         int cpt = 0;
         if (donnerJeton(materiel::Couleur::vert)) cpt++;
         if (donnerJeton(materiel::Couleur::bleu)) cpt++;
-        if (cpt==2) return;
         if (donnerJeton(materiel::Couleur::rouge)) cpt++;
-        if (cpt==2) return;
+        if (cpt=3) return;
         if (donnerJeton(materiel::Couleur::blanc)) cpt++;
-        if (cpt==2) return;
+        if (cpt==3) return;
         if (donnerJeton(materiel::Couleur::noir)) cpt++;
-        if (cpt==2) return;
+        if (cpt==3) return;
     }
 
     bool Controleur::donner3jetons() {
