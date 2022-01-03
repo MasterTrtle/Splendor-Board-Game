@@ -514,6 +514,7 @@ namespace Splendor {
         }
         if(!getCurrentJoueur().isIa())
         cout << "Il n'y a pas assez de jetons dans la pile des jetons joker  (" << getPlateau().getPile(c).getNombre() << "), aucun ne vous sera donc distribuer";
+
         return false;
     }
     bool Controleur::donner2jetons(Couleur c) {
@@ -606,6 +607,7 @@ namespace Splendor {
                 cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
                 v1.erase(std::find(v1.begin(), v1.end(), &c));
                 vreserved.push_back(&c);
+                donnerJeton(Couleur::jaune);
                 return true;
             }
 
@@ -613,6 +615,7 @@ namespace Splendor {
                 cout << "Vous réservez la carte " << c.getNom() << " présente sur le plateau";
                 v2.erase(std::find(v2.begin(), v2.end(), &c));
                 vreserved.push_back(&c);
+                donnerJeton(Couleur::jaune);
                 return true;
             }
             if (std::count(v3.begin(), v3.end(), &c)) {
