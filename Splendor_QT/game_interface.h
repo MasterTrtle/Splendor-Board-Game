@@ -35,6 +35,18 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private slots:
+    //jetons dans le partie
+    void on_gold_num_textChanged();
+
+    void on_black_num_textChanged();
+
+    void on_red_num_textChanged();
+
+    void on_green_num_textChanged();
+
+    void on_blue_num_textChanged();
+
+    void on_white_num_textChanged();
 
 private:
     Ui::game_interface *ui;
@@ -54,8 +66,10 @@ private:
     Splendor::Regles regle;
     game_end* end;
 
-
-
+    void textChanged();//met a jour les texte a chaque fois
+    void JetonsClicked(materiel::Couleur);
+    void carteDevClicked(VueCarte* vc);
+    void carteNobleClicked(VueCarte vc);
 };
 
 #endif // GAME_INTERFACE_H

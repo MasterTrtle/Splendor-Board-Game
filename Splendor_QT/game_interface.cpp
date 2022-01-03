@@ -69,7 +69,7 @@ game_interface::game_interface(int nb,QString player1,QString player2,QString pl
         vuecartes[i] = new vuecarte(c1,this);
     for(size_t i=12; i<16;i++){
         layoutCartes_NOBLE->addWidget(vuecartes[i]);
-        //connect(vuecartes[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(carteClique(VueCarte*)));
+        connect(vuecartes[i],SIGNAL(carteDevClicked(VueCarte*)),this,SLOT(carteDevClique(VueCarte*)));
     }
    // c.getPioche(materiel::TypeCarte::Noble);
     couche->addLayout(layoutCartes_NOBLE);
@@ -93,6 +93,10 @@ void game_interface::paintEvent(QPaintEvent *)
 }
 
 
+void carteDevClicked(VueCarte*){
+
+}
+
 
 
 
@@ -102,5 +106,82 @@ void game_interface::game_over(bool Flag){
         end = new game_end(winner,this);
         end->show();
     }
+}
+
+
+void game_interface::on_gold_num_textChanged()
+{
+    ui->gold_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::blanc).getNombre()));
+}
+
+
+void game_interface::on_black_num_textChanged()
+{
+    ui->black_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::noir).getNombre()));
+
+}
+
+
+void game_interface::on_red_num_textChanged()
+{
+   ui->red_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::rouge).getNombre()));
+}
+
+
+void game_interface::on_green_num_textChanged()
+{
+    ui->green_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::vert).getNombre()));
+}
+
+
+void game_interface::on_blue_num_textChanged()
+{
+    ui->blue_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::bleu).getNombre()));
+}
+
+
+void game_interface::on_white_num_textChanged()
+{
+    ui->white_num->setText(QString::number(regle.getControleur().getPlateau().getPile(materiel::Couleur::blanc).getNombre()));
+}
+
+
+void game_interface::textChanged()
+{
+    void on_gold_num_textChanged();
+
+    void on_black_num_textChanged();
+
+    void on_red_num_textChanged();
+
+    void on_green_num_textChanged();
+
+    void on_blue_num_textChanged();
+
+    void on_white_num_textChanged();
+}
+
+void game_interface::on_Pioche3_clicked()
+{
+
+
+}
+
+
+void game_interface::on_pioche2_clicked()
+{
+
+}
+
+
+void game_interface::on_Acheter_clicked()
+{
+
+}
+
+
+void game_interface::on_Reserver_clicked()
+{
+
 }
 
