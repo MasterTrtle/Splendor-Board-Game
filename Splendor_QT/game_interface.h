@@ -63,7 +63,7 @@ private:
     QString player2_nom;
     QString player3_nom;
     QString player4_nom;
-    int AI_switch;
+    int AI_switch;   //Interrupteurs Ai
     unsigned int nb_players;
     vector<vuecarte*> vuecartes;
     QGridLayout* layoutCartes_DEV;
@@ -74,7 +74,7 @@ private:
     Splendor::Regles regle;
     game_end* end;
 
-    void textChanged();//met a jour les texte a chaque fois
+    void textChanged();//Mettre à jour les texte a chaque fois
 
     void player1_textChanged(); //on met a jour les information de chaque joueur
     void player2_textChanged();

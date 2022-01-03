@@ -93,7 +93,8 @@ void game_interface::paintEvent(QPaintEvent *)
 }
 
 
-void carteDevClicked(VueCarte*){
+void carteDevClicked(VueCarte*)
+{
 
 }
 
@@ -159,6 +160,74 @@ void game_interface::textChanged()
     void on_blue_num_textChanged();
 
     void on_white_num_textChanged();
+}
+
+void game_interface::player1_textChanged(){
+
+    // Mettre à jour des jetons possédés par le joueur
+    ui->gold_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::jaune).getNombre()));
+    ui->blue_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::bleu).getNombre()));
+    ui->green_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::vert).getNombre()));
+    ui->black_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::noir).getNombre()));
+    ui->white_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::blanc).getNombre()));
+
+    // Mettre à jour des cartes achetée par le joueur //À résoudre : Problème : affichage des cartes
+
+    //regle.getControleur().getCurrentJoueur().printCarte(regle.getControleur().getCurrentJoueur().getCarteAchetes());
+
+    // Mettre à jour des cartes réservées par le joueur /À résoudre : Problème : affichage des cartes
+
+    //regle.getControleur().printCarte(c.getCurrentJoueur().getCarteReserve());
+}
+
+void game_interface::player2_textChanged(){
+    // Mettre à jour des jetons possédés par le joueur
+    ui->gold_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::jaune).getNombre()));
+    ui->blue_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::bleu).getNombre()));
+    ui->green_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::vert).getNombre()));
+    ui->black_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::noir).getNombre()));
+    ui->white_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::blanc).getNombre()));
+
+
+
+    //regle.getControleur().getCurrentJoueur().printCarte(regle.getControleur().getCurrentJoueur().getCarteAchetes());
+
+
+    //regle.getControleur().printCarte(c.getCurrentJoueur().getCarteReserve());
+}
+
+void game_interface::player3_textChanged(){
+    // Mettre à jour des jetons possédés par le joueur
+    ui->gold_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::jaune).getNombre()));
+    ui->blue_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::bleu).getNombre()));
+    ui->green_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::vert).getNombre()));
+    ui->black_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::noir).getNombre()));
+    ui->white_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::blanc).getNombre()));
+
+
+
+    //regle.getControleur().getCurrentJoueur().printCarte(regle.getControleur().getCurrentJoueur().getCarteAchetes());
+
+
+
+    //regle.getControleur().printCarte(c.getCurrentJoueur().getCarteReserve());
+}
+
+void game_interface::player4_textChanged(){
+    // Mettre à jour des jetons possédés par le joueur
+    ui->gold_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::jaune).getNombre()));
+    ui->blue_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::bleu).getNombre()));
+    ui->green_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::vert).getNombre()));
+    ui->black_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::noir).getNombre()));
+    ui->white_have->setText(QString::number(regle.getControleur().getCurrentJoueur().getPile(materiel::Couleur::blanc).getNombre()));
+
+
+
+    //regle.getControleur().getCurrentJoueur().printCarte(regle.getControleur().getCurrentJoueur().getCarteAchetes());
+
+
+
+    //regle.getControleur().printCarte(c.getCurrentJoueur().getCarteReserve());
 }
 
 void game_interface::on_Pioche3_clicked()
