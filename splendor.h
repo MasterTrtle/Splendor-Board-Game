@@ -197,7 +197,7 @@ namespace Splendor {
         Plateau();
         Plateau(int nbjoueurs);
 
-       
+
         ~Plateau();
         std::vector<Carte*>& getCarte(materiel::TypeCarte t);
         materiel::Pile& getPile(materiel::Couleur c);
@@ -250,7 +250,7 @@ namespace Splendor {
         void printCarte(std::vector<materiel::Carte*>& v, ostream& f = cout);
         bool isIa()const { return Ia; }
         bool hasCite() { return hasciteCard; }
-        Joueur(int i, string& n, string& ia) :nom(n), ID(i),hasciteCard(false) {
+        Joueur(int i, string& n, string& ia) :nom(n), ID(i), hasciteCard(false) {
             cout << ia;
             pileRouge = new materiel::Pile(materiel::Couleur::rouge);
             pileVert = new materiel::Pile(materiel::Couleur::vert);
@@ -296,7 +296,7 @@ namespace Splendor {
 
     };
     class Controleur {
-        
+
         bool someoneHasCite = false;
         int nombre_joueurs;
         materiel::Pioche* piocheN1;
@@ -328,10 +328,11 @@ namespace Splendor {
 
 
         bool verification_couleur(const int prix, Couleur couleur, int& joker);
-        Controleur(int nb_joueurs,bool ext);
+        Controleur(int nb_joueurs, bool ext);
         friend class Regles;
 
         int current_joueur;
+        const int getPlayerNbCarte(Couleur c) ;
 
     public:
         bool hasSomeoneWon();
@@ -372,14 +373,14 @@ namespace Splendor {
         friend class Controleur;
         int nombre_joueurs;
         bool isExtension;
-        Controleur* controleur = new Controleur(nombre_joueurs,isExtension);
-        
+        Controleur* controleur = new Controleur(nombre_joueurs, isExtension);
+
 
     public:
 
 
-        Regles(int nb_joueurs, bool ext) :nombre_joueurs(nb_joueurs),isExtension(ext) {
-          
+        Regles(int nb_joueurs, bool ext) :nombre_joueurs(nb_joueurs), isExtension(ext) {
+
 
         };
         Controleur& getControleur() {
